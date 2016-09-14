@@ -1,1 +1,0 @@
-{"version":3,"sources":["../../src/reducers/index.js"],"names":["user","spec","tools"],"mappings":";;;;;;;AAAA;;;;AACA;;;;AACA;;;;;;QAGCA,I;QACAC,I;QACAC,K","file":"index.js","sourcesContent":["import user from './user';\nimport spec from './spec';\nimport tools from './tools';\n\nexport {\n\tuser,\n\tspec,\n\ttools,\n};\n"]}

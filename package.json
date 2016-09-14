@@ -4,11 +4,11 @@
   "description": "CLI for Toolbeam",
   "main": "index.js",
   "repository": {
-		"type": "git",
-		"url": "https://github.com/AnomalyInnovations/toolbeam-cli.git"
-	},
+    "type": "git",
+    "url": "https://github.com/AnomalyInnovations/toolbeam-cli.git"
+  },
   "scripts": {
-    "build": "babel -s -w src -d build"
+    "build": "babel -s inline -w src -d build"
   },
   "bin": {
     "tb": "./build/index.js"
