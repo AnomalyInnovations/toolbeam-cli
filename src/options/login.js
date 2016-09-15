@@ -44,5 +44,4 @@ export default async function(store) {
 	}
 
 	console.log(chalk.cyan('You are logged in to Toolbeam.'));
-
 }
