@@ -7,11 +7,8 @@ exports.default = {
 	webScheme: 'https',
 	webHost: 'toolbeam.com',
 	// TODO
-	//	apiScheme: 'https',
-	//	apiHost: 'api.toolbeam.com',
-	//	apiPort: 443,
-	apiScheme: 'http',
-	apiHost: 'api.toolbeam.dev',
-	apiPort: 80
+	apiScheme: 'https',
+	apiHost: 'api.toolbeam.com',
+	apiPort: 443
 };
-//# sourceMappingURL=config.js.map
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uL3NyYy9jb25maWcuanMiXSwibmFtZXMiOlsid2ViU2NoZW1lIiwid2ViSG9zdCIsImFwaVNjaGVtZSIsImFwaUhvc3QiLCJhcGlQb3J0Il0sIm1hcHBpbmdzIjoiOzs7OztrQkFBZTtBQUNkQSxZQUFXLE9BREc7QUFFZEMsVUFBUyxjQUZLO0FBR2Y7QUFDQ0MsWUFBVyxPQUpHO0FBS2RDLFVBQVMsa0JBTEs7QUFNZEMsVUFBUztBQU5LLEMiLCJmaWxlIjoiY29uZmlnLmpzIiwic291cmNlc0NvbnRlbnQiOlsiZXhwb3J0IGRlZmF1bHQge1xuXHR3ZWJTY2hlbWU6ICdodHRwcycsXG5cdHdlYkhvc3Q6ICd0b29sYmVhbS5jb20nLFxuLy8gVE9ET1xuXHRhcGlTY2hlbWU6ICdodHRwcycsXG5cdGFwaUhvc3Q6ICdhcGkudG9vbGJlYW0uY29tJyxcblx0YXBpUG9ydDogNDQzLFxuLy9cdGFwaVNjaGVtZTogJ2h0dHAnLFxuLy9cdGFwaUhvc3Q6ICdhcGkudG9vbGJlYW0uZGV2Jyxcbi8vXHRhcGlQb3J0OiA4MCxcbn07XG4iXX0=

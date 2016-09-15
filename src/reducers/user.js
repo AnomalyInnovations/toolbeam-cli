@@ -54,11 +54,9 @@ export default function user(state = initialState, action = {}) {
 				signup_error: null
 			};
     case types.USER_SIGNUP_SUCCESS:
-			const result = action.result.data;
-
 			return { ...state,
-				session_id: result.session_id,
-				user: result.user,
+				session_id: action.result.data.session_id,
+				user: action.result.data.user,
 			};
     case types.USER_SIGNUP_FAIL:
 			return { ...state,
