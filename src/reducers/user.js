@@ -5,6 +5,7 @@ const initialState = {
 	user: null,
 	login_error: null,
 	logout_error: null,
+	signup_error: null,
 };
 
 export default function user(state = initialState, action = {}) {
@@ -45,6 +46,21 @@ export default function user(state = initialState, action = {}) {
     case types.USER_LOGOUT_FAIL:
 			return { ...state,
 				logout_error: action.error
+			};
+
+
+    case types.USER_SIGNUP:
+			return { ...state,
+				signup_error: null
+			};
+    case types.USER_SIGNUP_SUCCESS:
+			return { ...state,
+				session_id: action.result.data.session_id,
+				user: action.result.data.user,
+			};
+    case types.USER_SIGNUP_FAIL:
+			return { ...state,
+				signup_error: action.error
 			};
 
     default:

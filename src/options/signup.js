@@ -16,7 +16,13 @@ const prompts = [
 		description: 'Enter your password:',
 		message: 'Please enter your password',
 		hidden: true,
-		replace: '*',
+		required: true
+	},
+	{
+		name: 'passwordConfirm',
+		description: 'Confirm your password:',
+		message: 'Please enter your password again',
+		hidden: true,
 		required: true
 	},
 ];
@@ -28,21 +34,26 @@ export default async function(store) {
 	prompt.message = '';
 	prompt.delimiter = '';
 
-	const {email, password} = await getPrompt(prompts);
+	const {email, password, passwordConfirm} = await getPrompt(prompts);
 
-	const spinner = new Spinner('Logging in to Toolbeam…');
+	if (password != passwordConfirm) {
+		console.log(chalk.red('Password does not match the confirm password.'));
+		return;
+	}
+
+	const spinner = new Spinner('Signing up for Toolbeam…');
 	spinner.start();
 
 	try {
-		await store.dispatch(userActions.login(email, password));
+		await store.dispatch(userActions.signup(email, password));
 		spinner.stop();
 	}
 	catch(e) {
 		spinner.stop();
-		console.log(chalk.red(`Login failed: ${e.message}`));
+		console.log(chalk.red(`Signup failed: ${e.message}`));
 		return;
 	}
 
-	console.log(chalk.cyan('You are logged in to Toolbeam.'));
+	console.log(chalk.green('You are signed up for Toolbeam.'));
 
 }

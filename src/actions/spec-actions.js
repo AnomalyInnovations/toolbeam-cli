@@ -5,6 +5,13 @@ import { toolsFromOpenapi, specNameFromOpenapi } from '../libs/consume-openapi';
 // Actions //
 /////////////
 
+export function init(json) {
+	return {
+		type: types.SPEC_INIT,
+		json: json
+	};
+}
+
 export function loadInfo() {
 	return {
 		types: [types.SPEC_LOAD_INFO, types.SPEC_LOAD_INFO_SUCCESS, types.SPEC_LOAD_INFO_FAIL],

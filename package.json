@@ -34,7 +34,8 @@
     "source-map-support": "^0.4.2",
     "superagent": "^2.2.0",
     "tv4": "^1.2.7",
-    "yargs": "^5.0.0"
+    "yargs": "^5.0.0",
+    "urijs": "^1.18.0"
   },
   "bundledDependencies": [
     "babel-core",
@@ -52,7 +53,8 @@
     "source-map-support",
     "superagent",
     "tv4",
-    "yargs"
+    "yargs",
+    "urijs"
   ],
   "devDependencies": {
     "babel-cli": "^6.14.0"
