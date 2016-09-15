@@ -28,6 +28,7 @@ exports.default = function (prefs) {
 							dispatch(userActions.loadUserFromPrefs(prefs.user, prefs.session_id));
 						}
 						break;
+					case types.USER_SIGNUP_SUCCESS:
 					case types.USER_LOGIN_SUCCESS:
 						prefs.user = result.result.data.user;
 						prefs.session_id = result.result.data.session_id;

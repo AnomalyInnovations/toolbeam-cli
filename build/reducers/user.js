@@ -22,7 +22,8 @@ var initialState = {
 	session_id: null,
 	user: null,
 	login_error: null,
-	logout_error: null
+	logout_error: null,
+	signup_error: null
 };
 
 function user() {

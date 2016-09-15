@@ -3,3 +3,5 @@ export login from './login';
 export logout from './logout';
 export pull from './pull';
 export push from './push';
+export signup from './signup';
+export whoami from './whoami';

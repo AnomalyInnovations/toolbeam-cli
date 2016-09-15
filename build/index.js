@@ -23,6 +23,10 @@ var _requireLogin2 = require('./libs/require-login');
 
 var _requireLogin3 = _interopRequireDefault(_requireLogin2);
 
+var _requireAnonymous2 = require('./libs/require-anonymous');
+
+var _requireAnonymous3 = _interopRequireDefault(_requireAnonymous2);
+
 var _options = require('./options');
 
 var _commander = require('commander');
@@ -45,16 +49,43 @@ process.on('unhandledRejection', function (err) {
 });
 
 var requireLogin = (0, _requireLogin3.default)(_store2.default);
+var requireAnonymous = (0, _requireAnonymous3.default)(_store2.default);
 
 _commander2.default.version(_package2.default.version)
 /*.option('-C, --chdir <path>', 'change the working directory')
 .option('-c, --config <path>', 'set config path. defaults to ./deploy.conf')*/;
 
-_commander2.default.command('login').description('login to Toolbeam').action(function () {
-  return (0, _options.login)(_store2.default);
+// Account Commands
+_commander2.default.command('signup').description('signup for Toolbeam').action(function () {
+  return requireAnonymous(function () {
+    return (0, _options.signup)(_store2.default);
+  });
 });
 
+_commander2.default.command('login').description('login to Toolbeam').action(function () {
+  return requireAnonymous(function () {
+    return (0, _options.login)(_store2.default);
+  });
+});
+
+_commander2.default.command('logout').description('logout from Toolbeam').action(function () {
+  return (0, _options.logout)(_store2.default);
+});
+
+_commander2.default.command('whoami').description('who am i').action(function () {
+  return requireLogin(function () {
+    return (0, _options.whoami)(_store2.default);
+  });
+});
+
+// Project Commands
 _commander2.default.command('ls').description('list of your tools').action(function () {
+  return requireLogin(function () {
+    return (0, _options.list)(_store2.default);
+  });
+});
+
+_commander2.default.command('create').description('create new tool').action(function () {
   return requireLogin(function () {
     return (0, _options.list)(_store2.default);
   });
@@ -70,10 +101,6 @@ _commander2.default.command('push <file>').description('push a spec to Toolbeam'
   return requireLogin(function () {
     return (0, _options.push)(_store2.default, file);
   });
-});
-
-_commander2.default.command('logout').description('logout from Toolbeam').action(function () {
-  return (0, _options.logout)(_store2.default);
 });
 
 _commander2.default.parse(process.argv);

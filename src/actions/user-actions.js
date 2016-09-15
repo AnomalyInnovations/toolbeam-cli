@@ -47,6 +47,18 @@ export function logoutSuccess() {
 	};
 }
 
+export function signup(email, password) {
+	return {
+		types: [types.USER_SIGNUP, types.USER_SIGNUP_SUCCESS, types.USER_SIGNUP_FAIL],
+		promise: client => client.post('/auth/signup', {
+			data: {
+				email: email,
+				password: password,
+			}
+		})
+	};
+}
+
 //////////////////////
 // Public Functions //
 //////////////////////

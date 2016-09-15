@@ -8,6 +8,7 @@ exports.loadUserFromPrefs = loadUserFromPrefs;
 exports.login = login;
 exports.logout = logout;
 exports.logoutSuccess = logoutSuccess;
+exports.signup = signup;
 exports.isLoggedIn = isLoggedIn;
 exports.getSessionId = getSessionId;
 exports.getUserEmail = getUserEmail;
@@ -66,6 +67,20 @@ function logout() {
 function logoutSuccess() {
 	return {
 		type: types.USER_LOGOUT_SUCCESS
+	};
+}
+
+function signup(email, password) {
+	return {
+		types: [types.USER_SIGNUP, types.USER_SIGNUP_SUCCESS, types.USER_SIGNUP_FAIL],
+		promise: function promise(client) {
+			return client.post('/auth/signup', {
+				data: {
+					email: email,
+					password: password
+				}
+			});
+		}
 	};
 }
 

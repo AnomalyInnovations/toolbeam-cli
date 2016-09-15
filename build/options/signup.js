@@ -42,13 +42,18 @@ var prompts = [{
 	description: 'Enter your password:',
 	message: 'Please enter your password',
 	hidden: true,
-	replace: '*',
+	required: true
+}, {
+	name: 'passwordConfirm',
+	description: 'Confirm your password:',
+	message: 'Please enter your password again',
+	hidden: true,
 	required: true
 }];
 
 exports.default = function () {
 	var _ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee(store) {
-		var _ref2, email, password, spinner;
+		var _ref2, email, password, passwordConfirm, spinner;
 
 		return _regenerator2.default.wrap(function _callee$(_context) {
 			while (1) {
@@ -67,41 +72,52 @@ exports.default = function () {
 						_ref2 = _context.sent;
 						email = _ref2.email;
 						password = _ref2.password;
-						spinner = new _clui.Spinner('Logging in to Toolbeam…');
+						passwordConfirm = _ref2.passwordConfirm;
+
+						if (!(password != passwordConfirm)) {
+							_context.next = 12;
+							break;
+						}
+
+						console.log(_chalk2.default.red('Password does not match the confirm password.'));
+						return _context.abrupt('return');
+
+					case 12:
+						spinner = new _clui.Spinner('Signing up for Toolbeam…');
 
 						spinner.start();
 
-						_context.prev = 10;
-						_context.next = 13;
-						return store.dispatch(userActions.login(email, password));
+						_context.prev = 14;
+						_context.next = 17;
+						return store.dispatch(userActions.signup(email, password));
 
-					case 13:
+					case 17:
 						spinner.stop();
-						_context.next = 21;
+						_context.next = 25;
 						break;
 
-					case 16:
-						_context.prev = 16;
-						_context.t0 = _context['catch'](10);
+					case 20:
+						_context.prev = 20;
+						_context.t0 = _context['catch'](14);
 
 						spinner.stop();
-						console.log(_chalk2.default.red('Login failed: ' + _context.t0.message));
+						console.log(_chalk2.default.red('Signup failed: ' + _context.t0.message));
 						return _context.abrupt('return');
 
-					case 21:
+					case 25:
 
-						console.log(_chalk2.default.cyan('You are logged in to Toolbeam.'));
+						console.log(_chalk2.default.green('You are signed up for Toolbeam.'));
 
-					case 22:
+					case 26:
 					case 'end':
 						return _context.stop();
 				}
 			}
-		}, _callee, this, [[10, 16]]);
+		}, _callee, this, [[14, 20]]);
 	}));
 
 	return function (_x) {
 		return _ref.apply(this, arguments);
 	};
 }();
-//# sourceMappingURL=login.js.map
+//# sourceMappingURL=signup.js.map
