@@ -11,6 +11,11 @@ const initialState = {
 export default function user(state = initialState, action = {}) {
   switch (action.type) {
 
+    case types.SPEC_INIT:
+			return { ...state,
+				data: JSON.stringify(action.json, null, 2)
+			};
+
     case types.SPEC_LOAD_INFO:
 			return { ...state,
 				load_info_error: null

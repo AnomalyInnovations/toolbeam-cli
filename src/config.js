@@ -8,4 +8,5 @@ export default {
 //	apiScheme: 'http',
 //	apiHost: 'api.toolbeam.dev',
 //	apiPort: 80,
+	specFileName: 'spec.json',
 };

@@ -18,6 +18,7 @@ import clear from 'clear';
 import _requireLogin from './libs/require-login';
 import _requireAnonymous from './libs/require-anonymous';
 import {
+	init,
 	list,
 	login,
 	logout,
@@ -62,13 +63,13 @@ program
 
 // Project Commands
 program
- .command('ls')
- .description('list of your tools')
- .action(() => requireLogin(() => list(store)));
+ .command('init <url>')
+ .description('initialize project')
+ .action(url => requireLogin(() => init(store, url)));
 
 program
- .command('create')
- .description('create new tool')
+ .command('ls')
+ .description('list of your tools')
  .action(() => requireLogin(() => list(store)));
 
 program
