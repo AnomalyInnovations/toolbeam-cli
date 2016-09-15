@@ -9,12 +9,13 @@ process.on('unhandledRejection', err => {
     process.exit(1);
 });
 
-import pkgJson from '../package.json';
+import packageJson from '../package.json';
 
 import 'babel-polyfill';
 import chalk from 'chalk';
-import figlet from 'figlet';
-import clear from 'clear';
+import yargs from 'yargs';
+
+import store from './store';
 import _requireLogin from './libs/require-login';
 import {
 	list,
@@ -25,76 +26,62 @@ import {
 } from './options';
 
 
-import program from 'commander';
-import store from './store';
+// Command list
+const LOGIN = 'login';
+const LS = 'ls';
+const PULL = 'pull';
+const PUSH = 'push';
+const LOGOUT = 'logout';
 
+const usagePrefix = 'Usage: tb';
 const requireLogin = _requireLogin(store);
 
-program
-   .version(pkgJson.version)
-   /*.option('-C, --chdir <path>', 'change the working directory')
-   .option('-c, --config <path>', 'set config path. defaults to ./deploy.conf')*/;
+const argv = yargs
+	.usage(`${usagePrefix} <command>`)
+	.demand(1, 1)
+	.command(LOGIN, 'Login to Toolbeam',
+		yargs => yargs.usage(`${usagePrefix} ${LOGIN}`))
+	.command(LS, 'List all your tools',
+		yargs => yargs.usage(`${usagePrefix} ${LS}`))
+	.command(PULL, 'Pull your spec from Toolbeam',
+		yargs => yargs.usage(`${usagePrefix} ${PULL}`))
+	.command(`${PUSH} <file>`, 'Push your spec to Toolbeam',
+		yargs => yargs
+			.demand(1, 1, 'Missing: <file> that needs to be pushed')
+			.strict()
+			.usage(`${usagePrefix} ${PUSH} <file>`)
+			.example(`tb ${PUSH} spec.json`, 'Push spec.json to Toolbeam')
+			.fail(msg => console.log(chalk.red(`${msg}\n`))))
+	.command(LOGOUT, 'Logout from Toolbeam',
+		yargs => yargs.usage(`${usagePrefix} ${LOGOUT}`))
+	.help('h')
+	.alias('h', 'help')
+	.alias('v', 'version')
+	.version(packageJson.version)
+	.epilogue('For more information, checkout https://toolbeam.com')
+	.wrap(null)
+	.strict()
+	.fail((msg, err) => {
+		if (err) throw err;
+		yargs.showHelp();
+		process.exit(1);
+	})
+	.argv;
 
-program
- .command('login')
- .description('login to Toolbeam')
- .action(() => login(store));
-
-program
- .command('ls')
- .description('list of your tools')
- .action(() => requireLogin(() => list(store)));
-
-program
- .command('pull')
- .description('pull spec from Toolbeam')
- .action(() => requireLogin(() => pull(store)));
-
-program
- .command('push <file>')
- .description('push a spec to Toolbeam')
- .action(file => requireLogin(() => push(store, file)));
-
-program
- .command('logout')
- .description('logout from Toolbeam')
- .action(() => logout(store));
-
-program.parse(process.argv);
-
-/*
-program
- .command('exec <cmd>')
- .description('run the given remote command')
- .action(function(cmd) {
-	 console.log('exec "%s"', cmd);
- });
-
-program
- .command('teardown <dir> [otherDirs...]')
- .description('run teardown commands')
- .action(function(dir, otherDirs) {
-	 console.log('dir "%s"', dir);
-	 if (otherDirs) {
-		 otherDirs.forEach(function (oDir) {
-			 console.log('dir "%s"', oDir);
-		 });
-	 }
- });
-
-program
- .command('*')
- .description('deploy the given env')
- .action(function(env) {
-	 console.log('deploying "%s"', env);
- });
-
-//console.log('chdir: %s config: %s  tests: %s ', program.chdir, program.config, program.noTests);
-//
-//clear();
-//console.log(
-//  chalk.green(
-//    figlet.textSync('Toolbeam', { horizontalLayout: 'full' })
-//  )
-//);
-*/
+switch (argv._[0]) {
+	case LOGIN:
+		login(store);
+		break;
+	case LS:
+		requireLogin(() => list(store));
+		break;
+	case PULL:
+		requireLogin(() => pull(store));
+		break;
+	case PUSH:
+		requireLogin(() => push(store, argv.file));
+		break;
+	case LOGOUT:
+		logout(store);
+		break;
+}

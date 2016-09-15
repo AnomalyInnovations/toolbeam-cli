@@ -25,18 +25,16 @@
     "babel-preset-es2015": "^6.14.0",
     "babel-preset-stage-0": "^6.5.0",
     "chalk": "^1.1.3",
-    "clear": "0.0.1",
     "cli-table": "^0.3.1",
     "clui": "^0.3.1",
-    "commander": "^2.9.0",
-    "figlet": "^1.1.2",
     "preferences": "^0.2.1",
     "prompt": "^1.0.0",
     "redux": "^3.6.0",
     "redux-thunk": "^2.1.0",
     "source-map-support": "^0.4.2",
     "superagent": "^2.2.0",
-    "tv4": "^1.2.7"
+    "tv4": "^1.2.7",
+    "yargs": "^5.0.0"
   },
   "bundledDependencies": [
     "babel-core",
@@ -45,18 +43,16 @@
     "babel-preset-es2015",
     "babel-preset-stage-0",
     "chalk",
-    "clear",
     "cli-table",
     "clui",
-    "commander",
-    "figlet",
     "preferences",
     "prompt",
     "redux",
     "redux-thunk",
     "source-map-support",
     "superagent",
-    "tv4"
+    "tv4",
+    "yargs"
   ],
   "devDependencies": {
     "babel-cli": "^6.14.0"
