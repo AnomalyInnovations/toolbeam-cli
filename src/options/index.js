@@ -1,3 +1,4 @@
+export add from './add';
 export init from './init';
 export list from './list';
 export login from './login';
