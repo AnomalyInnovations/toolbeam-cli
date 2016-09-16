@@ -133,7 +133,7 @@ switch (argv._[0]) {
 		break;
 	case ADD:
 		const {toolOpts, paramOpts} = parseAddOptions(argv.set, argv['set-param']);
-		//requireLogin(() => add(store, argv.path, toolOpts, paramOpts));
+		requireLogin(() => add(store, argv.path, toolOpts, paramOpts));
 		break;
 	case LS:
 		requireLogin(() => list(store));
