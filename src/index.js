@@ -27,7 +27,7 @@ import {
 	push,
 	signup,
 	whoami,
-} from './options';
+} from './commands';
 
 
 // Command list
@@ -53,7 +53,7 @@ const argv = yargs
 		yargs => yargs.usage(`${usagePrefix} ${LOGIN}`))
 	.command(`${INIT} <url>`, 'Initialize your Toolbeam project',
 		yargs => yargs
-			.demand(1, 1, 'Missing: Base <url> of your api')
+			.demand(1, 1, 'Missing: Base <url> of your API')
 			.strict()
 			.usage(`${usagePrefix} ${INIT} <url>`)
 			.example(`tb ${INIT} http://api.example.com`, 'Initilize your Example API project')
