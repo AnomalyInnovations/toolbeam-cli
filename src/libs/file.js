@@ -1,5 +1,15 @@
 import fs from 'fs';
 
+export function existFile(file) {
+	return new Promise((resolve, reject) => {
+		fs.stat(file, (err, stats) => {
+			(err)
+				? (err.code == 'ENOENT' ? resolve(false) : reject(err))
+				: resolve(stats.isFile())
+		});
+	});
+}
+
 export function readFile(file) {
 	return new Promise((resolve, reject) => {
 		fs.readFile(file, 'utf8', (err, data) => {

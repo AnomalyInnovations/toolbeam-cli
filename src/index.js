@@ -19,6 +19,7 @@ import store from './store';
 import _requireLogin from './libs/require-login';
 import _requireAnonymous from './libs/require-anonymous';
 import {
+	add,
 	init,
 	list,
 	login,

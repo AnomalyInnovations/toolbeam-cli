@@ -3,12 +3,28 @@ import { Spinner } from 'clui';
 import URI from 'urijs';
 import config from '../config';
 
-import { writeFile } from '../libs/file';
+import { existFile, writeFile } from '../libs/file';
 import * as specActions from '../actions/spec-actions';
 
 export default async function({getState, dispatch}, url) {
 
+	const spinner = new Spinner('Initializing spec…');
+	spinner.start();
+
 	// ensure not init'ed
+	try {
+		const exists = await existFile(config.specFileName);
+		if (exists) {
+			console.log(chalk.red(`Init failed: project already exist`));
+			spinner.stop();
+			return;
+		}
+	}
+	catch(e) {
+		console.log(chalk.red(e));
+		spinner.stop();
+		return;
+	}
 
 	// parse url
 	const uri = URI(url);
@@ -40,9 +56,6 @@ export default async function({getState, dispatch}, url) {
 	dispatch(specActions.init(spec));
 
 	// write file
-	const spinner = new Spinner('Initializing spec…');
-
-	spinner.start();
 	try {
 		console.log(specActions.getData(getState()));
 		await writeFile(config.specFileName, specActions.getData(getState()));
