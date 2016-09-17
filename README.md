@@ -1,16 +1,32 @@
 # Toolbeam
 
-Toolbeam converts your API to a native cross-platform mobile tool.
+[Toolbeam](https://toolbeam.com) converts your API to a native cross-platform mobile tool.
 
 [![NPM Version][npm-image]][npm-url]
 
 ## Features
 
-TODO: List the features
+1. Native and Cross Platform
+
+   Tools run natively on iOS or Android without any additional setup.
+
+2. Instant Updates
+
+   Updates made via the CLI are reflected immediately on your phone.
+
+3. Simple Notification API
+
+   Send iOS or Android notifications to your tools using our simple notification API.
+
+4. Share via a Link
+
+   Share your tool with anybody via a link immediately after you create it.
 
 ## Get Started
 
-TODO: Write instructions to get started
+1. Install [Node.js](https://nodejs.org/)
+2. Install the Toolbeam CLI: `npm install -g toolbeam-cli`
+3. Sign up for a Toolbeam account: `tb signup`
 
 ## Examples
 
