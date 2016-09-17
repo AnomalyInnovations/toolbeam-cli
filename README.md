@@ -6,21 +6,21 @@
 
 ## Features
 
-1. Native and Cross Platform
++ Native and Cross Platform
 
-   Tools run natively on iOS or Android without any additional setup.
+  Tools run natively on iOS or Android without any additional setup.
 
-2. Instant Updates
++ Instant Updates
 
-   Updates made via the CLI are reflected immediately on your phone.
+  Updates made via the CLI are reflected immediately on your phone.
 
-3. Simple Notification API
++ Simple Notification API
 
-   Send iOS or Android notifications to your tools using our simple notification API.
+  Send iOS or Android notifications to your tools using our simple notification API.
 
-4. Share via a Link
++ Share via a Link
 
-   Share your tool with anybody via a link immediately after you create it.
+  Share your tool with anybody via a link immediately after you create it.
 
 ## Get Started
 
