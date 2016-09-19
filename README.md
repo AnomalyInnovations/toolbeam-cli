@@ -4,21 +4,48 @@
 
 [![NPM Version][npm-image]][npm-url]
 
+
+## How it works
+
+Toolbeam converts REST APIs to native mobile tools. Let's look at an example:
+
+1. Take a GET API resource that returns the status of the server
+
+   ```
+   http://api.example.com/v1/test/dummy_server_status
+   ```
+
+2. Add it to Toolbeam and create a tool
+
+   ```
+   > tb init http://api.example.com/v1/test
+   > tb add /dummy_server_status
+   > tb push
+   ```
+
+3. Navigate to the tool on your phone
+
+   :calling: &nbsp; **https://toolbeam.com/t/qoqivpum**
+
+   <!---
+   ![Tool](http://i.imgur.com/TtNaEfP.gif)
+   -->
+
 ## Features
 
-+ Native and Cross Platform
++ **Native and Cross Platform**
 
   Tools run natively on iOS or Android without any additional setup.
 
-+ Instant Updates
++ **Instant Updates**
 
   Updates made via the CLI are reflected immediately on your phone.
 
-+ Simple Notification API
++ **Simple Notification API**
 
   Send iOS or Android notifications to your tools using our simple notification API.
 
-+ Share via a Link
++ **Share via a Link**
 
   Share your tool with anybody via a link immediately after you create it.
 
@@ -32,9 +59,141 @@
 
 TODO: List all the different examples
 
-## Documentation
+## Toolbeam CLI
 
-TODO: Write documentation
+```
+Usage: tb <command>
+
+Commands:
+  signup       Sign up for Toolbeam
+  login        Login to Toolbeam
+  init <url>   Initialize your Toolbeam project
+  add <path>   Add an API resource as a tool
+  ls           List all your tools
+  pull         Pull your spec from Toolbeam
+  push <file>  Push your spec to Toolbeam
+  whoami       Info about current logged in user
+  logout       Logout from Toolbeam
+
+Options:
+  -h, --help     Show help  [boolean]
+  -v, --version  Show version number  [boolean]
+```
+
+### tb init \<url\>
+
+**Arguments**
+
+  + \<url\>
+
+    The base url of your API.
+
+**Examples**
+
+  + Initilize your Example API project.
+
+    `tb init http://api.example.com`
+
+  + Include the base path of your API.
+
+    `tb init http://api.example.com/v1`
+
+### tb add \<path\> [options]
+
+**Arguments**
+
+  + \<path\>
+
+    The path of your API resource. Supports path templating. Use curly braces ({}) to mark a section of a URL path as replaceable using path parameters.
+
+**Options**
+
+--set
+
+Set \<key\>:\<value\> options for the tool [array]
+
+  + operation:[GET|POST|PUT|DELETE]
+
+    The HTTP operation for this resource. Defaults to GET.
+
+  + security:[basic|none]
+
+    Type of security; 'basic' for basic auth or 'none' for no authentication. Defaults to 'none'.
+
+--set-param
+
+Set a parameter for the tool and \<key\>:\<value\> options [array]
+
+  + name:[string]
+
+    The name of the parameter. This will be used in path templating and in the headers depending on where it is used.
+
+  + in:[path|query|header|formData]
+
+    The type of the parameter and where it will be used.
+
+    - path
+  
+      Used to replace the parameter in path templating. The parameter `foo` will be applied to the base API path `/movies/{foo}`.
+  
+    - query
+  
+      Parameter will be added to the query string for the request.
+  
+    - header
+  
+      Parameter will be added as a custom header for the request.
+  
+    - formData
+  
+      HTTP request will be made as `application/x-www-form-urlencoded` and parameter will be passed in the request body similar to the query string format of `foo=1&bar=value`.
+
+**Examples**
+
+  + Add a GET resource with no parameters as a tool.
+
+    `tb add /movies`
+  
+  + Add a POST resource as a tool.
+
+    `tb add /movies/31/like --set operation:POST`
+  
+  + Add a GET resource with security type basic auth.
+
+    `tb add /movies/upload --set security:basic`
+  
+  +  Add a GET resource with a paramter using path templating.
+
+    `tb add /movies/{id} --set-param name:id in:path`
+
+  + Add a GET resource with two query string parameters.
+
+    ```
+    tb add /movies/search?query={str}&sort={order} \
+           --set-param name:str in:query \
+           --set-param name:order in:query
+    ```
+  
+  + Add a DELETE resource with a header parameter.
+    
+    ```
+    tb add /movies/1/remove \
+           --set operation:DELETE \
+           --set-param name:session_key in:header
+    ```
+  
+  + Add a POST resource with two form data parameters.
+
+    ```
+    tb add /movies/add \
+           --set operation:POST \
+           --set-param name:title in:formData \
+           --set-param name:year in:formData
+    ```
+
+## Toolbeam Spec
+
+Running `tb init <url>` and `tb add <path>` creates an [Open API Spec](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md) json file describing the API resource in the current directory. To further customize your tool you can directly edit the spec. Below are the properties of the Open API Spec that Toolbeam uses.
 
 ## Support
 
