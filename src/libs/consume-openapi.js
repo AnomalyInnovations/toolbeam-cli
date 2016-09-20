@@ -16,6 +16,12 @@ export function specNameFromOpenapi(oapi) {
 		: oapi.host;
 }
 
+export function specUUIDFromOpenapi(oapi) {
+	return (oapi.info && oapi.info['x-tb-uuid'])
+		? oapi.info['x-tb-uuid']
+		: null;
+}
+
 function getEndpoints(oapi) {
 	return Object.keys(oapi.paths).reduce((acc, path) => {
 		Object.keys(oapi.paths[path])

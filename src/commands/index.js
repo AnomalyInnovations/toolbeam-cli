@@ -3,6 +3,7 @@ export init from './init';
 export list from './list';
 export login from './login';
 export logout from './logout';
+export projects from './projects';
 export pull from './pull';
 export push from './push';
 export signup from './signup';

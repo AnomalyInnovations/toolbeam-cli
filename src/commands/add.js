@@ -93,8 +93,10 @@ export default async function({getState, dispatch}, path, toolData, paramData) {
 				"description": "Results"
 			}
 		},
-		"x-tb-action_label": operation == 'get' ? 'Get' : 'Submit',
-		"x-tb-color": "red"
+		"x-tb-actionLabel": operation == 'get' ? 'Get' : 'Submit',
+		"x-tb-color": "red",
+		"x-tb-needsConfirm": false,
+		"x-tb-needsNotificationPermission": false
 	};
 	paramData.forEach(perData => {
 		json.paths[path][operation].parameters.push({
@@ -102,19 +104,15 @@ export default async function({getState, dispatch}, path, toolData, paramData) {
 			"in": perData.in,
 			"required": true,
 			"type": "string",
-			"x-tb-field_label": perData.name,
-			"x-tb-field_placeholder": "",
-			"x-tb-field_type": "text"
+			"x-tb-fieldLabel": perData.name,
+			"x-tb-fieldPlaceholder": "",
+			"x-tb-fieldType": "text"
 		});
 	});
 
-	// build spec
-	dispatch(specActions.init(json));
-
-	// write file
+	// save spec
 	try {
-		console.log(specActions.getData(getState()));
-		await writeFile(config.specFileName, specActions.getData(getState()));
+		dispatch(specActions.save(json));
 	}
 	catch(e) {
 		console.log(chalk.red(e));

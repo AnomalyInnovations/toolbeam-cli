@@ -3,7 +3,7 @@ import { Spinner } from 'clui';
 import URI from 'urijs';
 import config from '../config';
 
-import { existFile, writeFile } from '../libs/file';
+import { existFile } from '../libs/file';
 import * as specActions from '../actions/spec-actions';
 
 export default async function({getState, dispatch}, url) {
@@ -37,28 +37,23 @@ export default async function({getState, dispatch}, url) {
 		return;
 	}
 
-	// build spec
-	const spec =
-	{
-		"swagger": "2.0",
-		"info": {
-			"title": `${host} API`,
-			"version": "1.0.0"
-		},
-		"host": host,
-		"basePath": basePath,
-		"schemes": [
-			scheme
-		],
-		"paths": {
-		}
-	}
-	dispatch(specActions.init(spec));
-
-	// write file
+	// save spec
 	try {
-		console.log(specActions.getData(getState()));
-		await writeFile(config.specFileName, specActions.getData(getState()));
+		const spec = {
+			"swagger": "2.0",
+			"info": {
+				"title": `${host} API`,
+				"version": "1.0.0"
+			},
+			"host": host,
+			"basePath": basePath,
+			"schemes": [
+				scheme
+			],
+			"paths": {
+			}
+		}
+		await dispatch(specActions.save(spec));
 	}
 	catch(e) {
 		console.log(chalk.red(e));

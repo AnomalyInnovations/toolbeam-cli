@@ -119,6 +119,9 @@ export default {
         },
         "license": {
           "$ref": "#/definitions/license"
+        },
+        "x-tb-uuid": {
+          "type": "string"
         }
       }
     },
@@ -1747,8 +1750,7 @@ export default {
 			"minLength": 1
 		},
 		"x-tb-fieldPlaceholder": {
-			"type": "string",
-			"minLength": 1
+			"type": "string"
 		},
 		"x-tb-fieldType": {
 			"type": "string",

@@ -60,5 +60,5 @@ function colorToChalk(color) {
 }
 
 function fullURL(uri) {
-	return `${config.webScheme}://${config.webHost}/${uri}`;
+	return `${config.webScheme}://${config.webHost}/t/${uri}`;
 }

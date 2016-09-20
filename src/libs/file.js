@@ -29,3 +29,13 @@ export function writeFile(file, content) {
 		});
 	});
 }
+
+export function deleteFile(file) {
+	return new Promise((resolve, reject) => {
+		fs.unlink(file, (err) => {
+			(err)
+				? reject(err)
+				: resolve()
+		});
+	});
+}

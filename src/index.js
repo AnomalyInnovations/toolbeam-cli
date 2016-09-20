@@ -24,6 +24,7 @@ import {
 	list,
 	login,
 	logout,
+	projects,
 	pull,
 	push,
 	signup,
@@ -36,6 +37,7 @@ const SIGNUP = 'signup';
 const LOGIN = 'login';
 const INIT = 'init';
 const ADD = 'add';
+const PROJECTS = 'projects';
 const LS = 'ls';
 const PULL = 'pull';
 const PUSH = 'push';
@@ -87,19 +89,17 @@ const argv = yargs
 			.example(`tb ${ADD} /user/31/like --set operation:POST`, 'Add a POST resource')
 			.fail(failFn))
 
+	.command(PROJECTS, 'List all your projects',
+		yargs => yargs.usage(`${usagePrefix} ${PROJECTS}`))
+
 	.command(LS, 'List all your tools',
 		yargs => yargs.usage(`${usagePrefix} ${LS}`))
 
 	.command(PULL, 'Pull your spec from Toolbeam',
 		yargs => yargs.usage(`${usagePrefix} ${PULL}`))
 
-	.command(`${PUSH} <file>`, 'Push your spec to Toolbeam',
-		yargs => yargs
-			.demand(1, 1, 'Missing: <file> that needs to be pushed')
-			.strict()
-			.usage(`${usagePrefix} ${PUSH} <file>`)
-			.example(`tb ${PUSH} spec.json`, 'Push spec.json to Toolbeam')
-			.fail(failFn))
+	.command(PUSH, 'Push your spec to Toolbeam',
+		yargs => yargs.usage(`${usagePrefix} ${PUSH}`))
 
 	.command(WHOAMI, 'Info about current logged in user',
 		yargs => yargs.usage(`${usagePrefix} ${WHOAMI}`))
@@ -135,6 +135,9 @@ switch (argv._[0]) {
 		const {toolOpts, paramOpts} = parseAddOptions(argv.set, argv['set-param']);
 		requireLogin(() => add(store, argv.path, toolOpts, paramOpts));
 		break;
+	case PROJECTS:
+		requireLogin(() => projects(store));
+		break;
 	case LS:
 		requireLogin(() => list(store));
 		break;
@@ -142,7 +145,7 @@ switch (argv._[0]) {
 		requireLogin(() => pull(store));
 		break;
 	case PUSH:
-		requireLogin(() => push(store, argv.file));
+		requireLogin(() => push(store));
 		break;
 	case LOGOUT:
 		logout(store);
