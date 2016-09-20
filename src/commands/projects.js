@@ -37,7 +37,7 @@ export default async function({getState, dispatch}) {
 		project.name, project.uuid
 	]);
 
-	table.push([["Project", "Project ID"], ...projectRows);
+	table.push(["Project", "Project ID"], ...projectRows);
 
 	console.log(table.toString());
 }
