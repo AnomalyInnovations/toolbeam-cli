@@ -74,3 +74,7 @@ export function getSessionId(state) {
 export function getUserEmail(state) {
 	return state.user.user.email;
 }
+
+export function getUserApiKey(state) {
+	return state.user.user.api_key;
+}
