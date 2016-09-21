@@ -95,10 +95,13 @@ const argv = yargs
 	.command(LS, 'List all your tools',
 		yargs => yargs.usage(`${usagePrefix} ${LS}`))
 
-	.command(PULL, 'Pull your spec from Toolbeam',
-		yargs => yargs.usage(`${usagePrefix} ${PULL}`))
+	.command(`${PULL} [id]`, 'Pull your current project spec from Toolbeam',
+		yargs => yargs
+			.usage(`${usagePrefix} ${PULL} [id]    Optionally pass in a project id`)
+			.strict()
+			.fail(failFn))
 
-	.command(PUSH, 'Push your spec to Toolbeam',
+	.command(PUSH, 'Push your current project spec to Toolbeam',
 		yargs => yargs.usage(`${usagePrefix} ${PUSH}`))
 
 	.command(WHOAMI, 'Info about current logged in user',
@@ -142,7 +145,7 @@ switch (argv._[0]) {
 		requireLogin(() => list(store));
 		break;
 	case PULL:
-		requireLogin(() => pull(store));
+		requireLogin(() => pull(store, argv.id));
 		break;
 	case PUSH:
 		requireLogin(() => push(store));
