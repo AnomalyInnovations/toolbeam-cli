@@ -1,8 +1,9 @@
 {
   "name": "toolbeam-cli",
-  "version": "0.0.3",
+  "version": "0.0.8",
   "description": "CLI for Toolbeam",
   "main": "index.js",
+  "files": ["build/"],
   "repository": {
     "type": "git",
     "url": "https://github.com/AnomalyInnovations/toolbeam-cli.git"
