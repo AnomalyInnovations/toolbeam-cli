@@ -62,16 +62,16 @@ TODO: List all the different examples
 ## Documentation
 
 1. [Toolbeam CLI](#toolbeam-cli)
-   1. [tb init \<url\>]()
-   2. [tb add \<path\> [options]]()
-   3. [tb projects]()
-   4. [tb ls]()
-   5. [tb pull [id]]()
-   6. [tb whoami]()
-2. [Toolbeam Spec]()
-   1. [Tool Options]()
-   2. [Field Options]()
-3. [Linking Tools]()
+   1. [tb init](#tb-init-url)
+   2. [tb add](#tb-add-path)
+   3. [tb projects](#tb-projects)
+   4. [tb ls](#tb-ls)
+   5. [tb pull](#tb-pull)
+   6. [tb whoami](#tb-whoami)
+2. [Toolbeam Spec](#toolbeam-spec)
+   1. [Tool Options](#tool-options)
+   2. [Field Options](#field-options)
+3. [Linking Tools](#linking-tools)
 
 ### Toolbeam CLI
 
