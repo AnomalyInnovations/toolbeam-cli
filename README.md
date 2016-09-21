@@ -84,112 +84,112 @@ Options:
 
 **Arguments**
 
-  + \<url\>
++ \<url\>
 
-    The base url of your API.
+  The base url of your API.
 
 **Examples**
 
-  + Initilize your Example API project.
++ Initilize your Example API project.
 
-    `tb init http://api.example.com`
+  `tb init http://api.example.com`
 
-  + Include the base path of your API.
++ Include the base path of your API.
 
-    `tb init http://api.example.com/v1`
+  `tb init http://api.example.com/v1`
 
 ### tb add \<path\> [options]
 
 **Arguments**
 
-  + \<path\>
++ \<path\>
 
-    The path of your API resource. Supports path templating. Use curly braces ({}) to mark a section of a URL path as replaceable using path parameters.
+  The path of your API resource. Supports path templating. Use curly braces ({}) to mark a section of a URL path as replaceable using path parameters.
 
 **Options**
 
-  + --set
++ --set
 
-    Set \<key\>:\<value\> options for the tool [array]
+  Set \<key\>:\<value\> options for the tool [array]
 
-    + operation:[GET|POST|PUT|DELETE]
+  - operation:[GET|POST|PUT|DELETE]
+
+    The HTTP operation for this resource. Defaults to GET.
+
+  - security:[basic|none]
+
+    Type of security; 'basic' for basic auth or 'none' for no authentication. Defaults to 'none'.
+
++ --set-param
+
+  Set a parameter for the tool and \<key\>:\<value\> options [array]
+
+  - name:[string]
+
+    The name of the parameter. This will be used in path templating and in the headers depending on where it is used.
+
+  - in:[path|query|header|formData]
+
+    The type of the parameter and where it will be used.
+
+    * path
   
-      The HTTP operation for this resource. Defaults to GET.
+      Used to replace the parameter in path templating. The parameter `foo` will be applied to the base API path `/movies/{foo}`.
   
-    + security:[basic|none]
+    * query
   
-      Type of security; 'basic' for basic auth or 'none' for no authentication. Defaults to 'none'.
+      Parameter will be added to the query string for the request.
   
-  + --set-param
+    * header
   
-    Set a parameter for the tool and \<key\>:\<value\> options [array]
+      Parameter will be added as a custom header for the request.
   
-    + name:[string]
+    * formData
   
-      The name of the parameter. This will be used in path templating and in the headers depending on where it is used.
-  
-    + in:[path|query|header|formData]
-  
-      The type of the parameter and where it will be used.
-  
-      - path
-    
-        Used to replace the parameter in path templating. The parameter `foo` will be applied to the base API path `/movies/{foo}`.
-    
-      - query
-    
-        Parameter will be added to the query string for the request.
-    
-      - header
-    
-        Parameter will be added as a custom header for the request.
-    
-      - formData
-    
-        HTTP request will be made as `application/x-www-form-urlencoded` and parameter will be passed in the request body similar to the query string format of `foo=1&bar=value`.
+      HTTP request will be made as `application/x-www-form-urlencoded` and parameter will be passed in the request body similar to the query string format of `foo=1&bar=value`.
 
 **Examples**
 
-  + Add a GET resource with no parameters as a tool.
++ Add a GET resource with no parameters as a tool.
 
-    `tb add /movies`
+  `tb add /movies`
+
++ Add a POST resource as a tool.
+
+  `tb add /movies/31/like --set operation:POST`
+
++ Add a GET resource with security type basic auth.
+
+  `tb add /movies/upload --set security:basic`
+
++  Add a GET resource with a paramter using path templating.
+
+  `tb add /movies/{id} --set-param name:id in:path`
+
++ Add a GET resource with two query string parameters.
+
+  ```
+  tb add /movies/search \
+         --set-param name:query in:query \
+         --set-param name:sort in:query
+  ```
+
++ Add a DELETE resource with a header parameter.
   
-  + Add a POST resource as a tool.
+  ```
+  tb add /movies/1/remove \
+         --set operation:DELETE \
+         --set-param name:session_key in:header
+  ```
 
-    `tb add /movies/31/like --set operation:POST`
-  
-  + Add a GET resource with security type basic auth.
++ Add a POST resource with two form data parameters.
 
-    `tb add /movies/upload --set security:basic`
-  
-  +  Add a GET resource with a paramter using path templating.
-
-    `tb add /movies/{id} --set-param name:id in:path`
-
-  + Add a GET resource with two query string parameters.
-
-    ```
-    tb add /movies/search \
-           --set-param name:query in:query \
-           --set-param name:sort in:query
-    ```
-  
-  + Add a DELETE resource with a header parameter.
-    
-    ```
-    tb add /movies/1/remove \
-           --set operation:DELETE \
-           --set-param name:session_key in:header
-    ```
-  
-  + Add a POST resource with two form data parameters.
-
-    ```
-    tb add /movies/add \
-           --set operation:POST \
-           --set-param name:title in:formData \
-           --set-param name:year in:formData
-    ```
+  ```
+  tb add /movies/add \
+         --set operation:POST \
+         --set-param name:title in:formData \
+         --set-param name:year in:formData
+  ```
 
 ## Toolbeam Spec
 
@@ -260,99 +260,99 @@ Below is a more detailed explanation of the fields that are used.
 
 ### Tool Options
 
-  + x-tb-name:[string]
++ x-tb-name:[string]
 
-    The name of the tool. If not provided, Toolbeam generates a name.
+  The name of the tool. If not provided, Toolbeam generates a name.
 
-  + x-tb-color:[red|blue|orange|green|purple]
++ x-tb-color:[red|blue|orange|green|purple]
 
-    The color of the tool.
+  The color of the tool.
 
-  + summary:[string]
++ summary:[string]
 
-    A small summary of the tool that is displayed at the top. Can be used to provide the user with a helpful description.
+  A small summary of the tool that is displayed at the top. Can be used to provide the user with a helpful description.
 
-  + operationId:[string]
++ operationId:[string]
 
-    A unique id that is used to identify the tool. If changed, Toolbeam will generate a new tool.
+  A unique id that is used to identify the tool. If changed, Toolbeam will generate a new tool.
 
-  + x-tb-actionLabel:[string]
++ x-tb-actionLabel:[string]
 
-    The label of the submit button of the tool.
+  The label of the submit button of the tool.
 
-  + x-tb-needsConfirm:[boolean]
++ x-tb-needsConfirm:[boolean]
 
-    True if a confirm dialog should be presented on submit.
+  True if a confirm dialog should be presented on submit.
 
-  + x-tb-needsNotificationPermission:[boolean]
++ x-tb-needsNotificationPermission:[boolean]
 
     True if the tool needs to ask the user permission to send notifications.
 
 ### Field Options
 
-  + name:[string]
++ name:[string]
 
-    The name of the parameter. This will be used in path templating and in the headers depending on where it is used. This option is required.
+  The name of the parameter. This will be used in path templating and in the headers depending on where it is used. This option is required.
 
-  + in:[path|query|header|formData]
-  
-    The type of the parameter and where it will be used. This option is required.
++ in:[path|query|header|formData]
 
-  + required:[boolean]
-  
-    True if this is a required field.
+  The type of the parameter and where it will be used. This option is required.
 
-  + default:[string]
-  
-    The default value of the field.
++ required:[boolean]
 
-  + x-tb-fieldLabel:[string]
-  
-    The label for the field. If not provided, the `name` is used as the label.
+  True if this is a required field.
 
-  + x-tb-fieldPlaceholder:[string]
-  
-    The placeholder text for the field. If not provided, the `type` is used as the placeholder.
++ default:[string]
 
-  + x-tb-fieldType:[text|number|email|select|hidden]
-  
-    The type of the field.
+  The default value of the field.
 
-      - text
-        
-        Displays the standard alphanumeric keypad on field focus.
++ x-tb-fieldLabel:[string]
 
-      - number
-        
-        Displays the number keypad on field focus.
+  The label for the field. If not provided, the `name` is used as the label.
 
-      - email
-        
-        Displays the email keypad on field focus.
++ x-tb-fieldPlaceholder:[string]
 
-      - hidden
-        
-        The field is not displayed to the user. Can be used in conjuction with setting a  `default` to pass some data in the request that does not change.
+  The placeholder text for the field. If not provided, the `type` is used as the placeholder.
 
-      - select
-        
-        The field is displayed as a picker. Use in conjuction with `enum` and `x-tb-fieldEnumLabel`. As an exmaple here is a param block for a select:
-        ```
-        {
-          "name": "type",
-          "in": "query",
-          "type": "string",
-          "x-tb-fieldType": "select",
-          "enum": ["casual_users", "paying_users"],
-          "x-tb-fieldEnumLabel": ["Casual Users", "Paying Users"]
-        }
-        ```
++ x-tb-fieldType:[text|number|email|select|hidden]
 
-  + enum:[array]
-  
-    An array of values used by the picker if the `x-tb-fieldType` is select. The index corresponding the selected item in the picker is passed in the request.
+  The type of the field.
 
-  + x-tb-fieldEnumLabel:[array]
+  - text
+    
+    Displays the standard alphanumeric keypad on field focus.
+
+  - number
+    
+    Displays the number keypad on field focus.
+
+  - email
+    
+    Displays the email keypad on field focus.
+
+  - hidden
+    
+    The field is not displayed to the user. Can be used in conjuction with setting a  `default` to pass some data in the request that does not change.
+
+  - select
+    
+    The field is displayed as a picker. Use in conjuction with `enum` and `x-tb-fieldEnumLabel`. As an exmaple here is a param block for a select:
+    ```
+    {
+      "name": "type",
+      "in": "query",
+      "type": "string",
+      "x-tb-fieldType": "select",
+      "enum": ["casual_users", "paying_users"], // This is sent in the API request
+      "x-tb-fieldEnumLabel": ["Casual Users", "Paying Users"] // This is shown to the user
+    }
+    ```
+
++ enum:[array]
+
+  An array of values used by the picker if the `x-tb-fieldType` is select. The index corresponding the selected item in the picker is passed in the request.
+
++ x-tb-fieldEnumLabel:[array]
   
     An array of values displayed as the options in the picker. If not provided, `enum` is displayed as the options.
 
