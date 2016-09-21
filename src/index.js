@@ -152,6 +152,7 @@ switch (argv._[0]) {
 		break;
 	case LOGOUT:
 		logout(store);
+		break;
 	case WHOAMI:
 		requireLogin(() => whoami(store));
 		break;
