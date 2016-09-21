@@ -7,7 +7,7 @@
 
 ## How it works
 
-Toolbeam converts REST APIs to native mobile tools. Let's look at an example:
+Toolbeam converts JSON REST APIs to native mobile tools. Let's look at an example:
 
 1. Take a GET API resource that returns the status of the server
 
@@ -59,28 +59,45 @@ Toolbeam converts REST APIs to native mobile tools. Let's look at an example:
 
 TODO: List all the different examples
 
-## Toolbeam CLI
+## Documentation
+
+1. [Toolbeam CLI](#toolbeam-cli)
+   1. [tb init \<url\>]()
+   2. [tb add \<path\> [options]]()
+   3. [tb projects]()
+   4. [tb ls]()
+   5. [tb pull [id]]()
+   6. [tb whoami]()
+2. [Toolbeam Spec]()
+   1. [Tool Options]()
+   2. [Field Options]()
+3. [Linking Tools]()
+
+### Toolbeam CLI
 
 ```
 Usage: tb <command>
 
 Commands:
-  signup       Sign up for Toolbeam
-  login        Login to Toolbeam
-  init <url>   Initialize your Toolbeam project
-  add <path>   Add an API resource as a tool
-  ls           List all your tools
-  pull         Pull your spec from Toolbeam
-  push <file>  Push your spec to Toolbeam
-  whoami       Info about current logged in user
-  logout       Logout from Toolbeam
+  signup      Sign up for Toolbeam
+  login       Login to Toolbeam
+  init <url>  Initialize your Toolbeam project
+  add <path>  Add an API resource as a tool
+  projects    List all your projects
+  ls          List all your tools
+  pull [id]   Pull your current project spec from Toolbeam
+  push        Push your current project spec to Toolbeam
+  whoami      Info about current logged in user
+  logout      Logout from Toolbeam
 
 Options:
   -h, --help     Show help  [boolean]
   -v, --version  Show version number  [boolean]
 ```
 
-### tb init \<url\>
+#### tb init \<url\>
+
+Initialize a new Toolbeam project with the given base url. Group all your API resources that are under the same base url into a single project. Conversely, create a new project for when adding an API resource that has a different base url.
 
 **Arguments**
 
@@ -98,7 +115,9 @@ Options:
 
   `tb init http://api.example.com/v1`
 
-### tb add \<path\> [options]
+#### tb add \<path\> [options]
+
+Add an API resource with the given path as a tool. The path is relative to the base url of the current project.
 
 **Arguments**
 
@@ -191,7 +210,33 @@ Options:
          --set-param name:year in:formData
   ```
 
-## Toolbeam Spec
+#### tb projects
+
+List all your projects along with their project ids. 
+
+#### tb ls
+
+List all your tools across all your projects along with their shareable url.
+
+#### tb pull [id]
+
+Pull the spec for your current project. Optionally, pull a specific project spec by passing in a project id. You can get the id of a project by using the `tb projects` command.
+
+**Examples**
+
++ Pull the current project spec
+
+  `tb pull`
+
++ Pull the spec of the given project
+
+  `tb pull 510c4e2841caaeadd61fef86284d539a`
+
+#### tb whoami
+
+Shows information about the current logged in session. Also, shows the API key of the current user.
+
+### Toolbeam Spec
 
 Running `tb init <url>` and `tb add <path>` creates an [Open API Spec](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md) json file describing the API resource in the current directory. To further customize your tool you can directly edit the spec and then run `tb push` to update your tools. Below is an annotated spec as an example.
 
@@ -199,7 +244,7 @@ Running `tb init <url>` and `tb add <path>` creates an [Open API Spec](https://g
 {
   "swagger": "2.0",
   "info": {
-    "title": "Acme Api",
+    "title": "Acme Api", // A name for your Toolbeam project
     "version": "1.0.0"
   },
   "host": "api.example.com", // API Host
@@ -258,7 +303,7 @@ Running `tb init <url>` and `tb add <path>` creates an [Open API Spec](https://g
 
 Below is a more detailed explanation of the fields that are used.
 
-### Tool Options
+#### Tool Options
 
 + x-tb-name:[string]
 
@@ -288,7 +333,7 @@ Below is a more detailed explanation of the fields that are used.
 
     True if the tool needs to ask the user permission to send notifications.
 
-### Field Options
+#### Field Options
 
 + name:[string]
 
@@ -356,6 +401,48 @@ Below is a more detailed explanation of the fields that are used.
   
     An array of values displayed as the options in the picker. If not provided, `enum` is displayed as the options.
 
+### Linking Tools
+
+Toolbeam auto converts `https://toolbeam.com/t/{toolId}` urls in an API response into a button that directs users to the specified tool. By using these links we can chain tools together. This is useful for cases where you want a user to execute an action based on what is returned from a tool.
+
+**Types of Links**
+
++ Link to the tool
+
+  Link to a tool by returning `https://toolbeam.com/t/{toolId}?paramName={defaultValue}` in your API. In the query string of the url you can add the parameters of the tool that you would like to initialize with.
+
++ Link directly to the tool response screen
+
+  You can also directly link to the response screen of a tool by returning the url `https://toolbeam.com/t/{toolId}/response?paramName={defaultValue}`. This is effectively making the API request of the tool with the passed in parameters.
+
+**Examples**
+
+Suppose your user info API responded with the following object. And you had a Edit User Info tool @ `https://toolbeam.com/t/whvhltqmi`.
+
+```javascript
+{
+  "user_id": 512,
+  "edit": <link>
+}
+```
+
+Then you could return the following as a `<link>`:
+
++ Link to the Edit User Info tool
+
+  `https://toolbeam.com/t/whvhltqmi`
+
++ Link to the tool with parameter `user_id` initialized to `512`
+
+  `https://toolbeam.com/t/whvhltqmi?user_id=512`
+
++ Link to the tool with parameter `user_id` and `type` initialized
+
+  `https://toolbeam.com/t/whvhltqmi?user_id=512&type=admin`
+
++ Link directly to the response screen of a tool with parameters `user_id` and `type`
+
+  `https://toolbeam.com/t/whvhltqmi/response?user_id=512&type=admin`
 
 ## Support
 
