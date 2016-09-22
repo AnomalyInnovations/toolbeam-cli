@@ -63,10 +63,10 @@ TODO: List all the different examples
 
 1. [Toolbeam CLI](#toolbeam-cli)
    1. [tb init](#tb-init-url)
-   2. [tb add](#tb-add-path)
+   2. [tb add](#tb-add-path-options)
    3. [tb projects](#tb-projects)
    4. [tb ls](#tb-ls)
-   5. [tb pull](#tb-pull)
+   5. [tb pull](#tb-pull-id)
    6. [tb whoami](#tb-whoami)
 2. [Toolbeam Spec](#toolbeam-spec)
    1. [Tool Options](#tool-options)
