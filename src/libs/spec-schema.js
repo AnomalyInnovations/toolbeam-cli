@@ -1755,12 +1755,14 @@ export default {
 		"x-tb-fieldType": {
 			"type": "string",
 			"enum": [
-				"text",
-				"number",
 				"email",
-				"select",
 				"geolocation",
-				"hidden"
+				"hidden",
+				"image",
+				"number",
+				"select",
+				"text",
+				"video"
 			]
 		},
 		"x-tb-fieldEnumLabel": {

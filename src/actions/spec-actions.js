@@ -76,6 +76,19 @@ export function update(specData) {
 	};
 }
 
+export function remove(uuid) {
+	return {
+		types: [types.SPEC_REMOVE, types.SPEC_REMOVE_SUCCESS, types.SPEC_REMOVE_FAIL],
+		promise: (client, sessionId) => {
+			return client.post('/user/remove_spec', {
+				data: {
+					spec_uuid			: uuid,
+					session_id 		: sessionId,
+				}});
+		}
+	};
+}
+
 //////////////////////
 // Public Functions //
 //////////////////////

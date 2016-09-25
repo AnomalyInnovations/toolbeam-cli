@@ -3,12 +3,23 @@ import { Spinner } from 'clui';
 import Table from 'cli-table';
 
 import config from '../config';
+import * as specsActions from '../actions/specs-actions';
 import * as toolsActions from '../actions/tools-actions';
 
 export default async function({getState, dispatch}) {
-	const spinner = new Spinner('Fetching your tools…');
+	const spinner = new Spinner('Fetching your projects…');
 
 	spinner.start();
+
+	// Load projects
+	try {
+		await dispatch(specsActions.load());
+	}
+	catch(e) {
+		spinner.stop();
+		console.log(chalk.red(`Failed to fetch: ${e.message}`));
+		return;
+	}
 
 	// Load tools
 	try {
@@ -22,22 +33,35 @@ export default async function({getState, dispatch}) {
 
 	spinner.stop();
 
+	// Build output
+	const projects = specsActions.getSpecs(getState());
+	const projectsById = projects.reduce((acc, project) => {
+		acc[project.id] = project
+		return acc;
+	}, {});
 	const tools = toolsActions.getTools(getState());
 
 	if (tools.length === 0) {
-		console.log(chalk.cyan('Your tool list is empty!'));
+		console.log(chalk.cyan('Your project list is empty!'));
 		return;
 	}
 
 	const table = new Table({
-		colWidths: [24, 34]
+		colWidths: [24, 35, 35, 35]
 	});
 
-	const toolRows = tools.map(tool => [
-		colorToChalk(tool.color)(tool.name), fullURL(tool.uri)
-	]);
+	const toolRows = tools.map(tool => {
+		const projectId = tool.spec_id;
+		const project = projectsById[projectId];
+		return [
+			project.name,
+			project.uuid,
+			colorToChalk(tool.color)(tool.name),
+			fullURL(tool.uri)
+		];
+	});
 
-	table.push(...toolRows);
+	table.push(["Project", "Project ID", "Tool", "Tool Link"], ...toolRows);
 
 	console.log(table.toString());
 }

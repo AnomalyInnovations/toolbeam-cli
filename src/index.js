@@ -21,10 +21,10 @@ import _requireAnonymous from './libs/require-anonymous';
 import {
 	add,
 	init,
-	list,
 	login,
 	logout,
-	projects,
+	projectLs,
+	projectRm,
 	pull,
 	push,
 	signup,
@@ -98,9 +98,6 @@ const argv = yargs
 	.command(`${RM} <path> [oprn]`, false, yargs => cmdRemove(yargs, RM))
 	.command(`${RM} <path> [oprn]`, 'Remove the given API resource', yargs => cmdRemove(yargs, RM))
 
-//	.command(LS, 'List all your tools',
-//		yargs => yargs.usage(`${usagePrefix} ${LS}`))
-
 	.command(`${PULL} [id]`, 'Pull your current project spec from Toolbeam',
 		yargs => yargs
 			.usage(`${usagePrefix} ${PULL} [id]`)
@@ -158,9 +155,6 @@ switch (argv._[0]) {
 		console.log('TODO: Implement add:', argv.path, argv.oprn, toolOpts, paramOpts);
 //		requireLogin(() => add(store, argv.path, toolOpts, paramOpts));
 		break;
-//	case LS:
-//		requireLogin(() => list(store));
-//		break;
 	case RM:
 		console.log('TODO: Implement remove:', argv.path, argv.oprn);
 		break;
@@ -174,11 +168,11 @@ switch (argv._[0]) {
 		switch (argv._[1]) {
 			case LS:
 			case LIST:
-				requireLogin(() => projects(store));
+				requireLogin(() => projectLs(store));
 				break;
 			case RM:
 			case REMOVE:
-				console.log('TODO: Implement remove');
+				requireLogin(() => projectRm(store, argv.id));
 				break;
 		}
 		break;
