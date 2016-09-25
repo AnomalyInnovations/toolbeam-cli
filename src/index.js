@@ -47,8 +47,8 @@ const PUSH = 'push';
 const LOGOUT = 'logout';
 const WHOAMI = 'whoami';
 
-const LSDESC = 'List all your projects';
-const RMDESC = 'Remove a project';
+const PROJECTLSDESC = 'List all your projects';
+const PROJECTRMDESC = 'Remove a project';
 
 const usagePrefix = 'Usage: tb';
 const requireLogin = _requireLogin(store);
@@ -78,6 +78,7 @@ const argv = yargs
 		yargs => yargs
 			.demand(1, 2, 'Missing: <path> of your API resource')
 			.strict()
+			.check(checkOperation)
 			.option('set', {
 				type: 'array',
 				group: 'Tool Options:',
@@ -95,7 +96,7 @@ const argv = yargs
 			.example(`tb ${ADD} /users/{id} POST --set-param name:id in:path`, 'Add a POST resource with a path parameter')
 			.fail(failFn))
 
-	.command(`${RM} <path> [oprn]`, false, yargs => cmdRemove(yargs, RM))
+	.command(`${REMOVE} <path> [oprn]`, false, yargs => cmdRemove(yargs, RM))
 	.command(`${RM} <path> [oprn]`, 'Remove the given API resource', yargs => cmdRemove(yargs, RM))
 
 //	.command(LS, 'List all your tools',
@@ -117,9 +118,9 @@ const argv = yargs
 			.usage(`${usagePrefix} ${PROJECT} <command>`)
 			.demand(2, 2, 'Missing: <command> to be executed')
 			.strict()
-			.command(LS, LSDESC, yargs => cmdProjectLs(yargs, LS))
+			.command(LS, PROJECTLSDESC, yargs => cmdProjectLs(yargs, LS))
 			.command(LIST, false, yargs => cmdProjectLs(yargs, LIST))
-			.command(`${RM} <id>`, RMDESC, yargs => cmdProjectRm(yargs, RM))
+			.command(`${RM} <id>`, PROJECTRMDESC, yargs => cmdProjectRm(yargs, RM))
 			.command(`${REMOVE} <id>`, false, yargs => cmdProjectRm(yargs, REMOVE))
 			.fail(failFn))
 
@@ -162,6 +163,7 @@ switch (argv._[0]) {
 //		requireLogin(() => list(store));
 //		break;
 	case RM:
+	case REMOVE:
 		console.log('TODO: Implement remove:', argv.path, argv.oprn);
 		break;
 	case PULL:
@@ -242,14 +244,30 @@ function parseAddOptions(toolOptStr = [], paramOptStr = []) {
 	};
 }
 
+function checkOperation(argv) {
+	const types = {
+		'get': true,
+		'post': true,
+		'put': true,
+		'patch': true,
+		'delete': true
+	};
+
+	if (argv._[2] && ! types.hasOwnProperty(argv._[2].toLowerCase())) {
+		return 'Error: Not a valid HTTP operation <oprn>';
+	}
+	return true;
+}
+
 function cmdRemove(yargs, cmd) {
 	yargs
 		.demand(1, 2, 'Missing: <path> of your API resource')
 		.strict()
+		.check(checkOperation)
 		.usage(`${usagePrefix} ${cmd} <path> [oprn]`)
 		.example(`tb ${cmd} /users`, 'Remove the \/users GET resource')
 		.example(`tb ${cmd} /users/{id} POST`, 'Remove the \/users/{id} POST resource')
-		.fail(failFn)
+		.fail(failFn);
 }
 
 function cmdProjectLs(yargs, cmd) {
