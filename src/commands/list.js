@@ -30,7 +30,7 @@ export default async function({getState, dispatch}) {
 	}
 
 	const table = new Table({
-		colWidths: [24, 32]
+		colWidths: [24, 34]
 	});
 
 	const toolRows = tools.map(tool => [

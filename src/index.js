@@ -37,12 +37,18 @@ const SIGNUP = 'signup';
 const LOGIN = 'login';
 const INIT = 'init';
 const ADD = 'add';
-const PROJECTS = 'projects';
+const PROJECT = 'project';
 const LS = 'ls';
+const LIST = 'list';
+const RM = 'rm';
+const REMOVE = 'remove';
 const PULL = 'pull';
 const PUSH = 'push';
 const LOGOUT = 'logout';
 const WHOAMI = 'whoami';
+
+const LSDESC = 'List all your projects';
+const RMDESC = 'Remove a project';
 
 const usagePrefix = 'Usage: tb';
 const requireLogin = _requireLogin(store);
@@ -68,9 +74,9 @@ const argv = yargs
 			.example(`tb ${INIT} http://api.example.com`, 'Initilize your Example API project')
 			.fail(failFn))
 
-	.command(`${ADD} <path>`, 'Add an API resource as a tool',
+	.command(`${ADD} <path> [oprn]`, 'Add an API resource as a tool',
 		yargs => yargs
-			.demand(1, 1, 'Missing: <path> of your API resource')
+			.demand(1, 2, 'Missing: <path> of your API resource')
 			.strict()
 			.option('set', {
 				type: 'array',
@@ -82,27 +88,40 @@ const argv = yargs
 				group: 'Parameter Options:',
 				desc: 'Set a parameter for the tool and <key>:<value> options',
 			})
-			.epilogue('For a full list of tool and parameter options refer to https://github.com/AnomalyInnovations/toolbeam-cli/blob/master/README.md')
-			.usage(`${usagePrefix} ${ADD} <path> [options]`)
-			.example(`tb ${ADD} /users`, 'Add the resource \/users to the spec')
-			.example(`tb ${ADD} /users/{id} --set-param name:id in:path`, 'Add a GET resource with a path parameter')
-			.example(`tb ${ADD} /user/31/like --set operation:POST`, 'Add a POST resource')
+			.epilogue('For a full list of tool and parameter options refer to https://github.com/AnomalyInnovations/toolbeam-cli')
+			.usage(`${usagePrefix} ${ADD} <path> [oprn] [options]`)
+			.example(`tb ${ADD} /users`, 'Add a GET resource')
+			.example(`tb ${ADD} /user/31/like POST`, 'Add a POST resource')
+			.example(`tb ${ADD} /users/{id} POST --set-param name:id in:path`, 'Add a POST resource with a path parameter')
 			.fail(failFn))
 
-	.command(PROJECTS, 'List all your projects',
-		yargs => yargs.usage(`${usagePrefix} ${PROJECTS}`))
+	.command(`${RM} <path> [oprn]`, false, yargs => cmdRemove(yargs, RM))
+	.command(`${RM} <path> [oprn]`, 'Remove the given API resource', yargs => cmdRemove(yargs, RM))
 
-	.command(LS, 'List all your tools',
-		yargs => yargs.usage(`${usagePrefix} ${LS}`))
+//	.command(LS, 'List all your tools',
+//		yargs => yargs.usage(`${usagePrefix} ${LS}`))
 
 	.command(`${PULL} [id]`, 'Pull your current project spec from Toolbeam',
 		yargs => yargs
-			.usage(`${usagePrefix} ${PULL} [id]    Optionally pass in a project id`)
+			.usage(`${usagePrefix} ${PULL} [id]`)
 			.strict()
+			.example(`tb ${PULL}`, 'Pull the current project spec')
+			.example(`tb ${PULL} 96a6d7f2`, 'Pull the project spec for the given id')
 			.fail(failFn))
 
 	.command(PUSH, 'Push your current project spec to Toolbeam',
 		yargs => yargs.usage(`${usagePrefix} ${PUSH}`))
+
+	.command(PROJECT, 'View and manage your projects',
+		yargs => yargs
+			.usage(`${usagePrefix} ${PROJECT} <command>`)
+			.demand(2, 2, 'Missing: <command> to be executed')
+			.strict()
+			.command(LS, LSDESC, yargs => cmdProjectLs(yargs, LS))
+			.command(LIST, false, yargs => cmdProjectLs(yargs, LIST))
+			.command(`${RM} <id>`, RMDESC, yargs => cmdProjectRm(yargs, RM))
+			.command(`${REMOVE} <id>`, false, yargs => cmdProjectRm(yargs, REMOVE))
+			.fail(failFn))
 
 	.command(WHOAMI, 'Info about current logged in user',
 		yargs => yargs.usage(`${usagePrefix} ${WHOAMI}`))
@@ -136,13 +155,14 @@ switch (argv._[0]) {
 		break;
 	case ADD:
 		const {toolOpts, paramOpts} = parseAddOptions(argv.set, argv['set-param']);
-		requireLogin(() => add(store, argv.path, toolOpts, paramOpts));
+		console.log('TODO: Implement add:', argv.path, argv.oprn, toolOpts, paramOpts);
+//		requireLogin(() => add(store, argv.path, toolOpts, paramOpts));
 		break;
-	case PROJECTS:
-		requireLogin(() => projects(store));
-		break;
-	case LS:
-		requireLogin(() => list(store));
+//	case LS:
+//		requireLogin(() => list(store));
+//		break;
+	case RM:
+		console.log('TODO: Implement remove:', argv.path, argv.oprn);
 		break;
 	case PULL:
 		requireLogin(() => pull(store, argv.id));
@@ -150,12 +170,26 @@ switch (argv._[0]) {
 	case PUSH:
 		requireLogin(() => push(store));
 		break;
-	case LOGOUT:
-		logout(store);
+	case PROJECT:
+		switch (argv._[1]) {
+			case LS:
+			case LIST:
+				requireLogin(() => projects(store));
+				break;
+			case RM:
+			case REMOVE:
+				console.log('TODO: Implement remove');
+				break;
+		}
 		break;
 	case WHOAMI:
 		requireLogin(() => whoami(store));
 		break;
+	case LOGOUT:
+		logout(store);
+		break;
+	default:
+		yargs.showHelp();
 }
 
 ///////////////////////
@@ -206,4 +240,26 @@ function parseAddOptions(toolOptStr = [], paramOptStr = []) {
 		toolOpts,
 		paramOpts
 	};
+}
+
+function cmdRemove(yargs, cmd) {
+	yargs
+		.demand(1, 2, 'Missing: <path> of your API resource')
+		.strict()
+		.usage(`${usagePrefix} ${cmd} <path> [oprn]`)
+		.example(`tb ${cmd} /users`, 'Remove the \/users GET resource')
+		.example(`tb ${cmd} /users/{id} POST`, 'Remove the \/users/{id} POST resource')
+		.fail(failFn)
+}
+
+function cmdProjectLs(yargs, cmd) {
+	yargs.usage(`${usagePrefix} ${PROJECT} ${cmd}`);
+}
+
+function cmdProjectRm(yargs, cmd) {
+	yargs
+		.usage(`${usagePrefix} ${PROJECT} ${cmd} <id>`)
+		.demand(1, 1, 'Missing: <id> of the project to be removed')
+		.example(`tb ${cmd} 96a6d7f2`, 'Remove the project with the given id')
+		.strict();
 }
