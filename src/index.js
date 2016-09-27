@@ -14,6 +14,7 @@ import packageJson from '../package.json';
 import 'babel-polyfill';
 import chalk from 'chalk';
 import yargs from 'yargs';
+import updateNotifier from 'update-notifier';
 
 import store from './store';
 import _requireLogin from './libs/require-login';
@@ -137,7 +138,10 @@ const argv = yargs
 	.strict()
 	.fail((msg, err) => {
 		if (err) throw err;
+
+		checkUpdates();
 		yargs.showHelp();
+
 		process.exit(1);
 	})
 	.argv;
@@ -274,4 +278,10 @@ function cmdProjectRm(yargs, cmd) {
 		.demand(1, 1, 'Missing: <id> of the project to be removed')
 		.example(`tb ${cmd} 96a6d7f2`, 'Remove the project with the given id')
 		.strict();
+}
+
+function checkUpdates() {
+	const notifier = updateNotifier({ pkg: packageJson });
+
+	notifier.notify();
 }
