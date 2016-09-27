@@ -6,5 +6,6 @@ export projectLs from './project-ls';
 export projectRm from './project-rm';
 export pull from './pull';
 export push from './push';
+export remove from './remove';
 export signup from './signup';
 export whoami from './whoami';

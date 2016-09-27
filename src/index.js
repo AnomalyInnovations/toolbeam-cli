@@ -27,6 +27,7 @@ import {
 	projectRm,
 	pull,
 	push,
+	remove,
 	signup,
 	whoami,
 } from './commands';
@@ -153,12 +154,11 @@ switch (argv._[0]) {
 		break;
 	case ADD:
 		const {toolOpts, paramOpts} = parseAddOptions(argv.set, argv['set-param']);
-		console.log('TODO: Implement add:', argv.path, argv.oprn, toolOpts, paramOpts);
-//		requireLogin(() => add(store, argv.path, toolOpts, paramOpts));
+		requireLogin(() => add(store, argv.path, argv.oprn, toolOpts, paramOpts));
 		break;
 	case RM:
 	case REMOVE:
-		console.log('TODO: Implement remove:', argv.path, argv.oprn);
+		requireLogin(() => remove(store, argv.path, argv.oprn));
 		break;
 	case PULL:
 		requireLogin(() => pull(store, argv.id));
