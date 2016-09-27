@@ -30,29 +30,31 @@ export default async function({getState, dispatch}, url) {
 	const uri = URI(url);
 	const scheme = uri.protocol();
 	const host = uri.host();
-	const basePath = uri.path();
+	const basePath = normalizeBasePath(uri.path());
 
-	if (scheme == '' || host == '' || basePath == '') {
+	if (scheme == '' || host == '') {
 		console.log(chalk.red(`Init failed: invalid url format`));
 		return;
 	}
 
+	// build spec
+	let spec = {};
+	spec['swagger'] = '2.0';
+	spec['info'] = {
+		"title": `${host} API`,
+		"version": "1.0.0"
+	};
+	spec['host'] = host;
+	if (basePath != '') {
+		spec['basePath'] = basePath;
+	}
+	spec['schemes'] = [
+		scheme
+	];
+	spec['paths'] = {};
+
 	// save spec
 	try {
-		const spec = {
-			"swagger": "2.0",
-			"info": {
-				"title": `${host} API`,
-				"version": "1.0.0"
-			},
-			"host": host,
-			"basePath": basePath,
-			"schemes": [
-				scheme
-			],
-			"paths": {
-			}
-		}
 		await dispatch(specActions.save(spec));
 	}
 	catch(e) {
@@ -63,4 +65,8 @@ export default async function({getState, dispatch}, url) {
 	
 	spinner.stop();
 	console.log(chalk.green(`Project created for ${url}`));
+}
+
+function normalizeBasePath(basePath) {
+	return basePath.replace(/\/$/, "");
 }

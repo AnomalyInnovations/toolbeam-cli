@@ -47,16 +47,16 @@ export default async function({getState, dispatch}) {
 	}
 
 	const table = new Table({
-		colWidths: [24, 35, 35, 35]
+		colWidths: [35, 15, 35, 35]
 	});
 
 	const toolRows = tools.map(tool => {
 		const projectId = tool.spec_id;
 		const project = projectsById[projectId];
 		return [
-			project.name,
+			trunc(project.name, 35),
 			project.uuid,
-			colorToChalk(tool.color)(tool.name),
+			trunc(colorToChalk(tool.color)(tool.name), 35),
 			fullURL(tool.uri)
 		];
 	});
@@ -85,4 +85,10 @@ function colorToChalk(color) {
 
 function fullURL(uri) {
 	return `${config.webScheme}://${config.webHost}/t/${uri}`;
+}
+
+function trunc(string, length) {
+	return (string.length > length)
+		? string.substr(0, length-1) + '…'
+		: string;
 }

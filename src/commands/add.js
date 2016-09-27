@@ -3,6 +3,7 @@ import { Spinner } from 'clui';
 import URI from 'urijs';
 import config from '../config';
 
+import { toolNameFromEndpoint } from '../libs/consume-openapi';
 import { existFile, readFile, writeFile } from '../libs/file';
 import { quietParse, minifyJSON } from '../libs/json';
 import * as specActions from '../actions/spec-actions';
@@ -13,7 +14,7 @@ export default async function({getState, dispatch}, path, oprn, toolData, paramD
 	spinner.start();
 
 	// validate parameter
-	oprn = normalizeOperation(oprn);
+	const operation = normalizeOperation(oprn);
 	const security = normalizeSecurity(toolData.security);
 	let error = false;
 	paramData.forEach(perData => {
@@ -89,7 +90,7 @@ export default async function({getState, dispatch}, path, oprn, toolData, paramD
 	json.paths = json.paths || {};
 	json.paths[path] = json.paths[path] || {};
 	json.paths[path][operation] = {
-		"x-tb-name": `${operation} ${path}`,
+		"x-tb-name": toolNameFromEndpoint({path:path, operation:operation}),
 		"operationId": generateOperationId(),
 		"security": security == 'basic' ? [{'basic_auth': []}] : [],
 		"parameters": [],

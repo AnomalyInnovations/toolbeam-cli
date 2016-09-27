@@ -111,7 +111,7 @@ export default async function({getState, dispatch}) {
 		// print update status
 		console.log(chalk.cyan('Pushed to Toolbeam.'));
 		if (createRet.data.tools_added) {
-			updateRet.data.tools_added.forEach(tool => {
+			createRet.data.tools_added.forEach(tool => {
 				console.log(chalk.green(`Added ${tool.name}`));
 			});
 		}

@@ -15,7 +15,6 @@ const prompts = [
 		description: 'Enter your password:',
 		message: 'Please enter your password',
 		hidden: true,
-		replace: '*',
 		required: true
 	},
 ];
@@ -27,7 +26,13 @@ export default async function(store) {
 	prompt.message = '';
 	prompt.delimiter = '';
 
-	const {email, password} = await getPrompt(prompts);
+	let email, password;
+	try {
+		{email, password} = await getPrompt(prompts);
+	}
+	catch(e) {
+		throw {message: 'Login cancelled'};
+	}
 
 	console.log(chalk.cyan('Logging in to Toolbeam…'));
 

@@ -25,9 +25,14 @@ export default async function(store) {
 		await store.dispatch(userActions.logout());
 	}
 	catch(e) {
-		spinner.stop();
-		console.log(chalk.red(`Logout failed: ${e.message}`));
-		return;
+		if (e.code == 1002) {
+			// ignore Invalid Session error
+		}
+		else {
+			spinner.stop();
+			console.log(chalk.red(`Logout failed: ${e.message}`));
+			return;
+		}
 	}
 
 	// delete file
