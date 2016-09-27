@@ -813,7 +813,7 @@ export default {
 				}
       }
     },
-    "formDataParameterSubSchema": {
+    "formDataFileParameterSubSchema": {
       "additionalProperties": false,
       "patternProperties": {
 				"^x-([^t]|(t[^b]))": {
@@ -849,11 +849,6 @@ export default {
         "type": {
           "type": "string",
           "enum": [
-            "string",
-            "number",
-            "boolean",
-            "integer",
-            "array",
             "file"
           ]
         },
@@ -918,10 +913,124 @@ export default {
           "$ref": "#/definitions/x-tb-fieldPlaceholder"
 				},
 				"x-tb-field_type": {
-          "$ref": "#/definitions/x-tb-fieldType"
+          "$ref": "#/definitions/x-tb-fieldTypeFile"
 				},
 				"x-tb-fieldType": {
-          "$ref": "#/definitions/x-tb-fieldType"
+          "$ref": "#/definitions/x-tb-fieldTypeFile"
+				},
+				"x-tb-fieldEnumLabel": {
+          "$ref": "#/definitions/x-tb-fieldEnumLabel"
+        }
+      }
+    },
+    "formDataNonFileParameterSubSchema": {
+      "additionalProperties": false,
+      "patternProperties": {
+				"^x-([^t]|(t[^b]))": {
+          "$ref": "#/definitions/vendorExtension"
+        }
+      },
+      "properties": {
+        "required": {
+          "type": "boolean",
+          "description": "Determines whether or not this parameter is required or optional.",
+          "default": false
+        },
+        "in": {
+          "type": "string",
+          "description": "Determines the location of the parameter.",
+          "enum": [
+            "formData"
+          ]
+        },
+        "description": {
+          "type": "string",
+          "description": "A brief description of the parameter. This could contain examples of use.  GitHub Flavored Markdown is allowed."
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of the parameter."
+        },
+        "allowEmptyValue": {
+          "type": "boolean",
+          "default": false,
+          "description": "allows sending a parameter by name only or with an empty value."
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "string",
+            "number",
+            "boolean",
+            "integer",
+            "array"
+          ]
+        },
+        "format": {
+          "type": "string"
+        },
+        "items": {
+          "$ref": "#/definitions/primitivesItems"
+        },
+        "collectionFormat": {
+          "$ref": "#/definitions/collectionFormatWithMulti"
+        },
+        "default": {
+          "$ref": "#/definitions/default"
+        },
+        "maximum": {
+          "$ref": "#/definitions/maximum"
+        },
+        "exclusiveMaximum": {
+          "$ref": "#/definitions/exclusiveMaximum"
+        },
+        "minimum": {
+          "$ref": "#/definitions/minimum"
+        },
+        "exclusiveMinimum": {
+          "$ref": "#/definitions/exclusiveMinimum"
+        },
+        "maxLength": {
+          "$ref": "#/definitions/maxLength"
+        },
+        "minLength": {
+          "$ref": "#/definitions/minLength"
+        },
+        "pattern": {
+          "$ref": "#/definitions/pattern"
+        },
+        "maxItems": {
+          "$ref": "#/definitions/maxItems"
+        },
+        "minItems": {
+          "$ref": "#/definitions/minItems"
+        },
+        "uniqueItems": {
+          "$ref": "#/definitions/uniqueItems"
+        },
+        "enum": {
+          "$ref": "#/definitions/enum"
+        },
+        "multipleOf": {
+          "$ref": "#/definitions/multipleOf"
+        },
+				"x-tb-field_label": {
+          "$ref": "#/definitions/x-tb-fieldLabel"
+				},
+				"x-tb-fieldLabel": {
+          "$ref": "#/definitions/x-tb-fieldLabel"
+				},
+				"x-tb-field_placeholder": {
+          "$ref": "#/definitions/x-tb-fieldPlaceholder"
+				},
+				"x-tb-fieldPlaceholder": {
+          "$ref": "#/definitions/x-tb-fieldPlaceholder"
+				},
+				"x-tb-field_type": {
+          "$ref": "#/definitions/x-tb-fieldTypeNonFile"
+				},
+				"x-tb-fieldType": {
+          "$ref": "#/definitions/x-tb-fieldTypeNonFile"
 				},
 				"x-tb-fieldEnumLabel": {
           "$ref": "#/definitions/x-tb-fieldEnumLabel"
@@ -1054,7 +1163,10 @@ export default {
           "$ref": "#/definitions/headerParameterSubSchema"
         },
         {
-          "$ref": "#/definitions/formDataParameterSubSchema"
+          "$ref": "#/definitions/formDataNonFileParameterSubSchema"
+        },
+        {
+          "$ref": "#/definitions/formDataFileParameterSubSchema"
         },
         {
           "$ref": "#/definitions/queryParameterSubSchema"
@@ -1752,17 +1864,22 @@ export default {
 		"x-tb-fieldPlaceholder": {
 			"type": "string"
 		},
-		"x-tb-fieldType": {
+		"x-tb-fieldTypeFile": {
+			"type": "string",
+			"enum": [
+				"image",
+				"video"
+			]
+		},
+		"x-tb-fieldTypeNonFile": {
 			"type": "string",
 			"enum": [
 				"email",
 				"geolocation",
 				"hidden",
-				"image",
 				"number",
 				"select",
-				"text",
-				"video"
+				"text"
 			]
 		},
 		"x-tb-fieldEnumLabel": {
