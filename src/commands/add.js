@@ -1,7 +1,7 @@
 import chalk from 'chalk';
-import { Spinner } from 'clui';
 import URI from 'urijs';
 import config from '../config';
+import * as errors from '../errors';
 
 import { toolNameFromEndpoint } from '../libs/consume-openapi';
 import { existFile, readFile, writeFile } from '../libs/file';
@@ -10,75 +10,20 @@ import * as specActions from '../actions/spec-actions';
 
 export default async function({getState, dispatch}, path, oprn, toolData, paramData) {
 
-	const spinner = new Spinner('Adding tool…');
-	spinner.start();
+	console.log(chalk.cyan('Adding tool...'));
 
 	// validate parameter
 	const operation = normalizeOperation(oprn);
 	const security = normalizeSecurity(toolData.security);
-	let error = false;
-	paramData.forEach(perData => {
-		perData.field = normalizeFieldType(perData.field);
-		if ( ! perData.field) {
-			error = 'missing parameter field';
-			return;
-		}
-		else if ( ! perData.name) {
-			error = 'missing parameter name';
-			return;
-		}
-		else if ( ! perData.in) {
-			error = 'missing parameter in';
-			return;
-		}
-	});
-	if (error) {
-		console.log(chalk.red(`Add failed: ${error}.`));
-		spinner.stop();
-		return;
-	}
+	paramData = normalizeParams(paramData);
 
-	// ensure spec exists
-	try {
-		const exists = await existFile(config.specFileName);
-		if ( ! exists) {
-			console.log(chalk.red('Add failed: ensure to run tb init first.'));
-			spinner.stop();
-			return;
-		}
-	}
-	catch(e) {
-		console.log(chalk.red(e));
-		spinner.stop();
-		return;
-	}
+	await ensureSpecFileExists();
 
 	// load spec
-	let fileStr;
-	try {
-		fileStr = await readFile(config.specFileName);
-	}
-	catch(e) {
-		console.log(chalk.red(e));
-		spinner.stop();
-		return;
-	}
+	const fileStr = await readFile(config.specFileName);
+	const json = JSON.parse(minifyJSON(fileStr));
 
-	// validate JSON
-	let json;
-	try {
-		json = quietParse(minifyJSON(fileStr));
-	}
-	catch(e) {
-		throw {message: errors.ERR_INVALID_JSON};
-	}
-
-	// ensure tool not exist
-	if (json.paths && json.paths[path] && json.paths[path][operation]) {
-		console.log(chalk.red('Add failed: tool already exist.'));
-		spinner.stop();
-		return;
-	}
+	ensureToolNotExists(json, path, operation);
 
 	// add auth
 	if (security == 'basic') {
@@ -125,16 +70,8 @@ export default async function({getState, dispatch}, path, oprn, toolData, paramD
 	});
 
 	// save spec
-	try {
-		dispatch(specActions.save(json));
-	}
-	catch(e) {
-		console.log(chalk.red(e));
-		spinner.stop();
-		return;
-	}
+	dispatch(specActions.save(json));
 	
-	spinner.stop();
 	console.log(chalk.green(`Tool added for ${path}`));
 }
 
@@ -154,6 +91,35 @@ function normalizeFieldType(param) {
 	param = param || 'text';
 	operation = operation.toLowerCase();
 	return operation;
+}
+
+function normalizeParams(paramData) {
+	paramData.forEach(perData => {
+		perData.field = normalizeFieldType(perData.field);
+		if ( ! perData.field) {
+			throw {message: errors.ERR_ADD_MISSING_PARAM_FIELD};
+		}
+		else if ( ! perData.name) {
+			throw {message: errors.ERR_ADD_MISSING_PARAM_NAME};
+		}
+		else if ( ! perData.in) {
+			throw {message: errors.ERR_ADD_MISSING_PARAM_IN};
+		}
+	});
+	return paramData;
+}
+
+async function ensureSpecFileExists() {
+	const exists = await existFile(config.specFileName);
+	if ( ! exists) {
+		throw {message: errors.ERR_ADD_SPEC_NOT_EXISTS};
+	}
+}
+
+function ensureToolNotExists(json, path, operation) {
+	if (json.paths && json.paths[path] && json.paths[path][operation]) {
+		throw {message: errors.ERR_ADD_TOOL_EXISTS};
+	}
 }
 
 function generateOperationId() {

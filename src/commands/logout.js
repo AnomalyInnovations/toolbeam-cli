@@ -35,17 +35,6 @@ export default async function(store) {
 		}
 	}
 
-	// delete file
-	try {
-		await deleteFile(config.specFileName);
-	}
-	catch(e) {
-		console.log(chalk.red(e));
-		spinner.stop();
-		return;
-	}
-	
 	spinner.stop();
 	console.log(chalk.cyan(logoutMessage));
-
 }
