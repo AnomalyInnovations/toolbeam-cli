@@ -3,11 +3,8 @@
 // Support source map outputs
 require('source-map-support').install();
 
-// Print all unhandled errors
-process.on('unhandledRejection', err => {
-    console.log(err.stack);
-    process.exit(1);
-});
+import errorHandler from './libs/error-handler';
+process.on('unhandledRejection', errorHandler);
 
 import packageJson from '../package.json';
 
