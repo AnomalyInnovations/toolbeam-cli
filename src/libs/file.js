@@ -34,7 +34,7 @@ export function deleteFile(file) {
 	return new Promise((resolve, reject) => {
 		fs.unlink(file, (err) => {
 			(err)
-				? reject(err)
+				? (err.code == 'ENOENT' ? resolve() : reject(err))
 				: resolve()
 		});
 	});
