@@ -22,6 +22,14 @@ export function specUUIDFromOpenapi(oapi) {
 		: null;
 }
 
+export function toolNameFromEndpoint(ep) {
+	const parts = ep.path.replace(/^\//, '').split('/').map(part => capitalize(part));
+	const name = parts.join(' ');
+	return (name == '')
+		? capitalize(ep.operation)
+		: `${capitalize(ep.operation)} ${name}`;
+}
+
 function getEndpoints(oapi) {
 	return Object.keys(oapi.paths).reduce((acc, path) => {
 		Object.keys(oapi.paths[path])
@@ -33,18 +41,11 @@ function getEndpoints(oapi) {
 	}, []);
 }
 
-function getNameFromEndpoint(ep) {
-	const name = ep.path.replace(/^\//, '').split('/').pop();
-	return (name == '')
-		? capitalize(ep.operation)
-		: `${capitalize(ep.operation)} ${capitalize(name)}`;
-}
-
 function endpointsToTool(endpoint, opr) {
 	const { path: path, operation: operation } = endpoint;
 	const name = opr['x-tb-name']
 		? opr['x-tb-name']
-		: getNameFromEndpoint(endpoint);
+		: toolNameFromEndpoint(endpoint);
 	const id = opr.operationId
 		? opr.operationId
 		: getIdFromEndpoint(endpoint);
