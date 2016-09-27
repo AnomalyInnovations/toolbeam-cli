@@ -7,17 +7,22 @@ import { existFile, readFile, writeFile } from '../libs/file';
 import { quietParse, minifyJSON } from '../libs/json';
 import * as specActions from '../actions/spec-actions';
 
-export default async function({getState, dispatch}, path, toolData, paramData) {
+export default async function({getState, dispatch}, path, oprn, toolData, paramData) {
 
 	const spinner = new Spinner('Adding tool…');
 	spinner.start();
 
 	// validate parameter
-	const operation = normalizeOperation(toolData.operation);
+	oprn = normalizeOperation(oprn);
 	const security = normalizeSecurity(toolData.security);
 	let error = false;
 	paramData.forEach(perData => {
-		if ( ! perData.name) {
+		perData.field = normalizeFieldType(perData.field);
+		if ( ! perData.field) {
+			error = 'missing parameter field';
+			return;
+		}
+		else if ( ! perData.name) {
 			error = 'missing parameter name';
 			return;
 		}
@@ -85,7 +90,7 @@ export default async function({getState, dispatch}, path, toolData, paramData) {
 	json.paths[path] = json.paths[path] || {};
 	json.paths[path][operation] = {
 		"x-tb-name": `${operation} ${path}`,
-		"operationId": `${operation} ${path}`,
+		"operationId": generateOperationId(),
 		"security": security == 'basic' ? [{'basic_auth': []}] : [],
 		"parameters": [],
 		"responses": {
@@ -94,20 +99,27 @@ export default async function({getState, dispatch}, path, toolData, paramData) {
 			}
 		},
 		"x-tb-actionLabel": operation == 'get' ? 'Get' : 'Submit',
-		"x-tb-color": "red",
+		"x-tb-color": generateColor(),
 		"x-tb-needsConfirm": false,
 		"x-tb-needsNotificationPermission": false
 	};
 	paramData.forEach(perData => {
-		json.paths[path][operation].parameters.push({
+		let param = {
 			"name": perData.name,
 			"in": perData.in,
 			"required": true,
 			"type": "string",
 			"x-tb-fieldLabel": perData.name,
 			"x-tb-fieldPlaceholder": "",
-			"x-tb-fieldType": "text"
-		});
+			"x-tb-fieldType": perData.field
+		};
+		if (perData.field == 'select') {
+			param = {...param,
+				"enum": ["Value1", "Value2"],
+				"x-tb-fieldEnumLabel": ["Option1", "Option2"],
+			}
+		}
+		json.paths[path][operation].parameters.push(param);
 	});
 
 	// save spec
@@ -134,4 +146,34 @@ function normalizeSecurity(operation) {
 	operation = operation || 'none';
 	operation = operation.toLowerCase();
 	return operation;
+}
+
+function normalizeFieldType(param) {
+	param = param || 'text';
+	operation = operation.toLowerCase();
+	return operation;
+}
+
+function generateOperationId() {
+	var text = "";
+	var possible = "abcdefghijklmnopqrstuvwxyz";
+
+	for( var i=0; i < 8; i++ ) {
+		text += possible.charAt(Math.floor(Math.random() * possible.length));
+	}
+
+	return text;
+}
+
+function generateColor() {
+	const colorNum = Math.floor(Math.random() * 5);
+	switch (colorNum) {
+		case 0: return "red";
+		case 1: return "blue";
+		case 2: return "purple";
+		case 3: return "green";
+		case 4:
+		default:
+			return "orange";
+	}
 }
