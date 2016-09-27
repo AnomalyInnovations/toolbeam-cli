@@ -48,13 +48,29 @@ export default async function({getState, dispatch}) {
 
 	if (specUUIDFromOpenapi(json) != null) {
 		// call update spec api
+		let updateRet;
 		try {
-			await dispatch(specActions.update(json));
+			updateRet = await dispatch(specActions.update(json));
 		}
 		catch(e) {
 			spinner.stop();
 			console.log(chalk.red(`Push failed: ${e.message}`));
 			return;
+		}
+
+		spinner.stop();
+
+		// print update status
+		console.log(chalk.cyan('Pushed to Toolbeam.'));
+		if (updateRet.data.tools_removed) {
+			updateRet.data.tools_removed.forEach(tool => {
+				console.log(chalk.red(`Removed ${tool.name}`));
+			});
+		}
+		if (updateRet.data.tools_added) {
+			updateRet.data.tools_added.forEach(tool => {
+				console.log(chalk.green(`Added ${tool.name}`));
+			});
 		}
 	}
 	else {
@@ -89,8 +105,15 @@ export default async function({getState, dispatch}) {
 			console.log(chalk.red(`Push failed: ${e.message}`));
 			return;
 		}
+
+		spinner.stop();
+
+		// print update status
+		console.log(chalk.cyan('Pushed to Toolbeam.'));
+		if (createRet.data.tools_added) {
+			updateRet.data.tools_added.forEach(tool => {
+				console.log(chalk.green(`Added ${tool.name}`));
+			});
+		}
 	}
-	
-	spinner.stop();
-	console.log(chalk.cyan('Pushed to Toolbeam.'));
 }
