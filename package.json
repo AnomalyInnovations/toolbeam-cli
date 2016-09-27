@@ -1,9 +1,11 @@
 {
   "name": "toolbeam-cli",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "CLI for Toolbeam",
   "main": "index.js",
-  "files": ["build/"],
+  "files": [
+    "build/"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/AnomalyInnovations/toolbeam-cli.git"
@@ -36,8 +38,9 @@
     "source-map-support": "^0.4.2",
     "superagent": "^2.2.0",
     "tv4": "^1.2.7",
-    "yargs": "^5.0.0",
-    "urijs": "^1.18.0"
+    "update-notifier": "^1.0.2",
+    "urijs": "^1.18.0",
+    "yargs": "^5.0.0"
   },
   "bundledDependencies": [
     "babel-core",
