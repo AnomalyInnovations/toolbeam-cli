@@ -1,6 +1,7 @@
 import prompt from 'prompt';
 import chalk from 'chalk';
 import { Spinner } from 'clui';
+import errors from '../errors';
 import { getPrompt } from '../libs/prompt';
 import * as userActions from '../actions/user-actions';
 
@@ -34,13 +35,7 @@ export default async function(store) {
 	prompt.message = '';
 	prompt.delimiter = '';
 
-	let email, password, passwordConfirm;
-	try {
-		{email, password, passwordConfirm} = await getPrompt(prompts);
-	}
-	catch(e) {
-		throw {message: 'Signup cancelled'};
-	}
+	const {email, password, passwordConfirm} = await getPrompt(prompts);
 
 	if (password != passwordConfirm) {
 		console.log(chalk.red('Password does not match the confirm password.'));

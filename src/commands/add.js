@@ -65,11 +65,12 @@ export default async function({getState, dispatch}, path, oprn, toolData, paramD
 	}
 
 	// validate JSON
-	const json = quietParse(minifyJSON(fileStr));
-	if (json === null) {
-		console.log(chalk.red('Error: Invalid JSON'));
-		spinner.stop();
-		return;
+	let json;
+	try {
+		json = quietParse(minifyJSON(fileStr));
+	}
+	catch(e) {
+		throw {message: errors.ERR_INVALID_JSON};
 	}
 
 	// ensure tool not exist

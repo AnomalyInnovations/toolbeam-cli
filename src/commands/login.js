@@ -27,13 +27,7 @@ export default async function(store) {
 	prompt.message = '';
 	prompt.delimiter = '';
 
-	let email, password;
-	try {
-		{email, password} = await getPrompt(prompts);
-	}
-	catch(e) {
-		throw {message: 'Login cancelled'};
-	}
+	const {email, password} = await getPrompt(prompts);
 
 	const spinner = new Spinner('Logging in to Toolbeam…');
 	spinner.start();
