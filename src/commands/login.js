@@ -26,13 +26,7 @@ export default async function(store) {
 	prompt.message = '';
 	prompt.delimiter = '';
 
-	let email, password;
-	try {
-		{email, password} = await getPrompt(prompts);
-	}
-	catch(e) {
-		throw {message: 'Login cancelled'};
-	}
+	const {email, password} = await getPrompt(prompts);
 
 	console.log(chalk.cyan('Logging in to Toolbeam…'));
 
