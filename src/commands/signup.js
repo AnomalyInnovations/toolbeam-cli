@@ -34,7 +34,13 @@ export default async function(store) {
 	prompt.message = '';
 	prompt.delimiter = '';
 
-	const {email, password, passwordConfirm} = await getPrompt(prompts);
+	let email, password, passwordConfirm;
+	try {
+		{email, password, passwordConfirm} = await getPrompt(prompts);
+	}
+	catch(e) {
+		throw {message: 'Signup cancelled'};
+	}
 
 	if (password != passwordConfirm) {
 		console.log(chalk.red('Password does not match the confirm password.'));
