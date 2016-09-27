@@ -16,7 +16,6 @@ const prompts = [
 		description: 'Enter your password:',
 		message: 'Please enter your password',
 		hidden: true,
-		replace: '*',
 		required: true
 	},
 ];
