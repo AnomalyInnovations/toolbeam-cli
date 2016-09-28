@@ -7,12 +7,12 @@ import { specUUIDFromOpenapi } from '../libs/consume-openapi';
 import * as specActions from '../actions/spec-actions';
 
 export default async function({getState, dispatch}, uuid) {
-	console.log(chalk.cyan('Pulling spec...'));
+	console.log(chalk.gray('Pulling spec...'));
 	
 	// Validate UUID passed in
 	uuid = uuid
-		? validate_uuid_in_argument(uuid)
-		: validate_uuid_in_file();
+		? await validate_uuid_in_argument(uuid)
+		: await validate_uuid_in_file();
 
 	// Load spec info & data
 	await dispatch(specActions.loadInfo(uuid));
@@ -24,7 +24,7 @@ export default async function({getState, dispatch}, uuid) {
 	console.log(chalk.cyan('Pulled from Toolbeam.'));
 }
 
-validate_uuid_in_argument(uuid) {
+async function validate_uuid_in_argument(uuid) {
 	const exists = await existFile(config.specFileName);
 	if (exists) {
 		// Check UUID does not match current project
@@ -37,7 +37,7 @@ validate_uuid_in_argument(uuid) {
 	return uuid;
 }
 
-validate_uuid_in_file() {
+async function validate_uuid_in_file() {
 	const exists = await existFile(config.specFileName);
 	if ( ! exists) {
 		throw errors.ERR_PULL_UUID_NOT_PROVIDED;

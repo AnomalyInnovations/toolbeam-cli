@@ -5,7 +5,7 @@ import config from '../config';
 import * as specActions from '../actions/spec-actions';
 
 export default async function({getState, dispatch}, uuid) {
-	console.log(chalk.cyan('Removing project...'));
+	console.log(chalk.gray('Removing project...'));
 
 	await dispatch(specActions.remove(uuid));
 

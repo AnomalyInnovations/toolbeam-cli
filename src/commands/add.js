@@ -9,8 +9,7 @@ import { quietParse, minifyJSON } from '../libs/json';
 import * as specActions from '../actions/spec-actions';
 
 export default async function({getState, dispatch}, path, oprn, toolData, paramData) {
-
-	console.log(chalk.cyan('Adding tool...'));
+	console.log(chalk.gray('Adding tool...'));
 
 	// validate parameter
 	const operation = normalizeOperation(oprn);
