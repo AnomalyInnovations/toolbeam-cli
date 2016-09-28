@@ -14,8 +14,8 @@ export default async function({getState, dispatch}, path, oprn) {
 	operation = normalizeOperation(oprn);
 
 	// load spec
-	ensureSpecFileExists();
-	const json = ensureSpecFileValidJson();
+	await ensureSpecFileExists();
+	const json = await ensureSpecFileValidJson();
 	ensureToolExists();
 
 	// remove tool
@@ -36,14 +36,14 @@ function normalizeOperation(operation) {
 	return operation;
 }
 
-function ensureSpecFileExists() {
+async function ensureSpecFileExists() {
 	const exists = await existFile(config.specFileName);
 	if ( ! exists) {
 		throw(ERR_REMOVE_SPEC_NOT_EXISTS);
 	}
 }
 
-function ensureSpecFileValidJson() {
+async function ensureSpecFileValidJson() {
 	const fileStr = await readFile(config.specFileName);
 	const json = quietParse(minifyJSON(fileStr));
 	if (json === null) {
