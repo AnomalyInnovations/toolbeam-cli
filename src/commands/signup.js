@@ -1,7 +1,6 @@
 import prompt from 'prompt';
 import chalk from 'chalk';
-import { Spinner } from 'clui';
-import errors from '../errors';
+import * as errors from '../errors';
 import { getPrompt } from '../libs/prompt';
 import * as userActions from '../actions/user-actions';
 
@@ -38,23 +37,13 @@ export default async function(store) {
 	const {email, password, passwordConfirm} = await getPrompt(prompts);
 
 	if (password != passwordConfirm) {
-		console.log(chalk.red('Password does not match the confirm password.'));
-		return;
+		throw errors.ERR_SIGNUP_PSWDS_DONT_MATCH;
 	}
 
-	const spinner = new Spinner('Signing up for Toolbeam…');
-	spinner.start();
+	console.log(chalk.gray('Signing up for Toolbeam...'));
 
-	try {
-		await store.dispatch(userActions.signup(email, password));
-		spinner.stop();
-	}
-	catch(e) {
-		spinner.stop();
-		console.log(chalk.red(`Signup failed: ${e.message}`));
-		return;
-	}
+	await store.dispatch(userActions.signup(email, password));
 
-	console.log(chalk.green('You are signed up for Toolbeam.'));
+	console.log(chalk.green('You are signed up for Toolbeam'));
 
 }

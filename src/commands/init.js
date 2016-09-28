@@ -1,6 +1,6 @@
 import chalk from 'chalk';
-import { Spinner } from 'clui';
 import URI from 'urijs';
+import * as errors from '../errors';
 import config from '../config';
 
 import { existFile } from '../libs/file';
@@ -8,22 +8,12 @@ import * as specActions from '../actions/spec-actions';
 
 export default async function({getState, dispatch}, url) {
 
-	const spinner = new Spinner('Initializing spec…');
-	spinner.start();
+	console.log(chalk.gray('Initializing spec...'));
 
 	// ensure not init'ed
-	try {
-		const exists = await existFile(config.specFileName);
-		if (exists) {
-			console.log(chalk.red(`Init failed: project already exist`));
-			spinner.stop();
-			return;
-		}
-	}
-	catch(e) {
-		console.log(chalk.red(e));
-		spinner.stop();
-		return;
+	const exists = await existFile(config.specFileName);
+	if (exists) {
+		throw errors.ERR_INIT_PROJECT_EXISTS;
 	}
 
 	// parse url
@@ -33,8 +23,7 @@ export default async function({getState, dispatch}, url) {
 	const basePath = normalizeBasePath(uri.path());
 
 	if (scheme == '' || host == '') {
-		console.log(chalk.red(`Init failed: invalid url format`));
-		return;
+		throw errors.ERR_INIT_INVALID_URL_FORMAT;
 	}
 
 	// build spec
@@ -54,16 +43,8 @@ export default async function({getState, dispatch}, url) {
 	spec['paths'] = {};
 
 	// save spec
-	try {
-		await dispatch(specActions.save(spec));
-	}
-	catch(e) {
-		console.log(chalk.red(e));
-		spinner.stop();
-		return;
-	}
+	await dispatch(specActions.save(spec));
 	
-	spinner.stop();
 	console.log(chalk.green(`Project created for ${url}`));
 }
 
