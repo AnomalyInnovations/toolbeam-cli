@@ -80,16 +80,16 @@ function normalizeOperation(operation) {
 	return operation;
 }
 
-function normalizeSecurity(operation) {
-	operation = operation || 'none';
-	operation = operation.toLowerCase();
-	return operation;
+function normalizeSecurity(security) {
+	security = security || 'none';
+	security = security.toLowerCase();
+	return security;
 }
 
 function normalizeFieldType(param) {
 	param = param || 'text';
-	operation = operation.toLowerCase();
-	return operation;
+	param = param.toLowerCase();
+	return param;
 }
 
 function normalizeParams(paramData) {
