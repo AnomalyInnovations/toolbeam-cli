@@ -9,7 +9,7 @@ import specSchema from '../libs/spec-schema';
 import * as specActions from '../actions/spec-actions';
 
 export default async function({getState, dispatch}) {
-	console.log(chalk.cyan('Pushing spec...'));
+	console.log(chalk.gray('Pushing spec...'));
 
 	// Read file
 	const fileStr = await readFile(config.specFileName);
@@ -28,11 +28,11 @@ export default async function({getState, dispatch}) {
 
 	// Create if no UUID, Update if has UUID
 	(specUUIDFromOpenapi(json) == null)
-		? handleCreateSpec(json)
-		: handleUpdateSpec(json);
+		? await handleCreateSpec(json)
+		: await handleUpdateSpec(json);
 }
 
-function handleCreateSpec(json) {
+async function handleCreateSpec(json) {
 	// call create spec api
 	const createRet = await dispatch(specActions.create(json));
 
@@ -52,7 +52,7 @@ function handleCreateSpec(json) {
 	}
 }
 
-function handleUpdateSpec(json) {
+async function handleUpdateSpec(json) {
 	// call update spec api
 	const updateRet = await dispatch(specActions.update(json));
 

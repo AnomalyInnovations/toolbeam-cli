@@ -6,7 +6,7 @@ import * as specsActions from '../actions/specs-actions';
 import * as toolsActions from '../actions/tools-actions';
 
 export default async function({getState, dispatch}) {
-	console.log(chalk.cyan('Fetching your projects...'));
+	console.log(chalk.gray('Fetching your projects...'));
 
 	// Load projects
 	await dispatch(specsActions.load());
