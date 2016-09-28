@@ -28,11 +28,11 @@ export default async function({getState, dispatch}) {
 
 	// Create if no UUID, Update if has UUID
 	(specUUIDFromOpenapi(json) == null)
-		? await handleCreateSpec(json)
-		: await handleUpdateSpec(json);
+		? await handleCreateSpec(dispatch, json)
+		: await handleUpdateSpec(dispatch, json);
 }
 
-async function handleCreateSpec(json) {
+async function handleCreateSpec(dispatch, json) {
 	// call create spec api
 	const createRet = await dispatch(specActions.create(json));
 
@@ -52,7 +52,7 @@ async function handleCreateSpec(json) {
 	}
 }
 
-async function handleUpdateSpec(json) {
+async function handleUpdateSpec(dispatch, json) {
 	// call update spec api
 	const updateRet = await dispatch(specActions.update(json));
 
