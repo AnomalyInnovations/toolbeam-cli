@@ -1,5 +1,4 @@
 import chalk from 'chalk';
-import { Spinner } from 'clui';
 import Table from 'cli-table';
 
 import config from '../config';
@@ -7,31 +6,13 @@ import * as specsActions from '../actions/specs-actions';
 import * as toolsActions from '../actions/tools-actions';
 
 export default async function({getState, dispatch}) {
-	const spinner = new Spinner('Fetching your projects…');
-
-	spinner.start();
+	console.log(chalk.cyan('Fetching your projects...'));
 
 	// Load projects
-	try {
-		await dispatch(specsActions.load());
-	}
-	catch(e) {
-		spinner.stop();
-		console.log(chalk.red(`Failed to fetch: ${e.message}`));
-		return;
-	}
+	await dispatch(specsActions.load());
 
 	// Load tools
-	try {
-		await dispatch(toolsActions.load());
-	}
-	catch(e) {
-		spinner.stop();
-		console.log(chalk.red(`Failed to fetch: ${e.message}`));
-		return;
-	}
-
-	spinner.stop();
+	await dispatch(toolsActions.load());
 
 	// Build output
 	const projects = specsActions.getSpecs(getState());
