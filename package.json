@@ -30,7 +30,6 @@
     "babel-preset-stage-0": "^6.5.0",
     "chalk": "^1.1.3",
     "cli-table": "^0.3.1",
-    "clui": "^0.3.1",
     "preferences": "^0.2.1",
     "prompt": "^1.0.0",
     "redux": "^3.6.0",
@@ -42,25 +41,6 @@
     "urijs": "^1.18.0",
     "yargs": "^5.0.0"
   },
-  "bundledDependencies": [
-    "babel-core",
-    "babel-plugin-transform-runtime",
-    "babel-polyfill",
-    "babel-preset-es2015",
-    "babel-preset-stage-0",
-    "chalk",
-    "cli-table",
-    "clui",
-    "preferences",
-    "prompt",
-    "redux",
-    "redux-thunk",
-    "source-map-support",
-    "superagent",
-    "tv4",
-    "yargs",
-    "urijs"
-  ],
   "devDependencies": {
     "babel-cli": "^6.14.0"
   }
