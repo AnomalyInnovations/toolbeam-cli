@@ -1,6 +1,5 @@
 import chalk from 'chalk';
 import specValidator from 'tv4';
-import { Spinner } from 'clui';
 
 import config from '../config';
 import { readFile } from '../libs/file';
@@ -10,28 +9,11 @@ import specSchema from '../libs/spec-schema';
 import * as specActions from '../actions/spec-actions';
 
 export default async function({getState, dispatch}) {
-	let fileStr;
-
-	const spinner = new Spinner('Pushing…');
-	spinner.start();
+	console.log(chalk.cyan('Pushing spec...'));
 
 	// Read file
-	try {
-		fileStr = await readFile(config.specFileName);
-	}
-	catch(e) {
-		console.log(chalk.red(e));
-		spinner.stop();
-		return;
-	}
-
-	// Validate JSON
-	let json = quietParse(minifyJSON(fileStr));
-	if (json === null) {
-		console.log(chalk.red('Error: Invalid JSON'));
-		spinner.stop();
-		return;
-	}
+	const fileStr = await readFile(config.specFileName);
+	const json = JSON.parse(minifyJSON(fileStr));
 
 	// Validate Open API Spec
 	const isValid = specValidator.validate(json, specSchema);
@@ -41,79 +23,49 @@ export default async function({getState, dispatch}) {
 			.splice(1)
 			.map(path => path.replace(/~1/gi, '/'))
 			.join(' > ');
-		console.log(chalk.red(`Error: ${error.message} in "${path}".`));
-		spinner.stop();
-		return;
+		throw(`Error: ${error.message} in "${path}".`);
 	}
 
-	if (specUUIDFromOpenapi(json) != null) {
-		// call update spec api
-		let updateRet;
-		try {
-			updateRet = await dispatch(specActions.update(json));
-		}
-		catch(e) {
-			spinner.stop();
-			console.log(chalk.red(`Push failed: ${e.message}`));
-			return;
-		}
+	// Create if no UUID, Update if has UUID
+	(specUUIDFromOpenapi(json) == null)
+		? handleCreateSpec(json)
+		: handleUpdateSpec(json);
+}
 
-		spinner.stop();
+function handleCreateSpec(json) {
+	// call create spec api
+	const createRet = await dispatch(specActions.create(json));
 
-		// print update status
-		console.log(chalk.cyan('Pushed to Toolbeam.'));
-		if (updateRet.data.tools_removed) {
-			updateRet.data.tools_removed.forEach(tool => {
-				console.log(chalk.red(`Removed ${tool.name}`));
-			});
-		}
-		if (updateRet.data.tools_added) {
-			updateRet.data.tools_added.forEach(tool => {
-				console.log(chalk.green(`Added ${tool.name}`));
-			});
-		}
+	// write file
+	json.info['x-tb-uuid'] = createRet.data.spec.uuid;
+	dispatch(specActions.save(json));
+
+	// call update spec api
+	await dispatch(specActions.update(json));
+
+	// print update status
+	console.log(chalk.cyan('Pushed to Toolbeam.'));
+	if (createRet.data.tools_added) {
+		createRet.data.tools_added.forEach(tool => {
+			console.log(chalk.green(`Added ${tool.name}`));
+		});
 	}
-	else {
-		// call create spec api
-		let createRet;
-		try {
-			createRet = await dispatch(specActions.create(json));
-		}
-		catch(e) {
-			spinner.stop();
-			console.log(chalk.red(`Push failed: ${e.message}`));
-			return;
-		}
+}
 
-		// write file
-		json.info['x-tb-uuid'] = createRet.data.spec.uuid;
-		try {
-			dispatch(specActions.save(json));
-		}
-		catch(e) {
-			console.log(chalk.red(e));
-			spinner.stop();
-			return;
-		}
+function handleUpdateSpec(json) {
+	// call update spec api
+	const updateRet = await dispatch(specActions.update(json));
 
-		// call update spec api
-		try {
-			await dispatch(specActions.update(json));
-		}
-		catch(e) {
-			spinner.stop();
-			console.log(chalk.red(`Push failed: ${e.message}`));
-			return;
-		}
-
-		spinner.stop();
-
-		// print update status
-		console.log(chalk.cyan('Pushed to Toolbeam.'));
-		if (createRet.data.tools_added) {
-			createRet.data.tools_added.forEach(tool => {
-				console.log(chalk.green(`Added ${tool.name}`));
-			});
-		}
+	// print update status
+	console.log(chalk.cyan('Pushed to Toolbeam.'));
+	if (updateRet.data.tools_removed) {
+		updateRet.data.tools_removed.forEach(tool => {
+			console.log(chalk.red(`Removed ${tool.name}`));
+		});
+	}
+	if (updateRet.data.tools_added) {
+		updateRet.data.tools_added.forEach(tool => {
+			console.log(chalk.green(`Added ${tool.name}`));
+		});
 	}
 }
