@@ -579,10 +579,10 @@ export default {
           "$ref": "#/definitions/x-tb-fieldPlaceholder"
 				},
 				"x-tb-field_type": {
-          "$ref": "#/definitions/x-tb-fieldType"
+          "$ref": "#/definitions/x-tb-fieldTypeNonFile"
 				},
 				"x-tb-fieldType": {
-          "$ref": "#/definitions/x-tb-fieldType"
+          "$ref": "#/definitions/x-tb-fieldTypeNonFile"
 				},
 				"x-tb-fieldEnumLabel": {
           "$ref": "#/definitions/x-tb-fieldEnumLabel"
@@ -689,10 +689,10 @@ export default {
           "$ref": "#/definitions/x-tb-fieldPlaceholder"
 				},
 				"x-tb-field_type": {
-          "$ref": "#/definitions/x-tb-fieldType"
+          "$ref": "#/definitions/x-tb-fieldTypeNonFile"
 				},
 				"x-tb-fieldType": {
-          "$ref": "#/definitions/x-tb-fieldType"
+          "$ref": "#/definitions/x-tb-fieldTypeNonFile"
 				},
 				"x-tb-fieldEnumLabel": {
           "$ref": "#/definitions/x-tb-fieldEnumLabel"
@@ -803,10 +803,10 @@ export default {
           "$ref": "#/definitions/x-tb-fieldPlaceholder"
 				},
 				"x-tb-field_type": {
-          "$ref": "#/definitions/x-tb-fieldType"
+          "$ref": "#/definitions/x-tb-fieldTypeNonFile"
 				},
 				"x-tb-fieldType": {
-          "$ref": "#/definitions/x-tb-fieldType"
+          "$ref": "#/definitions/x-tb-fieldTypeNonFile"
 				},
 				"x-tb-fieldEnumLabel": {
           "$ref": "#/definitions/x-tb-fieldEnumLabel"
@@ -1141,10 +1141,10 @@ export default {
           "$ref": "#/definitions/x-tb-fieldPlaceholder"
 				},
 				"x-tb-field_type": {
-          "$ref": "#/definitions/x-tb-fieldType"
+          "$ref": "#/definitions/x-tb-fieldTypeNonFile"
 				},
 				"x-tb-fieldType": {
-          "$ref": "#/definitions/x-tb-fieldType"
+          "$ref": "#/definitions/x-tb-fieldTypeNonFile"
 				},
 				"x-tb-fieldEnumLabel": {
           "$ref": "#/definitions/x-tb-fieldEnumLabel"
