@@ -11,12 +11,12 @@ export default async function({getState, dispatch}, path, oprn) {
 	console.log(chalk.gray('Removing tool...'));
 
 	// validate parameter
-	operation = normalizeOperation(oprn);
+	const operation = normalizeOperation(oprn);
 
 	// load spec
 	await ensureSpecFileExists();
 	const json = await ensureSpecFileValidJson();
-	ensureToolExists();
+	ensureToolExists(path, operation, json);
 
 	// remove tool
 	delete json.paths[path][operation];
@@ -52,7 +52,7 @@ async function ensureSpecFileValidJson() {
 	return json;
 }
 
-function ensureToolExists() {
+function ensureToolExists(path, operation, json) {
 	if (( ! json.paths) || ( ! json.paths[path]) || ( ! json.paths[path][operation])) {
 		throw(ERR_REMOVE_TOOL_NOT_EXISTS);
 	}
