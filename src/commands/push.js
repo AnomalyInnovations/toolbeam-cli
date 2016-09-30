@@ -6,6 +6,7 @@ import config from '../config';
 import { lintParse, prettyPrint, indentJsonString } from '../libs/json';
 import { readFile } from '../libs/file';
 import { specUUIDFromOpenapi } from '../libs/consume-openapi';
+import { toolUrl } from '../libs/tool';
 import specSchema from '../libs/spec-schema';
 import * as specActions from '../actions/spec-actions';
 
@@ -46,39 +47,44 @@ export default async function({getState, dispatch}) {
 async function handleCreateSpec(dispatch, json) {
 	// call create spec api
 	const createRet = await dispatch(specActions.create(json));
+	const data = createRet.data;
 
 	// write file
-	json.info['x-tb-uuid'] = createRet.data.spec.uuid;
+	json.info['x-tb-uuid'] = data.spec.uuid;
 	dispatch(specActions.save(json));
 
 	// call update spec api
 	await dispatch(specActions.update(json));
 
-	if (createRet.data.tools_added) {
-		createRet.data.tools_added.forEach(tool => {
-			console.log(chalk.green(`Tool '${tool.name}' added`));
+	if (data.tools_added && data.tools_added.length > 0) {
+		console.log(chalk.green('Tools added:'));
+		data.tools_added.forEach(tool => {
+			console.log(chalk.green(`  + ${tool.name}\n    ${toolUrl(tool.uri)}`));
 		});
 	}
 
-	console.log(chalk.green(`Project '${json.info.title}' created`));
+	console.log(chalk.green(`Project created '${json.info.title}'`));
 }
 
 async function handleUpdateSpec(dispatch, json) {
 	// call update spec api
 	const updateRet = await dispatch(specActions.update(json));
+	const data = updateRet.data;
 
-	if (updateRet.data.tools_removed) {
-		updateRet.data.tools_removed.forEach(tool => {
-			console.log(chalk.yellow(`Tool '${tool.name}' removed`));
+	if (data.tools_added && data.tools_added.length > 0) {
+		console.log(chalk.green('Tools added:'));
+		data.tools_added.forEach(tool => {
+			console.log(chalk.green(`  + ${tool.name}\n    ${toolUrl(tool.uri)}`));
 		});
 	}
-	if (updateRet.data.tools_added) {
-		updateRet.data.tools_added.forEach(tool => {
-			console.log(chalk.green(`Tool '${tool.name}' added`));
+	if (data.tools_removed && data.tools_removed.length > 0) {
+		console.log(chalk.yellow('Tools removed:'));
+		data.tools_removed.forEach(tool => {
+			console.log(chalk.yellow(`  - ${tool.name}`));
 		});
 	}
 
-	console.log(chalk.cyan(`Project '${json.info.title}' updated`));
+	console.log(chalk.cyan(`Project updated '${json.info.title}'`));
 }
 
 ///////////////////////

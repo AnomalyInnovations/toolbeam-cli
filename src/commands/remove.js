@@ -1,7 +1,7 @@
 import chalk from 'chalk';
 import URI from 'urijs';
 import config from '../config';
-import errors from '../errors';
+import * as errors from '../errors';
 
 import { existFile, readFile, writeFile } from '../libs/file';
 import { quietParse, minifyJSON } from '../libs/json';
@@ -39,7 +39,7 @@ function normalizeOperation(operation) {
 async function ensureSpecFileExists() {
 	const exists = await existFile(config.specFileName);
 	if ( ! exists) {
-		throw(ERR_REMOVE_SPEC_NOT_EXISTS);
+		throw(errors.ERR_REMOVE_SPEC_NOT_EXISTS);
 	}
 }
 
@@ -47,13 +47,13 @@ async function ensureSpecFileValidJson() {
 	const fileStr = await readFile(config.specFileName);
 	const json = quietParse(minifyJSON(fileStr));
 	if (json === null) {
-		throw(ERR_REMOVE_PARSE_SPEC_JSON);
+		throw(errors.ERR_REMOVE_PARSE_SPEC_JSON);
 	}
 	return json;
 }
 
 function ensureToolExists(path, operation, json) {
 	if (( ! json.paths) || ( ! json.paths[path]) || ( ! json.paths[path][operation])) {
-		throw(ERR_REMOVE_TOOL_NOT_EXISTS);
+		throw(errors.ERR_REMOVE_TOOL_NOT_EXISTS);
 	}
 }

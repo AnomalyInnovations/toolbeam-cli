@@ -18,3 +18,4 @@ export const ERR_PULL_UUID_NOT_IN_SPEC = 'Found an existing project in the curre
 
 export const ERR_REMOVE_SPEC_NOT_EXISTS = 'Spec file does not exist';
 export const ERR_REMOVE_PARSE_SPEC_JSON = 'Could not parse project file for the tool due to invalid json';
+export const ERR_REMOVE_TOOL_NOT_EXISTS = 'Tool you are trying to remove cannot be found';
