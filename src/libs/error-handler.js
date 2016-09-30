@@ -3,23 +3,20 @@ import chalk from 'chalk';
 export default e => {
 	if (e) {
 
-		if (e instanceof SyntaxError) {
-			printError(e.message);
-		}
-		else if (e instanceof Error) {
-			printError(e.message, '');
-		}
-		else if (typeof e === 'string') {
+		// Internal errors
+		if (typeof e === 'string') {
 			printError(e);
 		}
-		else if (typeof e.message === 'string') {
+		// Request errors
+		else if (typeof e.message === 'string' && ! e.stack) {
 			printError(e.message);
 		}
+		// Internal silent errors
 		else if (e.message === null) {
 			// Do nothing
 		}
 		else {
-			printError(`Uncaught exception in error handler ${e}`);
+			throw e;
 		}
 
 	}

@@ -9,5 +9,5 @@ export default store => callback => {
 		return;
 	}
 
-	callback();
+	return callback();
 }

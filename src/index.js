@@ -3,8 +3,11 @@
 // Support source map outputs
 require('source-map-support').install();
 
-import errorHandler from './libs/error-handler';
-process.on('unhandledRejection', errorHandler);
+// Print all unhandled errors
+process.on('unhandledRejection', e => {
+	console.log(e.stack);
+	process.exit(1);
+});
 
 import packageJson from '../package.json';
 
@@ -14,6 +17,7 @@ import yargs from 'yargs';
 import updateNotifier from 'update-notifier';
 
 import store from './store';
+import errorHandler from './libs/error-handler';
 import _requireLogin from './libs/require-login';
 import _requireAnonymous from './libs/require-anonymous';
 import {
@@ -143,55 +147,54 @@ const argv = yargs
 	})
 	.argv;
 
-switch (argv._[0]) {
-	case SIGNUP:
-		requireAnonymous(() => signup(store));
-		break;
-	case LOGIN:
-		requireAnonymous(() => login(store));
-		break;
-	case INIT:
-		requireLogin(() => init(store, argv.url));
-		break;
-	case ADD:
-		const {toolOpts, paramOpts} = parseAddOptions(argv.set, argv['set-param']);
-		requireLogin(() => add(store, argv.path, argv.oprn, toolOpts, paramOpts));
-		break;
-	case RM:
-	case REMOVE:
-		requireLogin(() => remove(store, argv.path, argv.oprn));
-		break;
-	case PULL:
-		requireLogin(() => pull(store, argv.id));
-		break;
-	case PUSH:
-		requireLogin(() => push(store));
-		break;
-	case PROJECT:
-		switch (argv._[1]) {
-			case LS:
-			case LIST:
-				requireLogin(() => projectLs(store));
-				break;
-			case RM:
-			case REMOVE:
-				requireLogin(() => projectRm(store, argv.id));
-				break;
-		}
-		break;
-	case WHOAMI:
-		requireLogin(() => whoami(store));
-		break;
-	case LOGOUT:
-		logout(store);
-		break;
-	default:
-		yargs.showHelp();
+// Run the command
+try {
+	Promise.resolve(runCommand(argv)).catch(errorHandler);
+}
+catch(e) {
+	errorHandler(e);
 }
 
 ///////////////////////
 // Private Functions //
 ///////////////////////
+
+function runCommand(argv) {
+	switch (argv._[0]) {
+		case SIGNUP:
+			return requireAnonymous(() => signup(store));
+		case LOGIN:
+			return requireAnonymous(() => login(store));
+		case INIT:
+			return requireLogin(() => init(store, argv.url));
+		case ADD:
+			const {toolOpts, paramOpts} = parseAddOptions(argv.set, argv['set-param']);
+			return requireLogin(() => add(store, argv.path, argv.oprn, toolOpts, paramOpts));
+		case RM:
+		case REMOVE:
+			return requireLogin(() => remove(store, argv.path, argv.oprn));
+		case PULL:
+			return requireLogin(() => pull(store, argv.id));
+		case PUSH:
+			return requireLogin(() => push(store));
+		case PROJECT:
+			switch (argv._[1]) {
+				case LS:
+				case LIST:
+					return requireLogin(() => projectLs(store));
+				case RM:
+				case REMOVE:
+					return requireLogin(() => projectRm(store, argv.id));
+			}
+			break;
+		case WHOAMI:
+			return requireLogin(() => whoami(store));
+		case LOGOUT:
+			return logout(store);
+		default:
+			return yargs.showHelp();
+	}
+}
 
 function parseAddOptions(toolOptStr = [], paramOptStr = []) {
 	const toolOpts = toolOptStr.reduce((acc, opt) => {
