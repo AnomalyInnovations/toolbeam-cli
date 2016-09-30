@@ -1,3 +1,14 @@
+import jsonlint from 'jsonlint';
+
+export function lintParse(str) {
+	try {
+		return jsonlint.parse(str);
+	}
+	catch(e) {
+		throw e.message;
+	}
+}
+
 export function quietParse(str) {
 	let o = null;
 
@@ -58,4 +69,15 @@ export function minifyJSON(json) {
 	}
 	new_str[ns++] = rc;
 	return new_str.join("");
+}
+
+export function prettyPrint(o) {
+	return JSON.stringify(o, null, 2);
+}
+
+export function indentJsonString(str) {
+	return str
+		.split('\n')
+		.map(line => `  ${line}`)
+		.join('\n');
 }

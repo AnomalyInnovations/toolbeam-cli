@@ -30,6 +30,8 @@
     "babel-preset-stage-0": "^6.5.0",
     "chalk": "^1.1.3",
     "cli-table": "^0.3.1",
+    "jsonlint": "^1.6.2",
+    "jsonpointer": "^4.0.0",
     "preferences": "^0.2.1",
     "prompt": "^1.0.0",
     "redux": "^3.6.0",

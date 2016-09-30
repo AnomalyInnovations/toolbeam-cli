@@ -1,8 +1,8 @@
 import chalk from 'chalk';
 import config from '../config';
-import errors from '../errors';
+import * as errors from '../errors';
 import { existFile, readFile, writeFile } from '../libs/file';
-import { quietParse, minifyJSON } from '../libs/json';
+import { lintParse } from '../libs/json';
 import { specUUIDFromOpenapi } from '../libs/consume-openapi';
 import * as specActions from '../actions/spec-actions';
 
@@ -11,8 +11,8 @@ export default async function({getState, dispatch}, uuid) {
 	
 	// Validate UUID passed in
 	uuid = uuid
-		? await validate_uuid_in_argument(uuid)
-		: await validate_uuid_in_file();
+		? await validateUuidInArgument(uuid)
+		: await validateUuidInFile();
 
 	// Load spec info & data
 	await dispatch(specActions.loadInfo(uuid));
@@ -24,12 +24,12 @@ export default async function({getState, dispatch}, uuid) {
 	console.log(chalk.cyan('Pulled from Toolbeam.'));
 }
 
-async function validate_uuid_in_argument(uuid) {
+async function validateUuidInArgument(uuid) {
 	const exists = await existFile(config.specFileName);
 	if (exists) {
 		// Check UUID does not match current project
 		const fileStr = await readFile(config.specFileName);
-		const json = JSON.parse(minifyJSON(fileStr));
+		const json = lintParse(fileStr);
 		if (json && uuid != specUUIDFromOpenapi(json)) {
 			throw errors.ERR_PULL_UUID_DOES_NOT_MATCH;
 		}
@@ -37,14 +37,14 @@ async function validate_uuid_in_argument(uuid) {
 	return uuid;
 }
 
-async function validate_uuid_in_file() {
+async function validateUuidInFile() {
 	const exists = await existFile(config.specFileName);
 	if ( ! exists) {
 		throw errors.ERR_PULL_UUID_NOT_PROVIDED;
 	}
 
 	const fileStr = await readFile(config.specFileName);
-	const json = quietParse(minifyJSON(fileStr));
+	const json = lintParse(fileStr);
 	if ( ! json) {
 		throw errors.ERR_PULL_PARSE_SPEC_JSON;
 	}

@@ -5,7 +5,7 @@ import * as errors from '../errors';
 
 import { toolNameFromEndpoint } from '../libs/consume-openapi';
 import { existFile, readFile, writeFile } from '../libs/file';
-import { quietParse, minifyJSON } from '../libs/json';
+import { lintParse } from '../libs/json';
 import * as specActions from '../actions/spec-actions';
 
 export default async function({getState, dispatch}, path, oprn, toolData, paramData) {
@@ -20,7 +20,7 @@ export default async function({getState, dispatch}, path, oprn, toolData, paramD
 
 	// load spec
 	const fileStr = await readFile(config.specFileName);
-	const json = JSON.parse(minifyJSON(fileStr));
+	const json = lintParse(fileStr);
 
 	ensureToolNotExists(json, path, operation);
 

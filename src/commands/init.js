@@ -45,7 +45,7 @@ export default async function({getState, dispatch}, url) {
 	// save spec
 	await dispatch(specActions.save(spec));
 	
-	console.log(chalk.green(`Project created for ${url}`));
+	console.log(chalk.green(`Spec created for ${url}`));
 }
 
 function normalizeBasePath(basePath) {

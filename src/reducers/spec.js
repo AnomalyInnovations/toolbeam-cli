@@ -1,3 +1,4 @@
+import { prettyPrint } from '../libs/json';
 import * as types from '../actions/action-types';
 
 const initialState = {
@@ -13,7 +14,7 @@ export default function user(state = initialState, action = {}) {
 
     case types.SPEC_SAVE:
 			return { ...state,
-				data: JSON.stringify(action.json, null, 2)
+				data: prettyPrint(action.json)
 			};
 
     case types.SPEC_LOAD_INFO:
@@ -35,7 +36,7 @@ export default function user(state = initialState, action = {}) {
 				load_error: null
 			};
     case types.SPEC_LOAD_SUCCESS:
-			const data = JSON.stringify(JSON.parse(action.result.data), null, 2);
+			const data = prettyPrint(JSON.parse(action.result.data));
 
 			return { ...state,
 				data: data
