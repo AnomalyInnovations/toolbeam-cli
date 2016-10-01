@@ -93,7 +93,7 @@ function printAddedTools(tools) {
 function printRemovedTools(tools) {
 	console.log('Tools removed:\n');
 	tools.forEach(tool => {
-		console.log(chalk.yellow(`  - ${tool.name}`));
+		console.log(chalk.red(`  - ${tool.name}`));
 	});
 	console.log('');
 }
