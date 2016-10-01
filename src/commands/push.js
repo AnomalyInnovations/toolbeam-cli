@@ -13,7 +13,7 @@ import * as specActions from '../actions/spec-actions';
 export default async function({getState, dispatch}) {
 	let fileStr, json;
 
-	console.log(chalk.gray(`Loading ${config.specFileName}...`));
+	console.log(chalk.gray(`Loading ${config.specFileName}`));
 
 	// Read file
 	try {
@@ -36,7 +36,7 @@ export default async function({getState, dispatch}) {
 		throw `${error.message}${contextPath}\n${context}`;
 	}
 
-	console.log(chalk.gray(`Pushing ${config.specFileName}...`));
+	console.log(chalk.gray(`Pushing ${config.specFileName}`));
 
 	// Create if no UUID, Update if has UUID
 	(specUUIDFromOpenapi(json) == null)

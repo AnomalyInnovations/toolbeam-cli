@@ -7,21 +7,24 @@ import { specUUIDFromOpenapi } from '../libs/consume-openapi';
 import * as specActions from '../actions/spec-actions';
 
 export default async function({getState, dispatch}, uuid) {
-	console.log(chalk.gray('Pulling spec...'));
 	
 	// Validate UUID passed in
 	uuid = uuid
 		? await validateUuidInArgument(uuid)
 		: await validateUuidInFile();
 
+	console.log(chalk.gray(`Pulling spec for project id '${uuid}'`));
+
 	// Load spec info & data
 	await dispatch(specActions.loadInfo(uuid));
 	await dispatch(specActions.load(specActions.getSpecFileLink(getState())));
 
+	console.log(chalk.gray(`Writing spec to ${config.specFileName}`));
+
 	// Write to file
 	await writeFile(config.specFileName, specActions.getData(getState()));
 	
-	console.log(chalk.cyan('Pulled from Toolbeam.'));
+	console.log('Pulled from Toolbeam');
 }
 
 async function validateUuidInArgument(uuid) {
@@ -30,7 +33,7 @@ async function validateUuidInArgument(uuid) {
 		// Check UUID does not match current project
 		const fileStr = await readFile(config.specFileName);
 		const json = lintParse(fileStr);
-		if (json && uuid != specUUIDFromOpenapi(json)) {
+		if (uuid != specUUIDFromOpenapi(json)) {
 			throw errors.ERR_PULL_UUID_DOES_NOT_MATCH;
 		}
 	}
@@ -38,6 +41,8 @@ async function validateUuidInArgument(uuid) {
 }
 
 async function validateUuidInFile() {
+	console.log(chalk.gray(`Loading project id from ${config.specFileName}`));
+
 	const exists = await existFile(config.specFileName);
 	if ( ! exists) {
 		throw errors.ERR_PULL_UUID_NOT_PROVIDED;
@@ -45,10 +50,6 @@ async function validateUuidInFile() {
 
 	const fileStr = await readFile(config.specFileName);
 	const json = lintParse(fileStr);
-	if ( ! json) {
-		throw errors.ERR_PULL_PARSE_SPEC_JSON;
-	}
-
 	const uuid = specUUIDFromOpenapi(json);
 	if ( ! uuid) {
 		throw errors.ERR_PULL_UUID_NOT_IN_SPEC;
