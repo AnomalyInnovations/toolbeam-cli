@@ -57,10 +57,7 @@ async function handleCreateSpec(dispatch, json) {
 	await dispatch(specActions.update(json));
 
 	if (data.tools_added && data.tools_added.length > 0) {
-		console.log(chalk.green('Tools added:'));
-		data.tools_added.forEach(tool => {
-			console.log(chalk.green(`  + ${tool.name}\n    ${toolUrl(tool.uri)}`));
-		});
+		printAddedTools(data.tools_added);
 	}
 
 	console.log(chalk.green(`Project created '${json.info.title}'`));
@@ -72,24 +69,34 @@ async function handleUpdateSpec(dispatch, json) {
 	const data = updateRet.data;
 
 	if (data.tools_added && data.tools_added.length > 0) {
-		console.log(chalk.green('Tools added:'));
-		data.tools_added.forEach(tool => {
-			console.log(chalk.green(`  + ${tool.name}\n    ${toolUrl(tool.uri)}`));
-		});
+		printAddedTools(data.tools_added);
 	}
 	if (data.tools_removed && data.tools_removed.length > 0) {
-		console.log(chalk.yellow('Tools removed:'));
-		data.tools_removed.forEach(tool => {
-			console.log(chalk.yellow(`  - ${tool.name}`));
-		});
+		printRemovedTools(data.tools_removed);
 	}
 
-	console.log(chalk.cyan(`Project updated '${json.info.title}'`));
+	console.log(`Project updated '${json.info.title}'`);
 }
 
 ///////////////////////
 // Private Functions //
 ///////////////////////
+
+function printAddedTools(tools) {
+	console.log('Tools added:\n');
+	tools.forEach(tool => {
+		console.log(chalk.green(`  + ${tool.name}`));
+		console.log(chalk.green(`    -> ${toolUrl(tool.uri)}\n`));
+	});
+}
+
+function printRemovedTools(tools) {
+	console.log('Tools removed:\n');
+	tools.forEach(tool => {
+		console.log(chalk.yellow(`  - ${tool.name}`));
+	});
+	console.log('');
+}
 
 function getPathContext(path) {
 	if (path === '') return '';
