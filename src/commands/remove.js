@@ -7,7 +7,7 @@ import { existFile, readFile, writeFile } from '../libs/file';
 import { quietParse, minifyJSON } from '../libs/json';
 import * as specActions from '../actions/spec-actions';
 
-export default async function({getState, dispatch}, path, oprn) {
+export default async function({getState, dispatch}, oprn, path) {
 	console.log(chalk.gray('Removing tool...'));
 
 	// validate parameter

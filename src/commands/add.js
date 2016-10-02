@@ -8,7 +8,7 @@ import { existFile, readFile, writeFile } from '../libs/file';
 import { lintParse } from '../libs/json';
 import * as specActions from '../actions/spec-actions';
 
-export default async function({getState, dispatch}, path, oprn, toolData, paramData) {
+export default async function({getState, dispatch}, oprn, path, toolData, paramData) {
 	console.log(chalk.gray('Adding tool...'));
 
 	// validate parameter

@@ -18,6 +18,7 @@ import updateNotifier from 'update-notifier';
 
 import store from './store';
 import errorHandler from './libs/error-handler';
+import { quietParse } from './libs/json';
 import _requireLogin from './libs/require-login';
 import _requireAnonymous from './libs/require-anonymous';
 import {
@@ -77,7 +78,7 @@ const argv = yargs
 			.example(`tb ${INIT} http://api.example.com`, 'Initilize your Example API project')
 			.fail(failFn))
 
-	.command(`${ADD} <path> [oprn]`, 'Add an API resource as a tool',
+	.command(`${ADD} [oprn] <path>`, 'Add an API resource as a tool',
 		yargs => yargs
 			.demand(1, 2, 'Missing: <path> of your API resource')
 			.strict()
@@ -93,14 +94,14 @@ const argv = yargs
 				desc: 'Set a parameter for the tool and <key>:<value> options',
 			})
 			.epilogue('For a full list of tool and parameter options refer to https://github.com/AnomalyInnovations/toolbeam-cli')
-			.usage(`${usagePrefix} ${ADD} <path> [oprn] [options]`)
+			.usage(`${usagePrefix} ${ADD} [oprn] <path> [options]`)
 			.example(`tb ${ADD} /users`, 'Add a GET resource')
-			.example(`tb ${ADD} /user/31/like POST`, 'Add a POST resource')
-			.example(`tb ${ADD} /users/{id} POST --set-param name:id in:path`, 'Add a POST resource with a path parameter')
+			.example(`tb ${ADD} POST /user/31/like`, 'Add a POST resource')
+			.example(`tb ${ADD} POST /users/{id} --set-param name:id in:path`, 'Add a POST resource with a path parameter')
 			.fail(failFn))
 
-	.command(`${REMOVE} <path> [oprn]`, false, yargs => cmdRemove(yargs, RM))
-	.command(`${RM} <path> [oprn]`, 'Remove the given API resource', yargs => cmdRemove(yargs, RM))
+	.command(`${REMOVE} [oprn] <path>`, false, yargs => cmdRemove(yargs, RM))
+	.command(`${RM} [oprn] <path>`, 'Remove the given API resource', yargs => cmdRemove(yargs, RM))
 
 	.command(`${PULL} [id]`, 'Pull your current project spec from Toolbeam',
 		yargs => yargs
@@ -168,11 +169,13 @@ function runCommand(argv) {
 		case INIT:
 			return requireLogin(() => init(store, argv.url));
 		case ADD:
-			const {toolOpts, paramOpts} = parseAddOptions(argv.set, argv['set-param']);
-			return requireLogin(() => add(store, argv.path, argv.oprn, toolOpts, paramOpts));
+			return requireLogin(() => add(
+				store,
+				...getPathOprn(argv),
+				...parseAddOptions(argv.set, argv.setParam)));
 		case RM:
 		case REMOVE:
-			return requireLogin(() => remove(store, argv.path, argv.oprn));
+			return requireLogin(() => remove(store, ...getPathOprn(argv)));
 		case PULL:
 			return requireLogin(() => pull(store, argv.id));
 		case PUSH:
@@ -200,8 +203,8 @@ function parseAddOptions(toolOptStr = [], paramOptStr = []) {
 	const toolOpts = toolOptStr.reduce((acc, opt) => {
 		const sp = opt.split(':');
 
-		if (sp.length === 2) {
-			acc[sp[0]] = sp[1];
+		if (sp.length >= 2) {
+			acc[sp[0]] = parseValue(sp.slice(1).join(':'));
 		}
 
 		return acc;
@@ -210,11 +213,12 @@ function parseAddOptions(toolOptStr = [], paramOptStr = []) {
 	const paramOpts = paramOptStr.reduce((acc, opt, i, opts) => {
 		const sp = opt.split(':');
 
-		if (sp.length !== 2) {
+		if (sp.length === 1) {
 			return acc;
 		}
 
-		const [key, value] = sp;
+		const key = sp[0];
+		const value = parseValue(sp.slice(1).join(':'));
 
 		// Starting a new param
 		if (key.toLowerCase() === 'name') {
@@ -236,10 +240,28 @@ function parseAddOptions(toolOptStr = [], paramOptStr = []) {
 		return acc;
 	}, {list: [], current: null}).list;
 
-	return {
+	return [
 		toolOpts,
 		paramOpts
-	};
+	];
+}
+
+function parseValue(value) {
+	// Try and parse value as boolean
+	const valAsBool = quietParse(value);
+
+	if (valAsBool !== null) {
+		return valAsBool;
+	}
+
+	return value;
+}
+
+function getPathOprn(argv) {
+	return [
+		argv.oprn ? argv.path : argv.oprn,
+		argv.oprn || argv.path
+	];
 }
 
 function checkOperation(argv) {
@@ -251,7 +273,7 @@ function checkOperation(argv) {
 		'delete': true
 	};
 
-	if (argv._[2] && ! types.hasOwnProperty(argv._[2].toLowerCase())) {
+	if (argv._[2] && ! types.hasOwnProperty(argv._[1].toLowerCase())) {
 		return 'Error: Not a valid HTTP operation <oprn>';
 	}
 	return true;
@@ -262,9 +284,9 @@ function cmdRemove(yargs, cmd) {
 		.demand(1, 2, 'Missing: <path> of your API resource')
 		.strict()
 		.check(checkOperation)
-		.usage(`${usagePrefix} ${cmd} <path> [oprn]`)
+		.usage(`${usagePrefix} ${cmd} [oprn] <path>`)
 		.example(`tb ${cmd} /users`, 'Remove the \/users GET resource')
-		.example(`tb ${cmd} /users/{id} POST`, 'Remove the \/users/{id} POST resource')
+		.example(`tb ${cmd} POST /users/{id}`, 'Remove the \/users/{id} POST resource')
 		.fail(failFn);
 }
 
