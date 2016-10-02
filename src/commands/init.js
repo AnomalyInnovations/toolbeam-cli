@@ -8,13 +8,13 @@ import * as specActions from '../actions/spec-actions';
 
 export default async function({getState, dispatch}, url) {
 
-	console.log(chalk.gray('Initializing spec...'));
-
 	// ensure not init'ed
 	const exists = await existFile(config.specFileName);
 	if (exists) {
 		throw errors.ERR_INIT_PROJECT_EXISTS;
 	}
+
+	console.log(chalk.gray('Initializing spec'));
 
 	// parse url
 	const uri = URI(url);
@@ -42,10 +42,12 @@ export default async function({getState, dispatch}, url) {
 	];
 	spec['paths'] = {};
 
+	console.log(chalk.gray(`Writing to ${config.specFileName}`));
+
 	// save spec
 	await dispatch(specActions.save(spec));
 	
-	console.log(chalk.green(`Spec created for ${url}`));
+	console.log(`Spec created for ${url}`);
 }
 
 function normalizeBasePath(basePath) {

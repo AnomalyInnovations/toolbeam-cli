@@ -1,7 +1,7 @@
 export const ERR_INVALID_JSON = 'Invalid json';
 
 export const ERR_INIT_PROJECT_EXISTS = 'Project already exists';
-export const ERR_INIT_INVALID_URL_FORMAT = 'Invalid url format';
+export const ERR_INIT_INVALID_URL_FORMAT = 'Please pass in a valid base url';
 
 export const ERR_SIGNUP_PSWDS_DONT_MATCH = 'Passwords don\'t match';
 
