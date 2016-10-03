@@ -12,11 +12,11 @@ export default async function(store) {
 
 	// ensure not logged in
 	if ( ! userActions.isLoggedIn(store.getState())) {
-		console.log(chalk.cyan(logoutMessage));
+		console.log(logoutMessage);
 		return;
 	}
 
-	console.log(chalk.gray('Logging out of Toolbeam...'));
+	console.log(chalk.gray('Logging out of Toolbeam'));
 
 	// log out
 	try {
@@ -26,5 +26,5 @@ export default async function(store) {
 		// ignore all errors
 	}
 
-	console.log(chalk.cyan(logoutMessage));
+	console.log(logoutMessage);
 }

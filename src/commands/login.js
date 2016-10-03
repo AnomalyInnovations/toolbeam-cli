@@ -28,9 +28,9 @@ export default async function(store) {
 
 	const {email, password} = await getPrompt(prompts);
 
-	console.log(chalk.gray('Logging in to Toolbeam...'));
+	console.log(chalk.gray('Logging in to Toolbeam'));
 
 	await store.dispatch(userActions.login(email, password));
 
-	console.log(chalk.cyan('You are logged in to Toolbeam'));
+	console.log('You are logged in to Toolbeam');
 }
