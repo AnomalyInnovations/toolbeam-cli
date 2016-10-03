@@ -9,12 +9,17 @@ import { lintParse } from '../libs/json';
 import * as specActions from '../actions/spec-actions';
 
 export default async function({getState, dispatch}, oprn, path, toolData, paramData) {
-	console.log(chalk.gray('Adding tool...'));
+
+	oprn = oprn || 'GET';
+
+	console.log(chalk.gray(`Adding '${oprn} ${path}'`));
 
 	// validate parameter
 	const operation = normalizeOperation(oprn);
 	const security = normalizeSecurity(toolData.security);
 	paramData = normalizeParams(paramData);
+
+	console.log(chalk.gray(`Loading ${config.specFileName}`));
 
 	await ensureSpecFileExists();
 
@@ -32,10 +37,11 @@ export default async function({getState, dispatch}, oprn, path, toolData, paramD
 	}
 
 	// add tool
+	const toolName = toolNameFromEndpoint({path:path, operation:operation});
 	json.paths = json.paths || {};
 	json.paths[path] = json.paths[path] || {};
 	json.paths[path][operation] = {
-		"x-tb-name": toolNameFromEndpoint({path:path, operation:operation}),
+		"x-tb-name": toolName,
 		"operationId": generateOperationId(),
 		"security": security == 'basic' ? [{'basic_auth': []}] : [],
 		"parameters": [],
@@ -71,7 +77,8 @@ export default async function({getState, dispatch}, oprn, path, toolData, paramD
 	// save spec
 	dispatch(specActions.save(json));
 	
-	console.log(chalk.green(`Tool added for ${path}`));
+	console.log(chalk.green(`Added tool '${toolName}' to spec`));
+	console.log(`Run 'tb push' to create your tool`);
 }
 
 function normalizeOperation(operation) {
