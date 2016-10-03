@@ -5,10 +5,9 @@ import config from '../config';
 import * as specActions from '../actions/spec-actions';
 
 export default async function({getState, dispatch}, uuid) {
-	console.log(chalk.gray('Removing project...'));
+	console.log(chalk.gray(`Removing project with id '${uuid}'`));
 
 	await dispatch(specActions.remove(uuid));
 
-	console.log(chalk.cyan(`Tools in project ${uuid} removed`));
-	console.log(chalk.cyan(`Project ${uuid} removed.`));
+	console.log(chalk.red(`Project ${uuid} removed`));
 }
