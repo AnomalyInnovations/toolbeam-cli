@@ -40,10 +40,10 @@ export default async function(store) {
 		throw errors.ERR_SIGNUP_PSWDS_DONT_MATCH;
 	}
 
-	console.log(chalk.gray('Signing up for Toolbeam...'));
+	console.log(chalk.gray('Signing up for Toolbeam'));
 
 	await store.dispatch(userActions.signup(email, password));
 
-	console.log(chalk.green('You are signed up for Toolbeam'));
+	console.log(`You are signed up. We've sent a verification email to '${email}'.`);
 
 }
