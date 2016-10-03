@@ -8,9 +8,7 @@ import { existFile, readFile, writeFile } from '../libs/file';
 import { lintParse } from '../libs/json';
 import * as specActions from '../actions/spec-actions';
 
-export default async function({getState, dispatch}, oprn, path, toolData, paramData) {
-
-	oprn = oprn || 'GET';
+export default async function({getState, dispatch}, oprn = 'GET', path, toolData, paramData) {
 
 	console.log(chalk.gray(`Adding '${oprn} ${path}'`));
 

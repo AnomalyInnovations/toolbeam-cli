@@ -3,7 +3,8 @@ import jsonpointer from 'jsonpointer';
 import specValidator from 'tv4';
 
 import config from '../config';
-import { lintParse, prettyPrint, indentJsonString } from '../libs/json';
+import { indent } from '../libs/string';
+import { lintParse, prettyPrint } from '../libs/json';
 import { readFile } from '../libs/file';
 import { specUUIDFromOpenapi } from '../libs/consume-openapi';
 import { toolUrl } from '../libs/tool';
@@ -138,8 +139,8 @@ function getSchemaContext(data, path) {
 		refStr = limitNumLines(prettyPrint(ref), 10, isRefArray);
 
 		bodyStr = isParentArr
-			? indentJsonString(refStr)
-			: indentJsonString(`"${refKey}": ${refStr}`);
+			? indent(refStr)
+			: indent(`"${refKey}": ${refStr}`);
 
 	}
 	// Number, Boolean, or String

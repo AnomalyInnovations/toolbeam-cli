@@ -7,9 +7,7 @@ import { existFile, readFile, writeFile } from '../libs/file';
 import { lintParse } from '../libs/json';
 import * as specActions from '../actions/spec-actions';
 
-export default async function({getState, dispatch}, oprn, path) {
-
-	oprn = oprn || 'GET';
+export default async function({getState, dispatch}, oprn = 'GET', path) {
 
 	console.log(chalk.gray(`Removing '${oprn} ${path}'`));
 

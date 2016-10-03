@@ -1,50 +1,68 @@
 import chalk from 'chalk';
 import Table from 'cli-table';
+import { indent, truncate } from '../libs/string';
 
 import config from '../config';
 import * as specsActions from '../actions/specs-actions';
 import * as toolsActions from '../actions/tools-actions';
 
 export default async function({getState, dispatch}) {
-	console.log(chalk.gray('Fetching your projects...'));
+	console.log(chalk.gray('Fetching your projects'));
 
 	// Load projects
 	await dispatch(specsActions.load());
 
-	// Load tools
-	await dispatch(toolsActions.load());
-
 	// Build output
 	const projects = specsActions.getSpecs(getState());
-	const projectsById = projects.reduce((acc, project) => {
-		acc[project.id] = project
-		return acc;
-	}, {});
-	const tools = toolsActions.getTools(getState());
 
-	if (tools.length === 0) {
-		console.log(chalk.cyan('Your project list is empty!'));
+	if (projects.length === 0) {
+		console.log('Your project list is empty!');
 		return;
 	}
 
-	const table = new Table({
-		colWidths: [35, 15, 35, 35]
-	});
+	// Load tools
+	await dispatch(toolsActions.load());
 
-	const toolRows = tools.map(tool => {
+	console.log('Your Projects:\n');
+
+	const tools = toolsActions.getTools(getState());
+
+	const toolGroupedByProject = tools.reduce((acc, tool) => {
 		const projectId = tool.spec_id;
-		const project = projectsById[projectId];
-		return [
-			trunc(project.name, 35),
-			project.uuid,
-			trunc(colorToChalk(tool.color)(tool.name), 35),
+
+		if ( ! acc.hasOwnProperty(projectId)) {
+			acc[projectId] = [];
+		}
+
+		acc[projectId].push([
+			truncate(colorToChalk(tool.color)(tool.name), 35),
 			fullURL(tool.uri)
-		];
+		]);
+
+		return acc;
+	}, {});
+
+	projects.forEach(project => {
+		let table;
+
+		console.log(`  ${truncate(project.name, 60)} (id: ${project.uuid})`);
+		const toolsInProject = toolGroupedByProject[project.id];
+
+		if (toolsInProject) {
+			table = new Table({
+				colWidths: [35, 35]
+			});
+			table.push(...toolsInProject);
+		}
+		else {
+			table = new Table({
+				colWidths: [ 36 ]
+			});
+			table.push(['There are no tools in this project']);
+		}
+
+		console.log(`${indent(table.toString())}\n`);
 	});
-
-	table.push(["Project", "Project ID", "Tool", "Tool Link"], ...toolRows);
-
-	console.log(table.toString());
 }
 
 function colorToChalk(color) {
@@ -66,10 +84,4 @@ function colorToChalk(color) {
 
 function fullURL(uri) {
 	return `${config.webScheme}://${config.webHost}/t/${uri}`;
-}
-
-function trunc(string, length) {
-	return (string.length > length)
-		? string.substr(0, length-1) + '…'
-		: string;
 }

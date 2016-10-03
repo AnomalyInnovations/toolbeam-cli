@@ -104,6 +104,9 @@ const argv = yargs
 	.command(`${REMOVE} [oprn] <path>`, false, yargs => cmdRemove(yargs, RM))
 	.command(`${RM} [oprn] <path>`, 'Remove the given API resource', yargs => cmdRemove(yargs, RM))
 
+	.command(PUSH, 'Push your current project spec to Toolbeam',
+		yargs => yargs.usage(`${usagePrefix} ${PUSH}`))
+
 	.command(`${PULL} [id]`, 'Pull your current project spec from Toolbeam',
 		yargs => yargs
 			.usage(`${usagePrefix} ${PULL} [id]`)
@@ -111,9 +114,6 @@ const argv = yargs
 			.example(`tb ${PULL}`, 'Pull the current project spec')
 			.example(`tb ${PULL} 96a6d7f2`, 'Pull the project spec for the given id')
 			.fail(failFn))
-
-	.command(PUSH, 'Push your current project spec to Toolbeam',
-		yargs => yargs.usage(`${usagePrefix} ${PUSH}`))
 
 	.command(PROJECT, 'View and manage your projects',
 		yargs => yargs

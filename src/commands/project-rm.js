@@ -8,7 +8,7 @@ import * as specActions from '../actions/spec-actions';
 
 const prompts = [{
   name: 'confirm',
-  description: 'Are you sure you\'d like to remove this project? [Y/n]'
+  description: 'Are you sure you want to remove this project? [Y/n]'
 }];
 
 export default async function({getState, dispatch}, uuid) {

@@ -74,10 +74,3 @@ export function minifyJSON(json) {
 export function prettyPrint(o) {
 	return JSON.stringify(o, null, 2);
 }
-
-export function indentJsonString(str) {
-	return str
-		.split('\n')
-		.map(line => `  ${line}`)
-		.join('\n');
-}
