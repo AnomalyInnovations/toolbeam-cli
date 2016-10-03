@@ -118,13 +118,12 @@ const argv = yargs
 	.command(PROJECT, 'View and manage your projects',
 		yargs => yargs
 			.usage(`${usagePrefix} ${PROJECT} <command>`)
-			.demand(2, 2, 'Missing: <command> to be executed')
+			.demand(2, 2)
 			.strict()
 			.command(LS, PROJECTLSDESC, yargs => cmdProjectLs(yargs, LS))
 			.command(LIST, false, yargs => cmdProjectLs(yargs, LIST))
 			.command(`${RM} <id>`, PROJECTRMDESC, yargs => cmdProjectRm(yargs, RM))
-			.command(`${REMOVE} <id>`, false, yargs => cmdProjectRm(yargs, REMOVE))
-			.fail(failFn))
+			.command(`${REMOVE} <id>`, false, yargs => cmdProjectRm(yargs, REMOVE)))
 
 	.command(WHOAMI, 'Info about current logged in user',
 		yargs => yargs.usage(`${usagePrefix} ${WHOAMI}`))
@@ -223,7 +222,8 @@ function cmdProjectRm(yargs, cmd) {
 		.usage(`${usagePrefix} ${PROJECT} ${cmd} <id>`)
 		.demand(1, 1, 'Missing: <id> of the project to be removed')
 		.example(`tb ${cmd} 96a6d7f2`, 'Remove the project with the given id')
-		.strict();
+		.strict()
+		.fail(failFn);
 }
 
 function parseAddToolOptions(options = []) {
