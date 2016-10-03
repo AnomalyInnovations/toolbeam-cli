@@ -9,7 +9,8 @@ export default e => {
 		}
 		// Request errors
 		else if (typeof e.message === 'string' && ! e.stack) {
-			printError(e.message);
+			const code = e.code ? ` (code: ${e.code})` : '';
+			printError(`${e.message}${code}`);
 		}
 		// Internal silent errors
 		else if (e.message === null) {
