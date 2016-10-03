@@ -51,7 +51,7 @@ async function handleCreateSpec(dispatch, json) {
 
 	// write file
 	json.info['x-tb-uuid'] = data.spec.uuid;
-	dispatch(specActions.save(json));
+	await dispatch(specActions.save(json));
 
 	// call update spec api
 	await dispatch(specActions.update(json));

@@ -75,7 +75,7 @@ export default async function({getState, dispatch}, oprn, path, toolData, paramD
 	});
 
 	// save spec
-	dispatch(specActions.save(json));
+	await dispatch(specActions.save(json));
 	
 	console.log(chalk.green(`Added tool '${toolName}' to spec`));
 	console.log(`Run 'tb push' to create your tool`);
@@ -103,13 +103,13 @@ function normalizeParams(paramData) {
 	paramData.forEach(perData => {
 		perData.field = normalizeFieldType(perData.field);
 		if ( ! perData.field) {
-			throw {message: errors.ERR_ADD_MISSING_PARAM_FIELD};
+			throw errors.ERR_ADD_MISSING_PARAM_FIELD;
 		}
 		else if ( ! perData.name) {
-			throw {message: errors.ERR_ADD_MISSING_PARAM_NAME};
+			throw errors.ERR_ADD_MISSING_PARAM_NAME;
 		}
 		else if ( ! perData.in) {
-			throw {message: errors.ERR_ADD_MISSING_PARAM_IN};
+			throw errors.ERR_ADD_MISSING_PARAM_IN;
 		}
 	});
 	return paramData;
@@ -118,21 +118,21 @@ function normalizeParams(paramData) {
 async function ensureSpecFileExists() {
 	const exists = await existFile(config.specFileName);
 	if ( ! exists) {
-		throw {message: errors.ERR_ADD_SPEC_NOT_EXISTS};
+		throw errors.ERR_ADD_SPEC_NOT_EXISTS;
 	}
 }
 
 function ensureToolNotExists(json, path, operation) {
 	if (json.paths && json.paths[path] && json.paths[path][operation]) {
-		throw {message: errors.ERR_ADD_TOOL_EXISTS};
+		throw errors.ERR_ADD_TOOL_EXISTS;
 	}
 }
 
 function generateOperationId() {
-	var text = "";
-	var possible = "abcdefghijklmnopqrstuvwxyz";
+	let text = "";
+	let possible = "abcdefghijklmnopqrstuvwxyz";
 
-	for( var i=0; i < 8; i++ ) {
+	for (let i=0; i < 8; i++ ) {
 		text += possible.charAt(Math.floor(Math.random() * possible.length));
 	}
 
