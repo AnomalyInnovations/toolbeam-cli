@@ -17,3 +17,5 @@ export const ERR_PULL_UUID_NOT_IN_SPEC = 'Please push your current project befor
 
 export const ERR_REMOVE_SPEC_NOT_EXISTS = 'Spec file not found';
 export const ERR_REMOVE_TOOL_NOT_EXISTS = 'The tool you are trying to remove cannot be found.';
+
+export const ERR_MSGME_REQUEST_FAIL = 'There was an issue sending the text message';

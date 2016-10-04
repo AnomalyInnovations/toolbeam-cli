@@ -68,8 +68,9 @@ async function handleUpdateSpec(dispatch, json) {
 	// call update spec api
 	const updateRet = await dispatch(specActions.update(json));
 	const data = updateRet.data;
+	const hasAddedTools = (data.tools_added && data.tools_added.length > 0);
 
-	if (data.tools_added && data.tools_added.length > 0) {
+	if (hasAddedTools) {
 		printAddedTools(data.tools_added);
 	}
 	if (data.tools_removed && data.tools_removed.length > 0) {
@@ -77,6 +78,9 @@ async function handleUpdateSpec(dispatch, json) {
 	}
 
 	console.log(`Project updated '${json.info.title}'`);
+	if (hasAddedTools) {
+		console.log('Run \'tb messageme\' to send them to your phone');
+	}
 }
 
 ///////////////////////

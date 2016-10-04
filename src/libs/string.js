@@ -4,9 +4,9 @@ export function trimChar(str, char) {
 		.replace(new RegExp(`${char}*$`), '');
 }
 
-export function truncate(string, length) {
+export function truncate(string, length, ellipsis = '…') {
 	return (string.length > length)
-		? string.substr(0, length - 1) + '…'
+		? string.substr(0, length - 1) + ellipsis
 		: string;
 }
 

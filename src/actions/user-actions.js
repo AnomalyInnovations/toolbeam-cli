@@ -10,11 +10,12 @@ export function load() {
 	};
 }
 
-export function loadUserFromPrefs(user, sessionId) {
+export function loadUserFromPrefs(user, sessionId, number) {
 	return {
 		type: types.USER_LOAD_SUCCESS,
 		user: user,
 		session_id: sessionId,
+		phone_number: number,
 	};
 }
 
@@ -59,6 +60,13 @@ export function signup(email, password) {
 	};
 }
 
+export function cachePhoneNumber(number) {
+	return {
+		type: types.USER_CACHE_PHNUMBER,
+		number: number
+	};
+}
+
 //////////////////////
 // Public Functions //
 //////////////////////
@@ -77,4 +85,8 @@ export function getUserEmail(state) {
 
 export function getUserApiKey(state) {
 	return state.user.user.api_key;
+}
+
+export function getCachedPhoneNumber(state) {
+	return state.user.phone_number;
 }

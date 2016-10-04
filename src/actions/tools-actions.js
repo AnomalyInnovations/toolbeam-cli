@@ -4,12 +4,13 @@ import * as types from './action-types';
 // Actions //
 /////////////
 
-export function load() {
+export function load(options = {}) {
 	return {
 		types: [types.TOOLS_LOAD, types.TOOLS_LOAD_SUCCESS, types.TOOLS_LOAD_FAIL],
 		promise: (client, sessionId) => client.get('/user/tools_owned', {
 			params: {
-				session_id: sessionId
+				session_id: sessionId,
+				...options
 			}
 		})
 	};

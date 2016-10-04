@@ -27,6 +27,7 @@ import {
 	init,
 	login,
 	logout,
+	messageme,
 	projectLs,
 	projectRm,
 	pull,
@@ -51,6 +52,7 @@ const PULL = 'pull';
 const PUSH = 'push';
 const LOGOUT = 'logout';
 const WHOAMI = 'whoami';
+const MSGME = 'messageme';
 
 const PROJECTLSDESC = 'List all your projects';
 const PROJECTRMDESC = 'Remove a project';
@@ -125,6 +127,9 @@ const argv = yargs
 			.command(`${RM} <id>`, PROJECTRMDESC, yargs => cmdProjectRm(yargs, RM))
 			.command(`${REMOVE} <id>`, false, yargs => cmdProjectRm(yargs, REMOVE)))
 
+	.command(MSGME, 'Send a text message with your recently created tools',
+		yargs => yargs.usage(`${usagePrefix} ${MSGME}`))
+
 	.command(WHOAMI, 'Info about current logged in user',
 		yargs => yargs.usage(`${usagePrefix} ${WHOAMI}`))
 
@@ -193,6 +198,8 @@ function runCommand(argv) {
 					return requireLogin(() => projectRm(store, argv.id));
 			}
 			break;
+		case MSGME:
+			return requireLogin(() => messageme(store));
 		case WHOAMI:
 			return requireLogin(() => whoami(store));
 		case LOGOUT:

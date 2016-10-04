@@ -2,6 +2,7 @@ export add from './add';
 export init from './init';
 export login from './login';
 export logout from './logout';
+export messageme from './messageme';
 export projectLs from './project-ls';
 export projectRm from './project-rm';
 export pull from './pull';

@@ -8,7 +8,11 @@ export default prefs => (
 		switch (action.type) {
 			case types.USER_LOAD:
 				if (prefs.session_id) {
-					dispatch(userActions.loadUserFromPrefs(prefs.user, prefs.session_id));
+					dispatch(userActions.loadUserFromPrefs(
+						prefs.user,
+						prefs.session_id,
+						prefs.phone_number
+					));
 				}
 				break;
 			case types.USER_SIGNUP_SUCCESS:
@@ -16,9 +20,13 @@ export default prefs => (
 				prefs.user = result.result.data.user;
 				prefs.session_id = result.result.data.session_id;
 				break;
+			case types.USER_CACHE_PHNUMBER:
+				prefs.phone_number = action.number;
+				break;
 			case types.USER_LOGOUT_SUCCESS:
 				prefs.user = null;
 				prefs.session_id = null;
+				prefs.phone_number = null;
 				break;
 			default:
 		}

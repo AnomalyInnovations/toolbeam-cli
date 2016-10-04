@@ -3,6 +3,7 @@ import * as types from '../actions/action-types';
 const initialState = {
 	session_id: null,
 	user: null,
+	phone_number: null,
 	login_error: null,
 	logout_error: null,
 	signup_error: null,
@@ -17,6 +18,7 @@ export default function user(state = initialState, action = {}) {
 			return { ...state,
 				session_id: action.session_id,
 				user: action.user,
+				phone_number: action.phone_number,
 			};
 
 
@@ -62,6 +64,11 @@ export default function user(state = initialState, action = {}) {
 			return { ...state,
 				signup_error: action.error
 			};
+
+
+    case types.USER_CACHE_PHNUMBER:
+			// Handled in middleware
+			return state;
 
     default:
       return state;
