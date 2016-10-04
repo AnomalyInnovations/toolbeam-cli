@@ -27,7 +27,7 @@ export default async function({getState, dispatch}, uuid) {
 		const ret = await dispatch(specActions.remove(uuid));
 		const projectName = ret.data.spec.name;
 
-		console.log(chalk.red(`Project ${projectName} (id: ${uuid}) removed`));
+		console.log(chalk.red(`Project '${projectName}' removed`));
 
 	}
 }

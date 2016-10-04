@@ -11,6 +11,8 @@ import { toolUrl } from '../libs/tool';
 import specSchema from '../libs/spec-schema';
 import * as specActions from '../actions/spec-actions';
 
+const msgmeStr = 'Run \'tb messageme\' to send the links to your phone';
+
 export default async function({getState, dispatch}) {
 	let fileStr, json;
 
@@ -49,6 +51,7 @@ async function handleCreateSpec(dispatch, json) {
 	// call create spec api
 	const createRet = await dispatch(specActions.create(json));
 	const data = createRet.data;
+	const hasAddedTools = (data.tools_added && data.tools_added.length > 0);
 
 	// write file
 	json.info['x-tb-uuid'] = data.spec.uuid;
@@ -57,11 +60,14 @@ async function handleCreateSpec(dispatch, json) {
 	// call update spec api
 	await dispatch(specActions.update(json));
 
-	if (data.tools_added && data.tools_added.length > 0) {
+	if (hasAddedTools) {
 		printAddedTools(data.tools_added);
 	}
 
 	console.log(chalk.green(`Project created '${json.info.title}'`));
+	if (hasAddedTools) {
+		console.log(msgmeStr);
+	}
 }
 
 async function handleUpdateSpec(dispatch, json) {
@@ -77,9 +83,9 @@ async function handleUpdateSpec(dispatch, json) {
 		printRemovedTools(data.tools_removed);
 	}
 
-	console.log(`Project updated '${json.info.title}'`);
+	console.log(`Project '${json.info.title}' updated`);
 	if (hasAddedTools) {
-		console.log('Run \'tb messageme\' to send them to your phone');
+		console.log(msgmeStr);
 	}
 }
 
