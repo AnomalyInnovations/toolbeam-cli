@@ -1,7 +1,7 @@
 #
 # Toolbeam
 #
-spec.json
+toolbeam.json
 build/*.js
 build/**/*.js
 
