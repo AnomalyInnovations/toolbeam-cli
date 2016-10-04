@@ -30,6 +30,10 @@ export function toolNameFromEndpoint(ep) {
 		: `${capitalize(ep.operation)} ${name}`;
 }
 
+export function generateLabelFromValue(value) {
+	return value.split(/[ _]/).map(part => capitalize(part)).join(' ');
+}
+
 function getEndpoints(oapi) {
 	return Object.keys(oapi.paths).reduce((acc, path) => {
 		Object.keys(oapi.paths[path])
