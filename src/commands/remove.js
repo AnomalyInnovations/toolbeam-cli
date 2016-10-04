@@ -39,7 +39,6 @@ export default async function({getState, dispatch}, oprn = 'GET', path) {
 }
 
 function normalizeOperation(operation) {
-	operation = operation || 'get';
 	operation = operation.toLowerCase();
 	return operation;
 }

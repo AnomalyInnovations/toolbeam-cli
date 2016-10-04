@@ -67,7 +67,7 @@ export default async function({getState, dispatch}, oprn = 'GET', path, toolData
 		// Handle specified enum
 		if (perData.enum) {
 			if ( ! Array.isArray(perData.enum)) {
-				throw {message: errors.ERR_ADD_INVALID_PARAM_ENUM};
+				throw errors.ERR_ADD_INVALID_PARAM_ENUM;
 			}
 			const enumLabels = perData.enum.map(value => generateLabelFromValue(value));
 			param = {...param,
@@ -93,7 +93,6 @@ export default async function({getState, dispatch}, oprn = 'GET', path, toolData
 }
 
 function normalizeOperation(operation) {
-	operation = operation || 'get';
 	operation = operation.toLowerCase();
 	return operation;
 }
