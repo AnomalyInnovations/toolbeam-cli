@@ -3,7 +3,7 @@ import URI from 'urijs';
 import config from '../config';
 import * as errors from '../errors';
 
-import { toolNameFromEndpoint } from '../libs/consume-openapi';
+import { toolNameFromEndpoint, generateLabelFromValue } from '../libs/consume-openapi';
 import { existFile, readFile, writeFile } from '../libs/file';
 import { lintParse } from '../libs/json';
 import * as specActions from '../actions/spec-actions';
@@ -15,6 +15,7 @@ export default async function({getState, dispatch}, oprn = 'GET', path, toolData
 	// validate parameter
 	const operation = normalizeOperation(oprn);
 	const security = normalizeSecurity(toolData.security);
+	const permission = normalizePermission(toolData.needsNotificationPermission);
 	paramData = normalizeParams(paramData);
 
 	console.log(chalk.gray(`Loading ${config.specFileName}`));
@@ -40,7 +41,7 @@ export default async function({getState, dispatch}, oprn = 'GET', path, toolData
 	json.paths[path] = json.paths[path] || {};
 	json.paths[path][operation] = {
 		"x-tb-name": toolName,
-		"operationId": generateOperationId(),
+		"operationId": generateOperationId(json),
 		"security": security == 'basic' ? [{'basic_auth': []}] : [],
 		"parameters": [],
 		"responses": {
@@ -51,7 +52,7 @@ export default async function({getState, dispatch}, oprn = 'GET', path, toolData
 		"x-tb-actionLabel": operation == 'get' ? 'Get' : 'Submit',
 		"x-tb-color": generateColor(),
 		"x-tb-needsConfirm": false,
-		"x-tb-needsNotificationPermission": false
+		"x-tb-needsNotificationPermission": permission,
 	};
 	paramData.forEach(perData => {
 		let param = {
@@ -59,11 +60,23 @@ export default async function({getState, dispatch}, oprn = 'GET', path, toolData
 			"in": perData.in,
 			"required": true,
 			"type": "string",
-			"x-tb-fieldLabel": perData.name,
+			"x-tb-fieldLabel": generateLabelFromValue(perData.name),
 			"x-tb-fieldPlaceholder": "",
 			"x-tb-fieldType": perData.field
 		};
-		if (perData.field == 'select') {
+		// Handle specified enum
+		if (perData.enum) {
+			if ( ! Array.isArray(perData.enum)) {
+				throw {message: errors.ERR_ADD_INVALID_PARAM_ENUM};
+			}
+			const enumLabels = perData.enum.map(value => generateLabelFromValue(value));
+			param = {...param,
+				"enum": perData.enum,
+				"x-tb-fieldEnumLabel": enumLabels,
+			};
+		}
+		// Handle NOT specified enum, but field is of 'select' type
+		else if (perData.field == 'select') {
 			param = {...param,
 				"enum": ["Value1", "Value2"],
 				"x-tb-fieldEnumLabel": ["Option1", "Option2"],
@@ -89,6 +102,11 @@ function normalizeSecurity(security) {
 	security = security || 'none';
 	security = security.toLowerCase();
 	return security;
+}
+
+function normalizePermission(permission) {
+	permission = permission || false;
+	return permission;
 }
 
 function normalizeFieldType(param) {
@@ -126,12 +144,21 @@ function ensureToolNotExists(json, path, operation) {
 	}
 }
 
-function generateOperationId() {
+function generateOperationId(json) {
+	// Generate id
 	let text = "";
 	let possible = "abcdefghijklmnopqrstuvwxyz";
-
 	for (let i=0; i < 8; i++ ) {
 		text += possible.charAt(Math.floor(Math.random() * possible.length));
+	}
+
+	// Verify does not thrash
+	for (let path in json.paths) {
+		for (let operation in json.paths[path]) {
+			if (json.paths[path][operation].operationId == text) {
+				return generateOperationId(json);
+			}
+		}
 	}
 
 	return text;

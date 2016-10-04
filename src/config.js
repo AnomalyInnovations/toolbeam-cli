@@ -4,5 +4,5 @@ export default {
 	apiScheme: 'https',
 	apiHost: 'api.toolbeam.com',
 	apiPort: 443,
-	specFileName: 'spec.json',
+	specFileName: 'toolbeam.json',
 };
