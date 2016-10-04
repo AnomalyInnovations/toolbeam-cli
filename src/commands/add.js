@@ -41,7 +41,7 @@ export default async function({getState, dispatch}, oprn = 'GET', path, toolData
 	json.paths[path] = json.paths[path] || {};
 	json.paths[path][operation] = {
 		"x-tb-name": toolName,
-		"operationId": generateOperationId(),
+		"operationId": generateOperationId(json),
 		"security": security == 'basic' ? [{'basic_auth': []}] : [],
 		"parameters": [],
 		"responses": {
@@ -144,12 +144,21 @@ function ensureToolNotExists(json, path, operation) {
 	}
 }
 
-function generateOperationId() {
+function generateOperationId(json) {
+	// Generate id
 	let text = "";
 	let possible = "abcdefghijklmnopqrstuvwxyz";
-
 	for (let i=0; i < 8; i++ ) {
 		text += possible.charAt(Math.floor(Math.random() * possible.length));
+	}
+
+	// Verify does not thrash
+	for (let path in json.paths) {
+		for (let operation in json.paths[path]) {
+			if (json.paths[path][operation].operationId == text) {
+				return generateOperationId(json);
+			}
+		}
 	}
 
 	return text;
