@@ -18,6 +18,7 @@ import updateNotifier from 'update-notifier';
 
 import store from './store';
 import errorHandler from './libs/error-handler';
+import { trimChar } from './libs/string';
 import { quietParse } from './libs/json';
 import _requireLogin from './libs/require-login';
 import _requireAnonymous from './libs/require-anonymous';
@@ -103,6 +104,9 @@ const argv = yargs
 	.command(`${REMOVE} [oprn] <path>`, false, yargs => cmdRemove(yargs, RM))
 	.command(`${RM} [oprn] <path>`, 'Remove the given API resource', yargs => cmdRemove(yargs, RM))
 
+	.command(PUSH, 'Push your current project spec to Toolbeam',
+		yargs => yargs.usage(`${usagePrefix} ${PUSH}`))
+
 	.command(`${PULL} [id]`, 'Pull your current project spec from Toolbeam',
 		yargs => yargs
 			.usage(`${usagePrefix} ${PULL} [id]`)
@@ -111,19 +115,15 @@ const argv = yargs
 			.example(`tb ${PULL} 96a6d7f2`, 'Pull the project spec for the given id')
 			.fail(failFn))
 
-	.command(PUSH, 'Push your current project spec to Toolbeam',
-		yargs => yargs.usage(`${usagePrefix} ${PUSH}`))
-
 	.command(PROJECT, 'View and manage your projects',
 		yargs => yargs
 			.usage(`${usagePrefix} ${PROJECT} <command>`)
-			.demand(2, 2, 'Missing: <command> to be executed')
+			.demand(2, 2)
 			.strict()
 			.command(LS, PROJECTLSDESC, yargs => cmdProjectLs(yargs, LS))
 			.command(LIST, false, yargs => cmdProjectLs(yargs, LIST))
 			.command(`${RM} <id>`, PROJECTRMDESC, yargs => cmdProjectRm(yargs, RM))
-			.command(`${REMOVE} <id>`, false, yargs => cmdProjectRm(yargs, REMOVE))
-			.fail(failFn))
+			.command(`${REMOVE} <id>`, false, yargs => cmdProjectRm(yargs, REMOVE)))
 
 	.command(WHOAMI, 'Info about current logged in user',
 		yargs => yargs.usage(`${usagePrefix} ${WHOAMI}`))
@@ -169,10 +169,13 @@ function runCommand(argv) {
 		case INIT:
 			return requireLogin(() => init(store, argv.url));
 		case ADD:
-			return requireLogin(() => add(
-				store,
-				...getPathOprn(argv),
-				...parseAddOptions(argv.set, argv.setParam)));
+			return requireLogin(() =>
+				add(
+					store,
+					...getPathOprn(argv),
+					parseAddToolOptions(argv.set),
+					parseAddParamOptions(argv.setParam)
+				));
 		case RM:
 		case REMOVE:
 			return requireLogin(() => remove(store, ...getPathOprn(argv)));
@@ -199,9 +202,33 @@ function runCommand(argv) {
 	}
 }
 
-function parseAddOptions(toolOptStr = [], paramOptStr = []) {
-	const toolOpts = toolOptStr.reduce((acc, opt) => {
-		const sp = opt.split(':');
+function cmdRemove(yargs, cmd) {
+	yargs
+		.demand(1, 2, 'Missing: <path> of your API resource')
+		.strict()
+		.check(checkOperation)
+		.usage(`${usagePrefix} ${cmd} [oprn] <path>`)
+		.example(`tb ${cmd} /users`, 'Remove the \/users GET resource')
+		.example(`tb ${cmd} POST /users/{id}`, 'Remove the \/users/{id} POST resource')
+		.fail(failFn);
+}
+
+function cmdProjectLs(yargs, cmd) {
+	yargs.usage(`${usagePrefix} ${PROJECT} ${cmd}`);
+}
+
+function cmdProjectRm(yargs, cmd) {
+	yargs
+		.usage(`${usagePrefix} ${PROJECT} ${cmd} <id>`)
+		.demand(1, 1, 'Missing: <id> of the project to be removed')
+		.example(`tb ${cmd} 96a6d7f2`, 'Remove the project with the given id')
+		.strict()
+		.fail(failFn);
+}
+
+function parseAddToolOptions(options = []) {
+	return options.reduce((acc, opt) => {
+		const sp = trimChar(opt, ':').split(':');
 
 		if (sp.length >= 2) {
 			acc[sp[0]] = parseValue(sp.slice(1).join(':'));
@@ -209,28 +236,30 @@ function parseAddOptions(toolOptStr = [], paramOptStr = []) {
 
 		return acc;
 	}, {});
+}
 
-	const paramOpts = paramOptStr.reduce((acc, opt, i, opts) => {
-		const sp = opt.split(':');
+function parseAddParamOptions(options = []) {
+	return options.reduce((acc, opt, i, opts) => {
+		const sp = trimChar(opt, ':').split(':');
 
-		if (sp.length === 1) {
-			return acc;
-		}
+		if (sp.length >= 2) {
 
-		const key = sp[0];
-		const value = parseValue(sp.slice(1).join(':'));
+			const key = sp[0];
+			const value = parseValue(sp.slice(1).join(':'));
 
-		// Starting a new param
-		if (key.toLowerCase() === 'name') {
-			// Finish what was being processed
-			if (acc.current !== null) {
-				acc.list.push(acc.current);
+			// Starting a new param
+			if (key.toLowerCase() === 'name') {
+				// Finish what was being processed
+				if (acc.current !== null) {
+					acc.list.push(acc.current);
+				}
+
+				acc.current = {};
 			}
 
-			acc.current = {};
-		}
+			acc.current[key] = value;
 
-		acc.current[key] = value;
+		}
 
 		// If end of list finish processing
 		if (i + 1 === opts.length) {
@@ -239,22 +268,34 @@ function parseAddOptions(toolOptStr = [], paramOptStr = []) {
 
 		return acc;
 	}, {list: [], current: null}).list;
-
-	return [
-		toolOpts,
-		paramOpts
-	];
 }
 
 function parseValue(value) {
-	// Try and parse value as boolean
-	const valAsBool = quietParse(value);
+	// Try and parse value as boolean or number
+	const parsedVal = quietParse(value);
 
-	if (valAsBool !== null) {
-		return valAsBool;
+	if (parsedVal !== null) {
+		return parsedVal;
+	}
+
+	// Try and parse as an array
+	const parsedArray = parseArray(value);
+
+	if (parsedArray !== null) {
+		return parsedArray;
 	}
 
 	return value;
+}
+
+function parseArray(value) {
+	const sp = trimChar(value, ',').split(',');
+
+	if (sp.length === 1) {
+		return null;
+	}
+
+	return sp.map(part => part.trim());
 }
 
 function getPathOprn(argv) {
@@ -277,29 +318,6 @@ function checkOperation(argv) {
 		return 'Error: Not a valid HTTP operation <oprn>';
 	}
 	return true;
-}
-
-function cmdRemove(yargs, cmd) {
-	yargs
-		.demand(1, 2, 'Missing: <path> of your API resource')
-		.strict()
-		.check(checkOperation)
-		.usage(`${usagePrefix} ${cmd} [oprn] <path>`)
-		.example(`tb ${cmd} /users`, 'Remove the \/users GET resource')
-		.example(`tb ${cmd} POST /users/{id}`, 'Remove the \/users/{id} POST resource')
-		.fail(failFn);
-}
-
-function cmdProjectLs(yargs, cmd) {
-	yargs.usage(`${usagePrefix} ${PROJECT} ${cmd}`);
-}
-
-function cmdProjectRm(yargs, cmd) {
-	yargs
-		.usage(`${usagePrefix} ${PROJECT} ${cmd} <id>`)
-		.demand(1, 1, 'Missing: <id> of the project to be removed')
-		.example(`tb ${cmd} 96a6d7f2`, 'Remove the project with the given id')
-		.strict();
 }
 
 function checkUpdates() {

@@ -4,19 +4,26 @@ import config from '../config';
 import * as errors from '../errors';
 
 import { existFile, readFile, writeFile } from '../libs/file';
-import { quietParse, minifyJSON } from '../libs/json';
+import { lintParse } from '../libs/json';
 import * as specActions from '../actions/spec-actions';
 
-export default async function({getState, dispatch}, oprn, path) {
-	console.log(chalk.gray('Removing tool...'));
+export default async function({getState, dispatch}, oprn = 'GET', path) {
+
+	console.log(chalk.gray(`Removing '${oprn} ${path}'`));
 
 	// validate parameter
 	const operation = normalizeOperation(oprn);
 
+	console.log(chalk.gray(`Loading ${config.specFileName}`));
+
 	// load spec
 	await ensureSpecFileExists();
-	const json = await ensureSpecFileValidJson();
+	const fileStr = await readFile(config.specFileName);
+	const json = lintParse(fileStr);
+
 	ensureToolExists(path, operation, json);
+
+	const tool = json.paths[path][operation];
 
 	// remove tool
 	delete json.paths[path][operation];
@@ -25,9 +32,10 @@ export default async function({getState, dispatch}, oprn, path) {
 	}
 
 	// save spec
-	dispatch(specActions.save(json));
+	await dispatch(specActions.save(json));
 	
-	console.log(chalk.green(`Tool removed for ${path}`));
+	console.log(chalk.red(`Removed tool '${tool['x-tb-name']}' from spec`));
+	console.log(`Run 'tb push' to remove your tool`);
 }
 
 function normalizeOperation(operation) {
@@ -39,21 +47,12 @@ function normalizeOperation(operation) {
 async function ensureSpecFileExists() {
 	const exists = await existFile(config.specFileName);
 	if ( ! exists) {
-		throw(errors.ERR_REMOVE_SPEC_NOT_EXISTS);
+		throw errors.ERR_REMOVE_SPEC_NOT_EXISTS;
 	}
-}
-
-async function ensureSpecFileValidJson() {
-	const fileStr = await readFile(config.specFileName);
-	const json = quietParse(minifyJSON(fileStr));
-	if (json === null) {
-		throw(errors.ERR_REMOVE_PARSE_SPEC_JSON);
-	}
-	return json;
 }
 
 function ensureToolExists(path, operation, json) {
 	if (( ! json.paths) || ( ! json.paths[path]) || ( ! json.paths[path][operation])) {
-		throw(errors.ERR_REMOVE_TOOL_NOT_EXISTS);
+		throw errors.ERR_REMOVE_TOOL_NOT_EXISTS;
 	}
 }

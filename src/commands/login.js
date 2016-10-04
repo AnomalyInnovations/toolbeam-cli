@@ -7,7 +7,8 @@ const prompts = [
 	{
 		name: 'email',
 		description: 'Enter your email:',
-		message: 'Please enter your email',
+		pattern: /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
+		message: 'Please enter a valid email',
 		required: true
 	},
 	{
@@ -28,9 +29,9 @@ export default async function(store) {
 
 	const {email, password} = await getPrompt(prompts);
 
-	console.log(chalk.gray('Logging in to Toolbeam...'));
+	console.log(chalk.gray('Logging in to Toolbeam'));
 
 	await store.dispatch(userActions.login(email, password));
 
-	console.log(chalk.cyan('You are logged in to Toolbeam'));
+	console.log('You are logged in to Toolbeam');
 }

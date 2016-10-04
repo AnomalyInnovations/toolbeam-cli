@@ -8,14 +8,17 @@ import { existFile, readFile, writeFile } from '../libs/file';
 import { lintParse } from '../libs/json';
 import * as specActions from '../actions/spec-actions';
 
-export default async function({getState, dispatch}, oprn, path, toolData, paramData) {
-	console.log(chalk.gray('Adding tool...'));
+export default async function({getState, dispatch}, oprn = 'GET', path, toolData, paramData) {
+
+	console.log(chalk.gray(`Adding '${oprn} ${path}'`));
 
 	// validate parameter
 	const operation = normalizeOperation(oprn);
 	const security = normalizeSecurity(toolData.security);
 	const permission = normalizePermission(toolData.needsNotificationPermission);
 	paramData = normalizeParams(paramData);
+
+	console.log(chalk.gray(`Loading ${config.specFileName}`));
 
 	await ensureSpecFileExists();
 
@@ -33,10 +36,11 @@ export default async function({getState, dispatch}, oprn, path, toolData, paramD
 	}
 
 	// add tool
+	const toolName = toolNameFromEndpoint({path:path, operation:operation});
 	json.paths = json.paths || {};
 	json.paths[path] = json.paths[path] || {};
 	json.paths[path][operation] = {
-		"x-tb-name": toolNameFromEndpoint({path:path, operation:operation}),
+		"x-tb-name": toolName,
 		"operationId": generateOperationId(),
 		"security": security == 'basic' ? [{'basic_auth': []}] : [],
 		"parameters": [],
@@ -82,9 +86,10 @@ export default async function({getState, dispatch}, oprn, path, toolData, paramD
 	});
 
 	// save spec
-	dispatch(specActions.save(json));
+	await dispatch(specActions.save(json));
 	
-	console.log(chalk.green(`Tool added for ${path}`));
+	console.log(chalk.green(`Added tool '${toolName}' to spec`));
+	console.log(`Run 'tb push' to create your tool`);
 }
 
 function normalizeOperation(operation) {
@@ -114,13 +119,13 @@ function normalizeParams(paramData) {
 	paramData.forEach(perData => {
 		perData.field = normalizeFieldType(perData.field);
 		if ( ! perData.field) {
-			throw {message: errors.ERR_ADD_MISSING_PARAM_FIELD};
+			throw errors.ERR_ADD_MISSING_PARAM_FIELD;
 		}
 		else if ( ! perData.name) {
-			throw {message: errors.ERR_ADD_MISSING_PARAM_NAME};
+			throw errors.ERR_ADD_MISSING_PARAM_NAME;
 		}
 		else if ( ! perData.in) {
-			throw {message: errors.ERR_ADD_MISSING_PARAM_IN};
+			throw errors.ERR_ADD_MISSING_PARAM_IN;
 		}
 	});
 	return paramData;
@@ -129,21 +134,21 @@ function normalizeParams(paramData) {
 async function ensureSpecFileExists() {
 	const exists = await existFile(config.specFileName);
 	if ( ! exists) {
-		throw {message: errors.ERR_ADD_SPEC_NOT_EXISTS};
+		throw errors.ERR_ADD_SPEC_NOT_EXISTS;
 	}
 }
 
 function ensureToolNotExists(json, path, operation) {
 	if (json.paths && json.paths[path] && json.paths[path][operation]) {
-		throw {message: errors.ERR_ADD_TOOL_EXISTS};
+		throw errors.ERR_ADD_TOOL_EXISTS;
 	}
 }
 
 function generateOperationId() {
-	var text = "";
-	var possible = "abcdefghijklmnopqrstuvwxyz";
+	let text = "";
+	let possible = "abcdefghijklmnopqrstuvwxyz";
 
-	for( var i=0; i < 8; i++ ) {
+	for (let i=0; i < 8; i++ ) {
 		text += possible.charAt(Math.floor(Math.random() * possible.length));
 	}
 
