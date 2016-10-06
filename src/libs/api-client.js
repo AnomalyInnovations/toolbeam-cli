@@ -20,6 +20,9 @@ class _ApiClient {
 			this[method] = (path, { params, data } = {}) => new Promise((resolve, reject) => {
 				const request = superagent[method](formatUrl(path));
 
+				// Add a 10s timeout
+				request.timeout(10000);
+
 				if (params) {
 					request.query(params);
 				}
