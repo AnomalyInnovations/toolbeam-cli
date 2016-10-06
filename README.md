@@ -7,25 +7,25 @@
 
 ## How it works
 
-Toolbeam converts JSON REST APIs to native mobile tools. Let's look at an example:
+Toolbeam converts JSON REST APIs to native mobile tools. A quick example:
 
-1. Take a GET API resource that returns the status of the server
+1. Take a GET API resource that returns a list of movies
 
    ```
-   http://api.example.com/v1/test/dummy_server_status
+   https://toolbeam-example-api-ynqjhhiqee.now.sh/top_movies
    ```
 
 2. Add it to Toolbeam and create a tool
 
    ```bash
-   > tb init http://api.example.com/v1/test
-   > tb add /dummy_server_status
+   > tb init https://toolbeam-example-api-ynqjhhiqee.now.sh
+   > tb add /top_movies
    > tb push
    ```
 
 3. Navigate to the tool on your phone
 
-   :calling: &nbsp; **https://toolbeam.com/t/qoqivpum**
+   :calling: &nbsp; **https://toolbeam.com/t/tnqjurvz**
 
    <!---
    ![Tool](http://i.imgur.com/TtNaEfP.gif)
@@ -37,13 +37,17 @@ Toolbeam converts JSON REST APIs to native mobile tools. Let's look at an exampl
 
   Tools run natively on iOS or Android without any additional setup.
 
-+ **Instant Updates**
-
-  Updates made via the CLI are reflected immediately on your phone.
-
 + **Simple Notification API**
 
   Send iOS or Android notifications to your tools using our simple notification API.
+
++ **Mobile Specific Form Fields**
+
+  Form fields designed for mobile including geolocation, image, and video.
+
++ **Instant Updates**
+
+  Updates made via the CLI are reflected immediately on your phone.
 
 + **Share via a Link**
 
@@ -57,13 +61,13 @@ Toolbeam converts JSON REST APIs to native mobile tools. Let's look at an exampl
 
 ## Examples
 
-We are going to continue with our movie example and add a tool to get a movie given it's id.
+Continuing with the movie example, let's add a tool to get a movie given it's id.
 
 ### Get a Movie
 
 ```bash
 > tb init https://toolbeam-example-api-ynqjhhiqee.now.sh
-> tb add /movies/{id} --set-param name:id in:path
+> tb add /movies/{id} --set-param name:id in:path field:number
 ```
 Let's give our project a name
 
@@ -110,10 +114,10 @@ And let's push our first project
 > tb push
 ```
 
-Now if you run `tb ls` you can see all your newly created tool!
+Now if you run `tb project ls` you can see all your newly created tool!
 
 ```bash
-> tb ls
+> tb project ls
 ┌────────────────────────┬──────────────────────────────────┐
 │ Get a Movie            │ https://toolbeam.com/t/oevonxry  │
 └────────────────────────┴──────────────────────────────────┘
@@ -279,27 +283,27 @@ Let's edit the spec really quickly
 
 ```javascript
 "get": {
-	"x-tb-name": "Find a Classic Movie",
-	"parameters": [
-		{
-			"name": "keyword",
-			"in": "query",
-			"required": true,
-			"type": "string",
-			"x-tb-fieldLabel": "Search",
-			"x-tb-fieldPlaceholder": "Ex: Ben-Hur",
-			"x-tb-fieldType": "text"
-		}
-	],
-	"responses": {
-		"200": {
-			"description": "Search Results"
-		}
-	},
-	"x-tb-actionLabel": "Search",
-	"x-tb-color": "orange",
-	"x-tb-needsConfirm": false,
-	"x-tb-needsNotificationPermission": false
+  "x-tb-name": "Find a Classic Movie",
+  "parameters": [
+    {
+      "name": "keyword",
+      "in": "query",
+      "required": true,
+      "type": "string",
+      "x-tb-fieldLabel": "Search",
+      "x-tb-fieldPlaceholder": "Ex: Ben-Hur",
+      "x-tb-fieldType": "text"
+    }
+  ],
+  "responses": {
+    "200": {
+      "description": "Search Results"
+    }
+  },
+  "x-tb-actionLabel": "Search",
+  "x-tb-color": "orange",
+  "x-tb-needsConfirm": false,
+  "x-tb-needsNotificationPermission": false
 }
 ```
 
@@ -309,8 +313,9 @@ And after a quick `tb push` we get our new search tool **https://toolbeam.com/t/
 
 + [Toolbeam CLI](#toolbeam-cli)
   - [tb init](#tb-init-url)
-  - [tb add](#tb-add-path-oprn-options)
-  - [tb rm](#tb-rm-path-oprn)
+  - [tb add](#tb-add-oprn-path-options)
+  - [tb rm](#tb-rm-oprn-path)
+  - [tb push](#tb-push)
   - [tb pull](#tb-pull-id)
   - [tb project ls](#tb-project-ls)
   - [tb project rm](#tb-project-rm-id)
@@ -328,20 +333,17 @@ And after a quick `tb push` we get our new search tool **https://toolbeam.com/t/
 Usage: tb <command>
 
 Commands:
-  signup      Sign up for Toolbeam
-  login       Login to Toolbeam
-  init <url>  Initialize your Toolbeam project
-  add <path>  Add an API resource as a tool
-  projects    List all your projects
-  ls          List all your tools
-  pull [id]   Pull your current project spec from Toolbeam
-  push        Push your current project spec to Toolbeam
-  whoami      Info about current logged in user
-  logout      Logout from Toolbeam
-
-Options:
-  -h, --help     Show help  [boolean]
-  -v, --version  Show version number  [boolean]
+  signup             Sign up for Toolbeam
+  login              Login to Toolbeam
+  init <url>         Initialize your Toolbeam project
+  add [oprn] <path>  Add an API resource as a tool
+  rm [oprn] <path>   Remove the given API resource
+  push               Push your current project spec to Toolbeam
+  pull [id]          Pull your current project spec from Toolbeam
+  project            View and manage your projects
+  messageme          Send a text message with your recently created tools
+  whoami             Info about current logged in user
+  logout             Logout from Toolbeam
 ```
 
 #### tb init \<url\>
@@ -364,19 +366,19 @@ Initialize a new Toolbeam project with the given base url. Group all your API re
 
   `tb init http://api.example.com/v1`
 
-#### tb add \<path\> [oprn] [options]
+#### tb add [oprn] \<path\> [options]
 
 Add an API resource with the given path as a tool. The path is relative to the base url of the current project.
 
 **Arguments**
 
++ [oprn]:GET|POST|PUT|PATCH|DELETE
+
+  The HTTP operation of the resource. Defaults to GET.
+
 + \<path\>
 
   The path of your API resource. Supports path templating. Use curly braces ({}) to mark a section of a URL path as replaceable using path parameters.
-
-+ [oprn]:[GET|POST|PUT|PATCH|DELETE]
-
-  The HTTP operation of the resource. Defaults to GET.
 
 **Options**
 
@@ -384,37 +386,21 @@ Add an API resource with the given path as a tool. The path is relative to the b
 
   Set \<key\>:\<value\> options for the tool [array]
 
-  - security:[basic|none]
-
-    Type of security; 'basic' for basic auth or 'none' for no authentication. Defaults to 'none'.
+  | Option                      | Description |
+  | --------------------------- | ----------- |
+  | security                    | Type of security;  `basic` for basic auth or `none` for no authentication. Defaults to `none`. |
+  | needsNotificationPermission | `true` if your tool needs to send notifications to the user. It will prompt the user for permission. Defaults to `false`. |
 
 + --set-param
 
   Set a parameter for the tool and \<key\>:\<value\> options [array]
 
-  - name:[string]
-
-    The name of the parameter. This will be used in path templating and in the headers depending on where it is used.
-
-  - in:[path|query|header|formData]
-
-    The type of the parameter and where it will be used.
-
-    * path
-  
-      Used to replace the parameter in path templating. The parameter `foo` will be applied to the base API path `/movies/{foo}`.
-  
-    * query
-  
-      Parameter will be added to the query string for the request.
-  
-    * header
-  
-      Parameter will be added as a custom header for the request.
-  
-    * formData
-  
-      HTTP request will be made as `application/x-www-form-urlencoded` and parameter will be passed in the request body similar to the query string format of `foo=1&bar=value`.
+  | Option | Description |
+  | -----  | ----------- |
+  | name   | **Required** The name of the parameter. This will be used in path templating and in the headers depending on where it is used. |
+  | in     | **Required** The type of the parameter and where it will be used. <ul><li>`path`: Used to replace the parameter in path templating. The parameter `foo` will be applied to the base API path `/movies/{foo}`.</li><li>`query`: Parameter will be added to the query string for the request.</li><li>`header`: Parameter will be added as a custom header for the request.</li><li>`formData`: HTTP request will be made as `application/x-www-form-urlencoded` and parameter will be passed in the request body similar to the query string format of `foo=1&bar=value`.</li></ul> |
+  | field  | The type of field used in the UI. Defaults to `text`.<ul><li>`text`: Displays the standard alphanumeric keypad on field focus.</li><li>`number`: Displays the number keypad on field focus.</li><li>`email`: Displays the email keypad on field focus.</li><li>`hidden`: The field is not displayed to the user.</li><li>`select`: The field is displayed as a picker. Use in conjuction with `enum` to display a list of options.</li><li>`geolocation`: Prompts the user for their current location and passes that to the API as a JSON object with `latitude` and `longitude`. For example, a geolocation field will pass in the following in the API request; `{"latitude":43.64,"longitude":-79.37}`.</li></ul>|
+  | enum   | Comma separated list of option in a select picker. Used in conjuction with `field:select`. |
 
 **Examples**
 
@@ -424,11 +410,15 @@ Add an API resource with the given path as a tool. The path is relative to the b
 
 + Add a POST resource as a tool.
 
-  `tb add /movies/31/like POST`
+  `tb add POST /movies/31/like`
 
 + Add a GET resource with security type basic auth.
 
   `tb add /movies/upload --set security:basic`
+
++ Add a POST resource with security type basic auth that needs to send notifications.
+
+  `tb add POST /movies/upload --set security:basic needsNotificationPermission:true`
 
 +  Add a GET resource with a paramter using path templating.
 
@@ -445,31 +435,32 @@ Add an API resource with the given path as a tool. The path is relative to the b
 + Add a DELETE resource with a header parameter.
   
   ```
-  tb add /movies/1/remove DELETE \
+  tb add DELETE /movies/1/remove \
          --set-param name:session_key in:header
   ```
 
-+ Add a POST resource with two form data parameters.
++ Add a POST resource with three form data parameters and one with field type select.
 
   ```
-  tb add /movies/add POST \
-         --set-param name:title in:formData \
-         --set-param name:year in:formData
+  tb add POST /movies/add \
+         --set-param name:title in:formData field:text \
+         --set-param name:year in:formData field:number \
+         --set-param name:genre in:formData field:select "enum:comedy,drama,romance,action"
   ```
 
-#### tb rm \<path\> [oprn]
+#### tb rm [oprn] \<path\>
 
-Remove an API resource with the given path. This does the opposite of `tb add`.
+Remove an API resource with the given path from the spec. This does the opposite of `tb add`.
 
 **Arguments**
+
++ [oprn]:GET|POST|PUT|PATCH|DELETE
+
+  The HTTP operation of the resource. Defaults to GET.
 
 + \<path\>
 
   The path of your API resource to remove.
-
-+ [oprn]:[GET|POST|PUT|PATCH|DELETE]
-
-  The HTTP operation of the resource. Defaults to GET.
 
 **Examples**
 
@@ -479,11 +470,15 @@ Remove an API resource with the given path. This does the opposite of `tb add`.
 
 + Remove a POST resource from the spec.
 
-  `tb add /movies/{id}/like POST`
+  `tb add POST /movies/{id}/like`
+
+#### tb push
+
+Push your current spec to Toolbeam. Looks for the `toolbeam.json` in the current directory. Creates or removes the tools in your spec.
 
 #### tb pull [id]
 
-Pull the spec for your current project. Optionally, pull a specific project spec by passing in a project id. You can get the id of a project by using the `tb projects` command.
+Pull the spec for your current project. Optionally, pull a specific project spec by passing in a project id. You can get the id of a project by using the `tb project ls` command.
 
 **Examples**
 
@@ -493,13 +488,13 @@ Pull the spec for your current project. Optionally, pull a specific project spec
 
 + Pull the spec of the given project
 
-  `tb pull 510c4e28`
+  `tb pull stqpliww`
 
 #### tb project ls
 
 List all your projects along with their project ids. And all the tools with their shareable URLs.
 
-#### tb project rm <id>
+#### tb project rm \<id\>
 
 Removes a project and all their tools. The tools in the project will also be removed from any users that have them. This command cannot be undone, please use with caution.
 
@@ -511,9 +506,9 @@ Removes a project and all their tools. The tools in the project will also be rem
 
 **Examples**
 
-+ Remove the project with id `510c4e28`
++ Remove the project with the given id
 
-  `tb project rm 510c4e28`
+  `tb project rm stqpliww`
 
 #### tb whoami
 
@@ -521,7 +516,7 @@ Shows information about the current logged in session. Also, shows the API key o
 
 ### Toolbeam Spec
 
-Running `tb init <url>` and `tb add <path>` creates an [Open API Spec](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md) json file describing the API resource in the current directory. To further customize your tool you can directly edit the spec and then run `tb push` to update your tools. Below is an annotated spec as an example.
+Under the hood, running `tb init` and `tb add` creates an [Open API Spec](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md) JSON file describing the API in the current directory. To further customize your tools you can directly edit the spec and then run `tb push` to update your tools. Below is an annotated spec as an example.
 
 ```javascript
 {
@@ -612,7 +607,7 @@ Below is a more detailed explanation of the fields that are used.
 
   The name of the tool. If not provided, Toolbeam generates a name.
 
-+ **x-tb-color:**[red|blue|orange|green|purple]
++ **x-tb-color:**red|blue|orange|green|purple
 
   The color of the tool.
 
@@ -642,9 +637,24 @@ Below is a more detailed explanation of the fields that are used.
 
   The name of the parameter. This will be used in path templating and in the headers depending on where it is used. This option is required.
 
-+ **in**:[path|query|header|formData]
++ **in**:path|query|header|formData
 
   The type of the parameter and where it will be used. This option is required.
+
+    - path
+
+      Used to replace the parameter in path templating. The parameter `foo` will be applied to the base API path `/movies/{foo}`.
+
+    - query
+
+      Parameter will be added to the query string for the request.
+    - header
+    
+      Parameter will be added as a custom header for the request.
+
+    - formData
+    
+      HTTP request will be made as `application/x-www-form-urlencoded` and parameter will be passed in the request body similar to the query string format of `foo=1&bar=value`.
 
 + **required**:[boolean]
 
@@ -681,6 +691,10 @@ Below is a more detailed explanation of the fields that are used.
   - hidden
     
     The field is not displayed to the user. Can be used in conjuction with setting a  `default` to pass some data in the request that does not change.
+
+  - geolocation
+    
+    Prompts the user for their current location and passes that to the API as a JSON object with `latitude` and `longitude`. For example, a geolocation field will pass in the following in the API request; `{"latitude":43.64,"longitude":-79.37}`.
 
   - select
     
