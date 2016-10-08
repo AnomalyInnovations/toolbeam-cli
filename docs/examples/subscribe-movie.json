@@ -1,0 +1,168 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Classic Movies",
+    "version": "1.0.0",
+    "x-tb-uuid": "kwdxpjpc"
+  },
+  "host": "toolbeam-example-api-ynqjhhiqee.now.sh",
+  "schemes": [
+    "https"
+  ],
+  "paths": {
+    "/movies/{id}": {
+      "get": {
+        "x-tb-name": "Get a Movie",
+        "operationId": "fpaehmze",
+        "security": [],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "x-tb-fieldLabel": "Movie Id",
+            "x-tb-fieldPlaceholder": "Ex: 4",
+            "x-tb-fieldType": "number"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Movie Info"
+          }
+        },
+        "x-tb-actionLabel": "Get Movie",
+        "x-tb-color": "blue",
+        "x-tb-needsConfirm": false,
+        "x-tb-needsNotificationPermission": false
+      },
+      "put": {
+        "x-tb-name": "Edit Movie",
+        "operationId": "bghmbzjv",
+        "security": [],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "x-tb-fieldLabel": "Movie Id",
+            "x-tb-fieldPlaceholder": "Ex: 4",
+            "x-tb-fieldType": "number"
+          },
+          {
+            "name": "genre",
+            "in": "formData",
+            "required": true,
+            "type": "string",
+            "x-tb-fieldLabel": "Genre",
+            "x-tb-fieldPlaceholder": "Select a Genre…",
+            "x-tb-fieldType": "select",
+            "enum": [
+              "Romance",
+              "Mystery",
+              "Fantasy",
+              "Thriller",
+              "Action"
+            ],
+            "x-tb-fieldEnumLabel": [
+              "Romance",
+              "Mystery",
+              "Fantasy",
+              "Thriller",
+              "Action"
+            ]
+          },
+          {
+            "name": "poster",
+            "in": "formData",
+            "required": false,
+            "type": "file",
+            "x-tb-fieldLabel": "Poster",
+            "x-tb-fieldPlaceholder": "Choose a photo",
+            "x-tb-fieldType": "image"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Movie Info Updated"
+          }
+        },
+        "x-tb-actionLabel": "Submit",
+        "x-tb-color": "green",
+        "x-tb-needsConfirm": false,
+        "x-tb-needsNotificationPermission": false
+      },
+      "delete": {
+        "x-tb-name": "Delete Movie",
+        "operationId": "vskhioho",
+        "security": [
+          {
+            "basic_auth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "x-tb-fieldLabel": "Movie Id",
+            "x-tb-fieldPlaceholder": "Ex: 4",
+            "x-tb-fieldType": "number"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Movie Deleted"
+          }
+        },
+        "x-tb-actionLabel": "Delete",
+        "x-tb-color": "red",
+        "x-tb-needsConfirm": true,
+        "x-tb-needsNotificationPermission": false
+      }
+    },
+    "/movies/{id}/subscribe": {
+      "post": {
+        "x-tb-name": "Subscribe to Movie",
+        "operationId": "twxhdser",
+        "security": [],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "x-tb-fieldLabel": "Movie Id",
+            "x-tb-fieldPlaceholder": "Ex: 4",
+            "x-tb-fieldType": "number"
+          },
+          {
+            "name": "location",
+            "in": "formData",
+            "required": true,
+            "type": "string",
+            "x-tb-fieldLabel": "Location",
+            "x-tb-fieldPlaceholder": "Your Current Location…",
+            "x-tb-fieldType": "geolocation"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Subscribed"
+          }
+        },
+        "x-tb-actionLabel": "Notify Me",
+        "x-tb-color": "purple",
+        "x-tb-needsConfirm": false,
+        "x-tb-needsNotificationPermission": true
+      }
+    }
+  },
+  "securityDefinitions": {
+    "basic_auth": {
+      "type": "basic"
+    }
+  }
+}
