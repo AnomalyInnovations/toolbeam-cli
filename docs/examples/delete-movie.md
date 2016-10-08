@@ -1,4 +1,4 @@
-Below is the annotated version of the spec with the changes made. The complete spec is available [here](delete-movie.json). See the full list of options that Toolbeam uses [here](/README.md#toolbeam-spec).
+Below is the annotated version of the spec with the changes made. View the [complete spec](delete-movie.json). See the full list of options that Toolbeam uses [here](/README.md#toolbeam-spec).
 
 ```javascript
 {
@@ -21,7 +21,7 @@ Below is the annotated version of the spec with the changes made. The complete s
         ... // This is unchanged from before
       },
       "delete": {
-				"x-tb-name": "Delete Movie", // Give our tool a name
+        "x-tb-name": "Delete Movie", // Give our tool a name
         "operationId": "vskhioho",
         "security": [
           {
@@ -34,19 +34,19 @@ Below is the annotated version of the spec with the changes made. The complete s
             "in": "path",
             "required": true,
             "type": "string",
-						"x-tb-fieldLabel": "Movie Id", // Change the field label
-						"x-tb-fieldPlaceholder": "Ex: 4", // Add a placeholder text
+            "x-tb-fieldLabel": "Movie Id", // Change the field label
+            "x-tb-fieldPlaceholder": "Ex: 4", // Add a placeholder text
             "x-tb-fieldType": "number"
           }
         ],
         "responses": {
           "200": {
-						"description": "Movie Deleted" // Add some response text
+            "description": "Movie Deleted" // Add some response text
           }
         },
-				"x-tb-actionLabel": "Delete", // Change the button text
-				"x-tb-color": "red", // Change the button color
-				"x-tb-needsConfirm": true, // Confirm before deleting
+        "x-tb-actionLabel": "Delete", // Change the button text
+        "x-tb-color": "red", // Change the button color
+        "x-tb-needsConfirm": true, // Confirm before deleting
         "x-tb-needsNotificationPermission": false
       }
     }

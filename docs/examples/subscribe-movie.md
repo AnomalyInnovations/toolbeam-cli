@@ -1,4 +1,4 @@
-Below is the annotated version of the spec with the changes made. The complete spec is available [here](docs/examples/subscribe-movie.json).
+Below is the annotated version of the spec with the changes made. View the [complete spec](subscribe-movie.json). See the full list of options that Toolbeam uses [here](/README.md#toolbeam-spec).
 
 ```javascript
 {
