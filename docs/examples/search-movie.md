@@ -5,8 +5,7 @@ Below is the annotated version of the spec with the changes made. View the [comp
   "swagger": "2.0",
   "info": {
     "title": "Classic Movies",
-    "version": "1.0.0",
-    "x-tb-uuid": "kwdxpjpc"
+    "version": "1.0.0"
   },
   "host": "toolbeam-example-api-ynqjhhiqee.now.sh",
   "schemes": [
