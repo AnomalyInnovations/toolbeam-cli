@@ -31,7 +31,7 @@ export function toolNameFromEndpoint(ep) {
 }
 
 export function generateLabelFromValue(value) {
-	return value.split(/[ _]/).map(part => capitalize(part)).join(' ');
+	return value.split(/[ _-]/).map(part => capitalize(part)).join(' ');
 }
 
 function getEndpoints(oapi) {
