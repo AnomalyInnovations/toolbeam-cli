@@ -67,10 +67,10 @@ export default async function({getState, dispatch}, operation = 'GET', path, too
 		};
 		// Handle specified enum
 		if (perData.enum) {
-			const enum = normalizeParamEnum(perData.enum);
-			const enumLabels = generateParamEnumLabel(enum);
+			const enumValues = normalizeParamEnum(perData.enum);
+			const enumLabels = generateParamEnumLabel(enumValues);
 			param = {...param,
-				"enum": enum,
+				"enum": enumValues,
 				"x-tb-fieldEnumLabel": enumLabels,
 			};
 		}
@@ -107,6 +107,9 @@ function normalizeSecurity(security) {
 }
 
 function normalizePermission(permission) {
+	if (permission === undefined) {
+		return false;
+	}
 	if (permission === true || permission == false) {
 		return permission;
 	}
@@ -135,10 +138,10 @@ function normalizeParams(paramData) {
 	return paramData;
 }
 
-function normalizeParamEnum(enum) {
-	return Array.isArray(perData.enum)
-		? enum
-		: [enum];
+function normalizeParamEnum(enumValues) {
+	return Array.isArray(enumValues)
+		? enumValues
+		: [enumValues];
 }
 
 async function ensureSpecFileExists() {
@@ -180,8 +183,8 @@ function generateParamTypeFromFieldType(fieldType) {
 		: 'string';
 }
 
-function generateParamEnumLabel(enum) {
-	return enum.map(value => generateLabelFromValue(value.toString()));
+function generateParamEnumLabel(enumValues) {
+	return enumValues.map(value => generateLabelFromValue(value.toString()));
 }
 
 function generateColor() {
