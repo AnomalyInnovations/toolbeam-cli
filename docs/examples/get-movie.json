@@ -1,0 +1,40 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Classic Movies",
+    "version": "1.0.0"
+  },
+  "host": "toolbeam-example-api-ynqjhhiqee.now.sh",
+  "schemes": [
+    "https"
+  ],
+  "paths": {
+    "/movies/{id}": {
+      "get": {
+        "x-tb-name": "Get a Movie",
+        "operationId": "fpaehmze",
+        "security": [],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "x-tb-fieldLabel": "Movie Id",
+            "x-tb-fieldPlaceholder": "Ex: 4",
+            "x-tb-fieldType": "number"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Movie Info"
+          }
+        },
+        "x-tb-actionLabel": "Get Movie",
+        "x-tb-color": "blue",
+        "x-tb-needsConfirm": false,
+        "x-tb-needsNotificationPermission": false
+      }
+    }
+  }
+}

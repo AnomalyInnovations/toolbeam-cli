@@ -240,6 +240,9 @@ function parseAddToolOptions(options = []) {
 		if (sp.length >= 2) {
 			acc[sp[0]] = parseValue(sp.slice(1).join(':'));
 		}
+		else {
+			throw `Invalid tool option format '${opt}'`;
+		}
 
 		return acc;
 	}, {});
@@ -263,9 +266,16 @@ function parseAddParamOptions(options = []) {
 
 				acc.current = {};
 			}
+			// Setting an option without starting a new param
+			else if (acc.current === null) {
+				throw `Set the parameter name before setting '${opt}'`;
+			}
 
 			acc.current[key] = value;
 
+		}
+		else {
+			throw `Invalid parameter option format '${opt}'`;
 		}
 
 		// If end of list finish processing

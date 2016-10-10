@@ -61,253 +61,145 @@ Toolbeam converts JSON REST APIs to native mobile tools. A quick example:
 
 ## Examples
 
-Continuing with the movie example, let's add a tool to get a movie given it's id.
+Continuing with the movie example, we are going to create a set of tools to explore some of the features of Toolbeam. We are going to use a very simple JSON API that is publicly accessible and you can see the source for it [here](https://github.com/AnomalyInnovations/toolbeam-example-api/blob/master/index.js).
 
-### Get a Movie
+### Setting API Parameters
 
-```bash
+To start off, let's create a tool to get a movie given it's id. We'll use the API `GET /movies/{id}`.
+
+```
 > tb init https://toolbeam-example-api-ynqjhhiqee.now.sh
 > tb add /movies/{id} --set-param name:id in:path field:number
 ```
-Let's give our project a name
 
-```javascript
-"info": {
-  "title": "Classic Movies", // Give our project a name
-  "version": "1.0.0"
-},
+The `id` parameter above is passed in through the path using path templating but can be passed through the query string, header, or form data. Read more about setting API Parameters using the `tb add` command [here](#tb-add-oprn-path-options).
+
+We are also setting the field type for the `id` parameter to `number` to use the number keypad. We'll go over field types in a little more detail in the next example.
+
+Running the two above commands create a [Open API Spec](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md) file called `toolbeam.json` in the current directory.
+
+(Optionally, we'll edit the [spec](docs/examples/get-movie.md) manually to make our tool a bit more user friendly)
+
+And now running `tb push` will push the spec to Toolbeam; creating the project and the tool.
+
+```
+> tb push
+Loading toolbeam.json
+Validating spec
+Pushing toolbeam.json
+Tools added:
+
+  + Get a Movie
+    -> https://toolbeam.com/t/oevonxry
+
+Project created 'Classic Movies'
+Run 'tb messageme' to send the links to your phone
 ```
 
-Let's edit our tool
+Go ahead and navigate to **https://toolbeam.com/t/oevonxry** or run `tb messageme` to send the link to your phone and try it out.
 
-```javascript
-"get": {
-  "x-tb-name": "Get a Movie", // Give our tool a name
-  "operationId": "get /movies/{id}",
-  "security": [],
-  "parameters": [
-    {
-      "name": "id",
-      "in": "path",
-      "required": true,
-      "type": "string",
-      "x-tb-fieldLabel": "Movie Id", // Change the field label
-      "x-tb-fieldPlaceholder": "Ex: 4", // Add a placeholder text
-      "x-tb-fieldType": "number" // Use a number keypad
-    }
-  ],
-  "responses": {
-    "200": {
-      "description": "Movie Info" // Add some helpful response text
-    }
-  },
-  "x-tb-actionLabel": "Get Movie", // Change the label on the button
-  "x-tb-color": "blue", //Change the color
-  "x-tb-needsConfirm": false,
-  "x-tb-needsNotificationPermission": false
-}
+### Setting Field Types and Handling File Uploads
+
+Let's make something a bit more complicated and explore the different field types. We'll create a new tool to edit the genre of the movie and upload a new poster. We are going to use the API `PUT /movies/{id}`. The API takes the `id` of the movie, the `genre`, and an image as the `poster`.
+
+```
+> tb add PUT /movies/{id} --set-param name:id in:path field:number \
+                          --set-param name:genre in:formData field:select enum:Romance,Mystery,Fantasy,Thriller,Action \
+                          --set-param name:poster in:formData field:image
 ```
 
-And let's push our first project
+We're using the `select` field type for the `genre` parameter and passing in the possible values using the `enum` option as a comma separated list.
 
-```bash
+To upload the `poster` we are using the `image` field type. When using a file field type (`image` or `video`) the API request uses the `multipart/form-data` encoding. Without a file field type, the API request is made using the `application/x-www-form-urlencoded` header for `formData` parameters. You can read more about the different field options [below](#tb-add-oprn-path-options).
+
+(Optionally, you can edit the [spec](docs/examples/update-movie.md) to change the appearance of the tool)
+
+Let's create the tool:
+
+```
 > tb push
 ```
 
-Now if you run `tb project ls` you can see all your newly created tool!
+And now navigate to **https://toolbeam.com/t/kldgocfm** and try taking a photo from your camera or uploading an image from your camera roll.
 
-```bash
-> tb project ls
-┌────────────────────────┬──────────────────────────────────┐
-│ Get a Movie            │ https://toolbeam.com/t/oevonxry  │
-└────────────────────────┴──────────────────────────────────┘
+### Using Basic Auth
+
+Now let's look at deleting a movie and making it so that the user needs to authenticate to do so. We'll use the API `DELETE /movies/{id}` that requires basic auth with the username `admin` and password `password`.
+
+```
+> tb add DELETE /movies/{id} --set security:basic \
+                             --set-param name:id in:path field:number
 ```
 
-Go ahead and navigate to **https://toolbeam.com/t/oevonxry** on your phone and try it out.
+Notice that we are setting the the tool option `security`. You can read further about the other tool options [below](#tb-add-oprn-path-options).
 
-### Update the Movie Info
+(Optionally, we'll edit the [spec](docs/examples/delete-movie.md) to tweak the appearance of the tool)
 
-Let's make something a bit more complicated and explore the different field types. We'll create a new tool to edit the genre of the movie and upload a new poster.
+Create the tool:
 
-```bash
-> tb add /movies/{id} PUT --set-param name:id in:path \
-                          --set-param name:genre in:formData \
-                          --set-param name:poster in:formData
+```
+> tb push
 ```
 
-And edit our spec
+Navigate to **https://toolbeam.com/t/moqulqnk** and try it with the basic auth info `admin:password`.
+
+### Sending Notifications
+
+To explore how to use notifications, let's create a tool that'll notify us when a movie is playing near our location. We'll use the API `POST /movies/{id}/subscribe`; that takes the `id` of the movie and `location` of the user.
+
+```
+> tb add POST /movies/{id}/subscribe --set needsNotificationPermission:true \
+                                     --set-param name:id in:path field:number \
+                                     --set-param name:location in:formData field:geolocation
+```
+
+Notice that we set the flag `needsNotificationPermission` to indicate that we'd like to send the user notifications. Toolbeam makes it easy to send notifications using the [Toolbeam Notification API](#toolbeam-notification-api). Simply, send us the uuid of the tool and user you'd like to send the notification to, along with your API Key. You can get user uuid and the tool uuid from the request headers and your API Key by running `tb whoami`. You can read more about the Notification API [here](#toolbeam-notification-api).
+
+Parameters sent usin `formData` are passed in to the API using the `application/x-www-form-urlencoded` header. Also, the location of the user is passed in as a JSON object containing latitude and longitude. You can read more about the `geolocation` field type for the `tb add` command [here](#tb-add-oprn-path-options).
+
+(Optionally, you can edit the [spec](docs/examples/subscribe-movie.md) to change the appearance of the tool)
+
+Let's create the tool:
+
+```
+> tb push
+```
+
+And head over to **https://toolbeam.com/t/bcgrjtcu** to give it a try. Now after you subscribe to a movie, you should get a notification on your phone after about 10s!
+
+If you are connecting to the example API using your own tools, the notifications will not work since the API Key used belongs to a demo account. Just be sure to grab your own API Key (using `tb whoami`) when trying to send notifications using your own API.
+
+### Linking Tools Together
+
+While, the tools on their own are useful; linking them together allows us to create more complicated CRUD-like tools. We'll use the API `GET /movies`; that takes a keyword to search for matching movies and returns a list of movies. For the sake of the example it always returns the same list. In addition to the movie object, it also returns a couple fields with links to the tools we created in the above examples. Here are the extra fields returned by the API:
 
 ```javascript
-"put": {
-  "x-tb-name": "Edit Movie",
-  "operationId": "put /movies/{id}",
-  "security": [],
-  "parameters": [
-    {
-      "name": "id",
-      "in": "path",
-      "required": true,
-      "type": "string",
-      "x-tb-fieldLabel": "Movie Id",
-      "x-tb-fieldPlaceholder": "Ex: 4",
-      "x-tb-fieldType": "number"
-    },
-    {
-      "name": "genre",
-      "in": "formData",
-      "required": true,
-      "type": "string",
-      "x-tb-fieldLabel": "Genre",
-      "x-tb-fieldPlaceholder": "Select a Genre…",
-      "x-tb-fieldType": "select", // Use a picker for the field
-      // The picker values
-      "enum": ["Romance", "Mystery", "Fantasy", "Thriller", "Action"],
-      // The picker displayed options; what the user sees
-      // In this simple example this is the same as the ones sent to the API
-      "x-tb-fieldEnumLabel": ["Romance", "Mystery", "Fantasy", "Thriller", "Action"]
-    },
-    {
-      "name": "poster",
-      "in": "formData",
-      "required": false, // Let's not make this a required field
-      "type": "file", // Use the file picker
-      "x-tb-fieldLabel": "Poster",
-      "x-tb-fieldPlaceholder": "Choose a photo",
-      "x-tb-fieldType": "file"
-    }
-  ],
-  "responses": {
-    "200": {
-      "description": "Movie Info Updated"
-    }
-  },
-  "x-tb-actionLabel": "Submit",
-  "x-tb-color": "green",
-  "x-tb-needsConfirm": false,
-  "x-tb-needsNotificationPermission": false
+{
+  'edit': 'https://toolbeam.com/t/kldgocfm?id=${movie.id}&genre=${movie.genre}',
+  'delete': 'https://toolbeam.com/t/moqulqnk/response?id=${movie.id}',
+  'subscribe': 'https://toolbeam.com/t/bcgrjtcu?id=${movie.id}'
 }
 ```
 
-Check out your newly created tool at **https://toolbeam.com/t/kldgocfm**.
+We are linking to the Edit, Delete, and Subscribe tools from above and passing in the info for the movie that is returned. By doing so Toolbeam will convert these fields into buttons that'll link to the specified tools. And the query string parameters in these urls are used as the default values in the linked tools.
 
-### Delete a Movie
+Notice that the unlike the others, the delete tool is linking to `/response`. By doing so, it links directly to the response screen of the Delete tool and skips the form screen. You can read further about linking tools [below](#linking-tools).
 
-Now let's look at deleting a movie but make it so that the user needs to authenticate to do so.
+Now let's add the API resource:
 
-```bash
-> tb add /movies/:id DELETE --set security:basic \
-                            --set-param name:id in:path
 ```
-
-And update the spec like before
-
-```javascript
-"x-tb-name": "Delete Movie",
-"parameters": [
-  {
-    "name": "id",
-    "in": "path",
-    "required": true,
-    "type": "string",
-    "x-tb-fieldLabel": "Movie Id",
-    "x-tb-fieldPlaceholder": "Ex: 4",
-    "x-tb-fieldType": "number"
-  },
-],
-"responses": {
-  "200": {
-    "description": "Movie Deleted"
-  }
-},
-"x-tb-actionLabel": "Delete",
-"x-tb-color": "red",
-"x-tb-needsConfirm": true, // Confirm before deleting
-"x-tb-needsNotificationPermission": false
-```
-
-And after a quick `tb push`, check out your new tool **https://toolbeam.com/t/moqulqnk**. Try it with the info admin:password.
-
-### Subscribe to Notifications
-
-```bash
-> tb add /movies/{id}/subscribe POST --set-param name:id in:path \
-                                     --set-param name:location in:formData
-```
-
-Add update the fields
-
-```javascript
-"x-tb-name": "Subscribe to Movie",
-"parameters": [
-  {
-    "name": "id",
-    "in": "path",
-    "required": true,
-    "type": "string",
-    "x-tb-fieldLabel": "Movie Id",
-    "x-tb-fieldPlaceholder": "Ex: 4",
-    "x-tb-fieldType": "number"
-  },
-  {
-    "name": "location",
-    "in": "formData",
-    "required": true,
-    "type": "string",
-    "x-tb-fieldLabel": "Location",
-    "x-tb-fieldPlaceholder": "Your Current Location…",
-    "x-tb-fieldType": "geolocation" // Take the user's current location
-  }
-],
-"responses": {
-  "200": {
-    "description": "Subscribed"
-  }
-},
-"x-tb-actionLabel": "Notify Me",
-"x-tb-color": "purple",
-"x-tb-needsConfirm": false,
-"x-tb-needsNotificationPermission": true // Request notification permission from the user
-```
-
-And `tb push` to test out the tool **https://toolbeam.com/t/bcgrjtcu**. Now after you subscribe to a movie, you should get a notification on your phone after about 10s!
-
-### Putting it all together
-
-Let's create a simple search tool that helps you look up a movie and then links to the other tools we've created so far to let you manage it all from one place.
-
-```bash
 > tb add /movies --set-param name:keyword in:query
 ```
 
-Let's edit the spec really quickly
+(Optionally, edit the [spec](docs/examples/search-movie.md) to change the appearance of the tool)
 
-```javascript
-"get": {
-  "x-tb-name": "Find a Classic Movie",
-  "parameters": [
-    {
-      "name": "keyword",
-      "in": "query",
-      "required": true,
-      "type": "string",
-      "x-tb-fieldLabel": "Search",
-      "x-tb-fieldPlaceholder": "Ex: Ben-Hur",
-      "x-tb-fieldType": "text"
-    }
-  ],
-  "responses": {
-    "200": {
-      "description": "Search Results"
-    }
-  },
-  "x-tb-actionLabel": "Search",
-  "x-tb-color": "orange",
-  "x-tb-needsConfirm": false,
-  "x-tb-needsNotificationPermission": false
-}
+And create the tool:
+
+```
+> tb push
 ```
 
-And after a quick `tb push` we get our new search tool **https://toolbeam.com/t/dbgfrxpi**.
+Head over to **https://toolbeam.com/t/dbgfrxpi** and search for a movie to give linking a try. If you are building your own tools by connecting to the example API, remember that the tools that are linked are the ones from a demo account.
 
 ## Documentation
 
@@ -445,7 +337,7 @@ Add an API resource with the given path as a tool. The path is relative to the b
   tb add POST /movies/add \
          --set-param name:title in:formData field:text \
          --set-param name:year in:formData field:number \
-         --set-param name:genre in:formData field:select "enum:comedy,drama,romance,action"
+         --set-param name:genre in:formData field:select enum:comedy,drama,romance,action
   ```
 
 #### tb rm [oprn] \<path\>
@@ -672,7 +564,7 @@ Below is a more detailed explanation of the fields that are used.
 
   The placeholder text for the field. If not provided, the `type` is used as the placeholder.
 
-+ **x-tb-fieldType**:[text|number|email|select|hidden]
++ **x-tb-fieldType**:text|number|email|select|hidden
 
   The type of the field.
 
@@ -801,7 +693,7 @@ POST https://api.toolbeam.com/v1/app/send_notifications
 
   + Send a simple "hello world" message using cURL
 
-    ```bash
+    ```
     > curl -X POST -H "API-KEY: <Your API KEY>" \
            -d message=hello%20world&user_uuid=<Recipient User UUID>&tool_uuid=<Recipient Tool UUID> \
            https://api.toolbeam.com/v1/app/send_notifications
