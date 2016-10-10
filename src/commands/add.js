@@ -8,12 +8,13 @@ import { existFile, readFile, writeFile } from '../libs/file';
 import { lintParse } from '../libs/json';
 import * as specActions from '../actions/spec-actions';
 
-export default async function({getState, dispatch}, oprn = 'GET', path, toolData, paramData) {
+export default async function({getState, dispatch}, operation = 'GET', path, toolData, paramData) {
 
-	console.log(chalk.gray(`Adding '${oprn} ${path}'`));
+	console.log(chalk.gray(`Adding '${operation} ${path}'`));
 
 	// validate parameter
-	const operation = normalizeOperation(oprn);
+	path = normalizePath(path);
+	operation = normalizeOperation(operation);
 	const security = normalizeSecurity(toolData.security);
 	const permission = normalizePermission(toolData.needsNotificationPermission);
 	paramData = normalizeParams(paramData);
@@ -59,19 +60,17 @@ export default async function({getState, dispatch}, oprn = 'GET', path, toolData
 			"name": perData.name,
 			"in": perData.in,
 			"required": true,
-			"type": "string",
+			"type": generateParamTypeFromFieldType(perData.field),
 			"x-tb-fieldLabel": generateLabelFromValue(perData.name),
 			"x-tb-fieldPlaceholder": "",
 			"x-tb-fieldType": perData.field
 		};
 		// Handle specified enum
 		if (perData.enum) {
-			if ( ! Array.isArray(perData.enum)) {
-				throw errors.ERR_ADD_INVALID_PARAM_ENUM;
-			}
-			const enumLabels = perData.enum.map(value => generateLabelFromValue(value));
+			const enum = normalizeParamEnum(perData.enum);
+			const enumLabels = generateParamEnumLabel(enum);
 			param = {...param,
-				"enum": perData.enum,
+				"enum": enum,
 				"x-tb-fieldEnumLabel": enumLabels,
 			};
 		}
@@ -92,6 +91,10 @@ export default async function({getState, dispatch}, oprn = 'GET', path, toolData
 	console.log(`Run 'tb push' to create your tool`);
 }
 
+function normalizePath(path) {
+	return path.startsWith('/') ? path : '/' + path;
+}
+
 function normalizeOperation(operation) {
 	operation = operation.toLowerCase();
 	return operation;
@@ -104,8 +107,10 @@ function normalizeSecurity(security) {
 }
 
 function normalizePermission(permission) {
-	permission = permission || false;
-	return permission;
+	if (permission === true || permission == false) {
+		return permission;
+	}
+	throw errors.ERR_ADD_INVALID_NOTIFICATION_PERMISSION;
 }
 
 function normalizeFieldType(param) {
@@ -128,6 +133,12 @@ function normalizeParams(paramData) {
 		}
 	});
 	return paramData;
+}
+
+function normalizeParamEnum(enum) {
+	return Array.isArray(perData.enum)
+		? enum
+		: [enum];
 }
 
 async function ensureSpecFileExists() {
@@ -161,6 +172,16 @@ function generateOperationId(json) {
 	}
 
 	return text;
+}
+
+function generateParamTypeFromFieldType(fieldType) {
+	return (fieldType == 'image' || fieldType == 'video')
+		? 'file'
+		: 'string';
+}
+
+function generateParamEnumLabel(enum) {
+	return enum.map(value => generateLabelFromValue(value.toString()));
 }
 
 function generateColor() {
