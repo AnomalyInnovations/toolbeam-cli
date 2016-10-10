@@ -12,13 +12,13 @@ Toolbeam converts JSON REST APIs to native mobile tools. A quick example:
 1. Take a GET API resource that returns a list of movies
 
    ```
-   https://toolbeam-example-api-mdoemmcvce.now.sh/top_movies
+   https://toolbeam-example-api-wgkghsyfrv.now.sh/top_movies
    ```
 
 2. Add it to Toolbeam and create a tool
 
    ```bash
-   > tb init https://toolbeam-example-api-mdoemmcvce.now.sh
+   > tb init https://toolbeam-example-api-wgkghsyfrv.now.sh
    > tb add /top_movies
    > tb push
    ```
@@ -68,7 +68,7 @@ Continuing with the movie example, we are going to create a set of tools to expl
 To start off, let's create a tool to get a movie given it's id. We'll use the API `GET /movies/{id}`.
 
 ```
-> tb init https://toolbeam-example-api-mdoemmcvce.now.sh
+> tb init https://toolbeam-example-api-wgkghsyfrv.now.sh
 > tb add /movies/{id} --set-param name:id in:path field:number
 ```
 
