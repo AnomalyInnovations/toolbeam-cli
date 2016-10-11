@@ -12,13 +12,13 @@ Toolbeam converts JSON REST APIs to native mobile tools. A quick example:
 1. Take a GET API resource that returns a list of movies
 
    ```
-   https://toolbeam-example-api-ynqjhhiqee.now.sh/top_movies
+   https://toolbeam-example-api-wgkghsyfrv.now.sh/top_movies
    ```
 
 2. Add it to Toolbeam and create a tool
 
    ```bash
-   > tb init https://toolbeam-example-api-ynqjhhiqee.now.sh
+   > tb init https://toolbeam-example-api-wgkghsyfrv.now.sh
    > tb add /top_movies
    > tb push
    ```
@@ -68,7 +68,7 @@ Continuing with the movie example, we are going to create a set of tools to expl
 To start off, let's create a tool to get a movie given it's id. We'll use the API `GET /movies/{id}`.
 
 ```
-> tb init https://toolbeam-example-api-ynqjhhiqee.now.sh
+> tb init https://toolbeam-example-api-wgkghsyfrv.now.sh
 > tb add /movies/{id} --set-param name:id in:path field:number
 ```
 
@@ -155,7 +155,7 @@ To explore how to use notifications, let's create a tool that'll notify us when 
 
 Notice that we set the flag `needsNotificationPermission` to indicate that we'd like to send the user notifications. Toolbeam makes it easy to send notifications using the [Toolbeam Notification API](#toolbeam-notification-api). Simply, send us the uuid of the tool and user you'd like to send the notification to, along with your API Key. You can get user uuid and the tool uuid from the request headers and your API Key by running `tb whoami`. You can read more about the Notification API [here](#toolbeam-notification-api).
 
-Parameters sent usin `formData` are passed in to the API using the `application/x-www-form-urlencoded` header. Also, the location of the user is passed in as a JSON object containing latitude and longitude. You can read more about the `geolocation` field type for the `tb add` command [here](#tb-add-oprn-path-options).
+Parameters sent using `formData` are passed in to the API using the `application/x-www-form-urlencoded` header. Also, the location of the user is passed in as a JSON object containing latitude and longitude. You can read more about the `geolocation` field type for the `tb add` command [here](#tb-add-oprn-path-options).
 
 (Optionally, you can edit the [spec](docs/examples/subscribe-movie.md) to change the appearance of the tool)
 
