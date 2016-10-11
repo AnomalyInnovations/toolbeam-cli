@@ -1,4 +1,5 @@
 # Toolbeam
+![Logo](https://github.com/AnomalyInnovations/toolbeam-cli/raw/master/docs/images/icon.png "Logo")
 
 
 [Toolbeam](https://toolbeam.com) converts your API to a native cross-platform mobile tool.
