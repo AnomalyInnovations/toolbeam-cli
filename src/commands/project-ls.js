@@ -1,4 +1,5 @@
 import chalk from 'chalk';
+import dateFormat from 'dateformat';
 import Table from 'cli-table';
 import { indent, truncate } from '../libs/string';
 
@@ -43,9 +44,16 @@ export default async function({getState, dispatch}) {
 	}, {});
 
 	projects.forEach(project => {
+		const name = truncate(project.name, 60);
+		const line = Array(name.length).fill('-').join('');
+
 		let table;
 
-		console.log(`  ${truncate(project.name, 60)} (id: ${project.uuid})`);
+		console.log(`  ${name}`);
+		console.log(`  ${line}`);
+		console.log(`  Id: ${project.uuid}`);
+		console.log(`  Created: ${dateFormat(new Date(project.date * 1000), 'mediumDate')}`);
+
 		const toolsInProject = toolGroupedByProject[project.id];
 
 		if (toolsInProject) {
