@@ -1,5 +1,6 @@
 # Toolbeam
 
+
 [Toolbeam](https://toolbeam.com) converts your API to a native cross-platform mobile tool.
 
 [![NPM Version][npm-image]][npm-url]
@@ -211,6 +212,7 @@ Head over to **https://toolbeam.com/t/dbgfrxpi** and search for a movie to give 
   - [tb pull](#tb-pull-id)
   - [tb project ls](#tb-project-ls)
   - [tb project rm](#tb-project-rm-id)
+  - [tb messageme](#tb-messageme)
   - [tb whoami](#tb-whoami)
 + [Toolbeam Spec](#toolbeam-spec)
   - [Project Options](#project-options)
@@ -238,7 +240,7 @@ Commands:
   logout             Logout from Toolbeam
 ```
 
-#### tb init \<url\>
+### tb init \<url\>
 
 Initialize a new Toolbeam project with the given base url. Group all your API resources that are under the same base url into a single project. Conversely, create a new project for when adding an API resource that has a different base url.
 
@@ -258,7 +260,7 @@ Initialize a new Toolbeam project with the given base url. Group all your API re
 
   `tb init http://api.example.com/v1`
 
-#### tb add [oprn] \<path\> [options]
+### tb add [oprn] \<path\> [options]
 
 Add an API resource with the given path as a tool. The path is relative to the base url of the current project.
 
@@ -281,7 +283,7 @@ Add an API resource with the given path as a tool. The path is relative to the b
   | Option                      | Description |
   | --------------------------- | ----------- |
   | security                    | Type of security;  `basic` for basic auth or `none` for no authentication. Defaults to `none`. |
-  | needsNotificationPermission | `true` if your tool needs to send notifications to the user. It will prompt the user for permission. Defaults to `false`. |
+  | needsNotificationPermission | Set to `true` if your tool needs to send notifications to the user. It will prompt the user for permission. Defaults to `false`. |
 
 + --set-param
 
@@ -290,9 +292,9 @@ Add an API resource with the given path as a tool. The path is relative to the b
   | Option | Description |
   | -----  | ----------- |
   | name   | **Required** The name of the parameter. This will be used in path templating and in the headers depending on where it is used. |
-  | in     | **Required** The type of the parameter and where it will be used. <ul><li>`path`: Used to replace the parameter in path templating. The parameter `foo` will be applied to the base API path `/movies/{foo}`.</li><li>`query`: Parameter will be added to the query string for the request.</li><li>`header`: Parameter will be added as a custom header for the request.</li><li>`formData`: HTTP request will be made as `application/x-www-form-urlencoded` and parameter will be passed in the request body similar to the query string format of `foo=1&bar=value`.</li></ul> |
-  | field  | The type of field used in the UI. Defaults to `text`.<ul><li>`text`: Displays the standard alphanumeric keypad on field focus.</li><li>`number`: Displays the number keypad on field focus.</li><li>`email`: Displays the email keypad on field focus.</li><li>`hidden`: The field is not displayed to the user.</li><li>`select`: The field is displayed as a picker. Use in conjuction with `enum` to display a list of options.</li><li>`geolocation`: Prompts the user for their current location and passes that to the API as a JSON object with `latitude` and `longitude`. For example, a geolocation field will pass in the following in the API request; `{"latitude":43.64,"longitude":-79.37}`.</li></ul>|
-  | enum   | Comma separated list of option in a select picker. Used in conjuction with `field:select`. |
+  | in     | **Required** The type of the parameter and where it will be used. <ul><li>`path`: Used to replace the parameter in path templating. The parameter `foo` will be applied to the base API path `/movies/{foo}`.</li><li>`query`: Parameter will be added to the query string for the request.</li><li>`header`: Parameter will be added as a custom header for the request.</li><li>`formData`: The request will be made using `application/x-www-form-urlencoded` or `multipart/form-data`. If there are no parameters with field type `image` or `video`, then the parameters will be passed in the request body similar to the query string format of `foo=1&bar=value` using `application/x-www-form-urlencoded`. But in the presence of a paramter with field type `image` or `video`; the request will be encoded using `multipart/form-data`.</li></ul> |
+  | field  | The type of field used in the UI. Defaults to `text`.<ul><li>`text`: Displays the standard alphanumeric keypad on field focus.</li><li>`number`: Displays the number keypad on field focus.</li><li>`email`: Displays the email keypad on field focus.</li><li>`hidden`: The field is not displayed to the user.</li><li>`select`: The field is displayed as a picker. Use in conjuction with `enum` to display a list of options.</li><li>`image`: Let's the user upload an image from their camera roll or take a photo with their camera. The API request is made using `multipart/form-data`.</li><li>`video`: Similar to `image` but let's the user upload a video.</li><li>`geolocation`: Prompts the user for their current location and passes that to the API as a JSON object with `latitude` and `longitude` (ex:`{"latitude":43.64,"longitude":-79.37}`).</li></ul>|
+  | enum   | Comma separated list of option in a select picker. Used in conjuction with field type `select`. |
 
 **Examples**
 
@@ -340,7 +342,7 @@ Add an API resource with the given path as a tool. The path is relative to the b
          --set-param name:genre in:formData field:select enum:comedy,drama,romance,action
   ```
 
-#### tb rm [oprn] \<path\>
+### tb rm [oprn] \<path\>
 
 Remove an API resource with the given path from the spec. This does the opposite of `tb add`.
 
@@ -364,11 +366,11 @@ Remove an API resource with the given path from the spec. This does the opposite
 
   `tb add POST /movies/{id}/like`
 
-#### tb push
+### tb push
 
 Push your current spec to Toolbeam. Looks for the `toolbeam.json` in the current directory. Creates or removes the tools in your spec.
 
-#### tb pull [id]
+### tb pull [id]
 
 Pull the spec for your current project. Optionally, pull a specific project spec by passing in a project id. You can get the id of a project by using the `tb project ls` command.
 
@@ -382,11 +384,11 @@ Pull the spec for your current project. Optionally, pull a specific project spec
 
   `tb pull stqpliww`
 
-#### tb project ls
+### tb project ls
 
 List all your projects along with their project ids. And all the tools with their shareable URLs.
 
-#### tb project rm \<id\>
+### tb project rm \<id\>
 
 Removes a project and all their tools. The tools in the project will also be removed from any users that have them. This command cannot be undone, please use with caution.
 
@@ -402,7 +404,11 @@ Removes a project and all their tools. The tools in the project will also be rem
 
   `tb project rm stqpliww`
 
-#### tb whoami
+### tb messageme
+
+Sends a text message to the given number with the 3 most recently created tools. Uses [TextBelt](http://textbelt.com) to send the messages.
+
+### tb whoami
 
 Shows information about the current logged in session. Also, shows the API key of the current user.
 
@@ -475,7 +481,7 @@ Under the hood, running `tb init` and `tb add` creates an [Open API Spec](https:
 
 Below is a more detailed explanation of the fields that are used.
 
-#### Project Options
+### Project Options
 
 + **info.title**:[string]
 
@@ -493,7 +499,7 @@ Below is a more detailed explanation of the fields that are used.
 
   The base path of your API, relative to the API host.
 
-#### Tool Options
+### Tool Options
 
 + **x-tb-name**:[string]
 
@@ -523,7 +529,7 @@ Below is a more detailed explanation of the fields that are used.
 
     True if the tool needs to ask the user permission to send notifications.
 
-#### Field Options
+### Field Options
 
 + **name**:[string]
 
@@ -546,7 +552,7 @@ Below is a more detailed explanation of the fields that are used.
 
     - formData
     
-      HTTP request will be made as `application/x-www-form-urlencoded` and parameter will be passed in the request body similar to the query string format of `foo=1&bar=value`.
+      The request will be made using `application/x-www-form-urlencoded` or `multipart/form-data`. If there are no parameters with field type `image` or `video`, then the parameters will be passed in the request body similar to the query string format of `foo=1&bar=value` using `application/x-www-form-urlencoded`. But in the presence of a paramter with field type `image` or `video`; the request will be encoded using `multipart/form-data`.
 
 + **required**:[boolean]
 
@@ -584,10 +590,6 @@ Below is a more detailed explanation of the fields that are used.
     
     The field is not displayed to the user. Can be used in conjuction with setting a  `default` to pass some data in the request that does not change.
 
-  - geolocation
-    
-    Prompts the user for their current location and passes that to the API as a JSON object with `latitude` and `longitude`. For example, a geolocation field will pass in the following in the API request; `{"latitude":43.64,"longitude":-79.37}`.
-
   - select
     
     The field is displayed as a picker. Use in conjuction with `enum` and `x-tb-fieldEnumLabel`. As an exmaple here is a param block for a select:
@@ -601,6 +603,18 @@ Below is a more detailed explanation of the fields that are used.
       "x-tb-fieldEnumLabel": ["Casual Users", "Paying Users"] // This is shown to the user
     }
     ```
+
+  - image
+
+    Let's the user upload an image from their camera roll or take a photo with their camera. The API request is made using `multipart/form-data`.
+
+  - video
+
+    Similar to `image` but let's the user upload a video.
+
+  - geolocation
+    
+    Prompts the user for their current location and passes that to the API as a JSON object with `latitude` and `longitude`. For example, a geolocation field will pass in the following in the API request; `{"latitude":43.64,"longitude":-79.37}`.
 
 + **enum**:[array]
 
@@ -655,11 +669,26 @@ Then you could return the following as a `<link>`:
 
 ### Toolbeam Notification API
 
-To send notifications to your tools in Toolbeam we have a simplified API to use. To send notifications to a tool you need to ensure that the `x-tb-needsNotificationPermission` is set to `true` for the tool. Refer to [Tool Options](#tool-options) for further details. By setting this flag, Toolbeam asks the user permission to send notifications stores the user's preference. You can then make requests to the Toolbeam Notification API below to send your users notifications.
+To send notifications to your tools in Toolbeam we have a simplified API to use. Set `needsNotificationPermission` to `true` while creating your tool with `tb add`. Refer to [tb add](#tb-add-oprn-path-options) for further details. By setting this flag, Toolbeam asks the user permission to send notifications and stores the user's preference. You can then make requests to the Toolbeam Notification API below to send your users notifications. 
 
 ```
 POST https://api.toolbeam.com/v1/app/send_notifications
 ```
+
+The notifications API needs your API Key, you can get this by running `tb whoami`. And it needs the uuid's of the tool and user we are going to be sending notifications to. This is passed in the request headers when Toolbeam makes a request to your API. Here is a sample of the headers that are a part of a Toolbeam request.
+
+```
+Content-Type: application/x-www-form-urlencoded
+User-Agent: Toolbeam/1.12.20 CFNetwork/808.0.2 Darwin/15.6.0
+Connection: keep-alive
+Accept: */*
+Accept-Language: en-us
+TB-User-UUID: adqlymds
+TB-Tool-UUID: bcgrjtcu
+Accept-Encoding: gzip, deflate
+```
+
+The notification API ensures that you own the tool you are sending notifications to. And that the user you are sending to is subscribed to the tool.
 
 **Request Parameters**
 
