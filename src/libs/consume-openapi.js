@@ -23,7 +23,9 @@ export function specUUIDFromOpenapi(oapi) {
 }
 
 export function toolNameFromEndpoint(ep) {
-	const parts = ep.path.replace(/^\//, '').split(/[\/_-]/).map(part => capitalize(part));
+	const parts = ep.path.replace(/^\//, '').split(/[\/_-]/)
+		.filter(part =>  ! (part.startsWith('{') && part.endsWith('}')))
+		.map(part => capitalize(part));
 	const name = parts.join(' ');
 	return (name === '')
 		? capitalize(ep.operation)
