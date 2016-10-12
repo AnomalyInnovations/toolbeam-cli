@@ -63,6 +63,8 @@ Toolbeam converts your API into a native cross-platform mobile tool. A quick exa
     * [Field Options](#field-options)
   - [Linking Tools](#linking-tools)
   - [Toolbeam Notification API](#toolbeam-notification-api)
++ [Support](#support)
++ [License](#license)
 
 ## Features
 
@@ -777,7 +779,7 @@ The notification API ensures that you own the tool you are sending notifications
 
 ## Support
 
-Have a feature request or find a bug? [Open a new issue](https://github.com/AnomalyInnovations/toolbeam-cli/issues/new) or contact us via [email](mailto:contact@anomalyinnovations.com).
+Have a feature request or find a bug? Chat with us on [Gitter](https://gitter.im/toolbeam-cli/Lobby), open a [new issue](https://github.com/AnomalyInnovations/toolbeam-cli/issues/new), or send us an [email](mailto:contact@toolbeam.com).
 
 ## License
 
