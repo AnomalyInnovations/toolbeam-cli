@@ -1,5 +1,6 @@
 # Toolbeam
-![Logo](https://github.com/AnomalyInnovations/toolbeam-cli/raw/master/docs/images/icon.png "Logo")
+
+![Logo](https://github.com/AnomalyInnovations/toolbeam-cli/raw/master/docs/images/icon.png)
 
 
 [Toolbeam](https://toolbeam.com) converts your API to a native cross-platform mobile tool.
@@ -100,6 +101,8 @@ Run 'tb messageme' to send the links to your phone
 
 Go ahead and navigate to **https://toolbeam.com/t/oevonxry** or run `tb messageme` to send the link to your phone and try it out.
 
+![Example Screenshot](https://github.com/AnomalyInnovations/toolbeam-cli/raw/master/docs/examples/1.png)
+
 ### Setting Field Types and Handling File Uploads
 
 Let's make something a bit more complicated and explore the different field types. We'll create a new tool to edit the genre of the movie and upload a new poster. We are going to use the API `PUT /movies/{id}`. The API takes the `id` of the movie, the `genre`, and an image as the `poster`.
@@ -124,6 +127,8 @@ Let's create the tool:
 
 And now navigate to **https://toolbeam.com/t/kldgocfm** and try taking a photo from your camera or uploading an image from your camera roll.
 
+![Example Screenshot](https://github.com/AnomalyInnovations/toolbeam-cli/raw/master/docs/examples/2.png)
+
 ### Using Basic Auth
 
 Now let's look at deleting a movie and making it so that the user needs to authenticate to do so. We'll use the API `DELETE /movies/{id}` that requires basic auth with the username `admin` and password `password`.
@@ -144,6 +149,8 @@ Create the tool:
 ```
 
 Navigate to **https://toolbeam.com/t/moqulqnk** and try it with the basic auth info `admin:password`.
+
+![Example Screenshot](https://github.com/AnomalyInnovations/toolbeam-cli/raw/master/docs/examples/3.png)
 
 ### Sending Notifications
 
@@ -170,6 +177,8 @@ Let's create the tool:
 And head over to **https://toolbeam.com/t/bcgrjtcu** to give it a try. Now after you subscribe to a movie, you should get a notification on your phone after about 10s!
 
 If you are connecting to the example API using your own tools, the notifications will not work since the API Key used belongs to a demo account. Just be sure to grab your own API Key (using `tb whoami`) when trying to send notifications using your own API.
+
+![Example Screenshot](https://github.com/AnomalyInnovations/toolbeam-cli/raw/master/docs/examples/4.png)
 
 ### Linking Tools Together
 
@@ -202,6 +211,8 @@ And create the tool:
 ```
 
 Head over to **https://toolbeam.com/t/dbgfrxpi** and search for a movie to give linking a try. If you are building your own tools by connecting to the example API, remember that the tools that are linked are the ones from a demo account.
+
+![Example Screenshot](https://github.com/AnomalyInnovations/toolbeam-cli/raw/master/docs/examples/5.png)
 
 ## Documentation
 
