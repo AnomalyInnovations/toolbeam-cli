@@ -2,15 +2,13 @@
 
 ![Logo](https://github.com/AnomalyInnovations/toolbeam-cli/raw/master/docs/images/icon.png)
 
+**[Toolbeam](https://toolbeam.com) converts your API to a native cross-platform mobile tool.**
 
-[Toolbeam](https://toolbeam.com) converts your API to a native cross-platform mobile tool.
+---
 
 [![NPM Version][npm-image]][npm-url]
 
-
-## How it works
-
-Toolbeam converts JSON REST APIs to native mobile tools. A quick example:
+A quick example:
 
 1. Take a GET API resource that returns a list of movies
 
@@ -213,6 +211,12 @@ And create the tool:
 Head over to **https://toolbeam.com/t/dbgfrxpi** and search for a movie to give linking a try. If you are building your own tools by connecting to the example API, remember that the tools that are linked are the ones from a demo account.
 
 ![Example Screenshot](https://github.com/AnomalyInnovations/toolbeam-cli/raw/master/docs/examples/5.png)
+
+## How it works
+
+Running `tb init` and `tb add` creates an [Open API Spec](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md) JSON file called `toolbeam.json` describing the API resource in the current directory. And `tb push` uploads this to Toolbeam.com and creates the tools. The tools talk directly to your API and the data transferred is not stored on the device or on our servers.
+
+![Flowchart](https://github.com/AnomalyInnovations/toolbeam-cli/raw/master/docs/images/flow.png)
 
 ## Documentation
 
