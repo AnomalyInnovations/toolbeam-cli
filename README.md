@@ -1,14 +1,22 @@
-# Toolbeam
+<p align="center">
+  <a href="https://toolbeam.com/">
+    <img alt="Toolbeam" src="https://github.com/AnomalyInnovations/toolbeam-cli/raw/master/docs/images/logo.png" width="340">
+  </a>
+</p>
 
-![Logo](https://github.com/AnomalyInnovations/toolbeam-cli/raw/master/docs/images/icon.png)
+<p align="center">
+  <b>Convert your API to a native mobile tool</b>
+</p>
 
-**[Toolbeam](https://toolbeam.com) converts your API to a native cross-platform mobile tool.**
-
-[![NPM Version][npm-image]][npm-url] [![iOS][ios-image]][ios-url] [![Android][android-image]][android-url] [![Gitter][gitter-image]][gitter-url] [![License][license-image]](license)
+<p align="center">
+  <a href="https://www.npmjs.com/package/toolbeam-cli"><img alt="NPM Version" src="https://img.shields.io/npm/v/toolbeam-cli.svg?style=flat-square"></a>
+  <a href="https://gitter.im/toolbeam-cli/Lobby"><img alt="Chat on Gitter" src="https://img.shields.io/gitter/room/toolbeam-cli/lobby.svg?style=flat-square"></a>
+  <a href="https://github.com/AnomalyInnovations/toolbeam-cli/blob/master/license"><img alt="License" src="https://img.shields.io/badge/license-MIT-lightgrey.svg?style=flat-square"></a>
+</p>
 
 --------------------------------------------------------
 
-A quick example:
+Toolbeam converts your API into a native cross-platform mobile tool. A quick example:
 
 1. Take a GET API resource that returns a list of movies
 
@@ -776,14 +784,3 @@ Have a feature request or find a bug? [Open a new issue](https://github.com/Anom
 Copyright (c) 2016 Anomaly Innovations
 
 Distributed under the MIT license. See [LICENSE](LICENSE) for more information.
-
-[npm-image]: https://img.shields.io/npm/v/toolbeam-cli.svg?style=flat-square
-[gitter-image]: https://img.shields.io/gitter/room/toolbeam-cli/lobby.svg?style=flat-square
-[license-image]: https://img.shields.io/badge/license-MIT-lightgrey.svg?style=flat-square
-[ios-image]: https://img.shields.io/badge/iOS-App%20Store-blue.svg?style=flat-square
-[android-image]: https://img.shields.io/badge/Android-Play%20Store-green.svg?style=flat-square
-
-[npm-url]: https://www.npmjs.com/package/toolbeam-cli
-[gitter-url]: https://gitter.im/toolbeam-cli/Lobby
-[ios-url]: https://itunes.apple.com/us/app/toolbeam/id1101941226?mt=8
-[android-url]: https://play.google.com/store/apps/details?id=com.anomalyinnovations.toolbeam
