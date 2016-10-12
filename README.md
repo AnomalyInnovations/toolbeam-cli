@@ -1,5 +1,7 @@
 # Toolbeam
 
+[![Join the chat at https://gitter.im/toolbeam-cli/Lobby](https://badges.gitter.im/toolbeam-cli/Lobby.svg)](https://gitter.im/toolbeam-cli/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 ![Logo](https://github.com/AnomalyInnovations/toolbeam-cli/raw/master/docs/images/icon.png)
 
 **[Toolbeam](https://toolbeam.com) converts your API to a native cross-platform mobile tool.**
