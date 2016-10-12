@@ -4,9 +4,9 @@
 
 **[Toolbeam](https://toolbeam.com) converts your API to a native cross-platform mobile tool.**
 
----
+[![NPM Version][npm-image]][npm-url] [![iOS][ios-image]][ios-url] [![Android][android-image]][android-url] [![Gitter][gitter-image]][gitter-url] [![License][license-image]](license)
 
-[![NPM Version][npm-image]][npm-url]
+--------------------------------------------------------
 
 A quick example:
 
@@ -31,6 +31,30 @@ A quick example:
    <!---
    ![Tool](http://i.imgur.com/TtNaEfP.gif)
    -->
+
+## Contents
+
++ [Features](#features)
++ [Get Started](#get-started)
++ [Examples](#examples)
++ [How it Works](#how-it-works)
++ [Documentation](#documentation)
+  - [Toolbeam CLI](#toolbeam-cli)
+    * [tb init](#tb-init-url)
+    * [tb add](#tb-add-oprn-path-options)
+    * [tb rm](#tb-rm-oprn-path)
+    * [tb push](#tb-push)
+    * [tb pull](#tb-pull-id)
+    * [tb project ls](#tb-project-ls)
+    * [tb project rm](#tb-project-rm-id)
+    * [tb messageme](#tb-messageme)
+    * [tb whoami](#tb-whoami)
+  - [Toolbeam Spec](#toolbeam-spec)
+    * [Project Options](#project-options)
+    * [Tool Options](#tool-options)
+    * [Field Options](#field-options)
+  - [Linking Tools](#linking-tools)
+  - [Toolbeam Notification API](#toolbeam-notification-api)
 
 ## Features
 
@@ -212,30 +236,13 @@ Head over to **https://toolbeam.com/t/dbgfrxpi** and search for a movie to give 
 
 ![Example Screenshot](https://github.com/AnomalyInnovations/toolbeam-cli/raw/master/docs/examples/5.png)
 
-## How it works
+## How it Works
 
 Running `tb init` and `tb add` creates an [Open API Spec](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md) JSON file called `toolbeam.json` describing the API resource in the current directory. And `tb push` uploads this to Toolbeam.com and creates the tools. The tools talk directly to your API and the data transferred is not stored on the device or on our servers.
 
 ![Flowchart](https://github.com/AnomalyInnovations/toolbeam-cli/raw/master/docs/images/flow.png)
 
 ## Documentation
-
-+ [Toolbeam CLI](#toolbeam-cli)
-  - [tb init](#tb-init-url)
-  - [tb add](#tb-add-oprn-path-options)
-  - [tb rm](#tb-rm-oprn-path)
-  - [tb push](#tb-push)
-  - [tb pull](#tb-pull-id)
-  - [tb project ls](#tb-project-ls)
-  - [tb project rm](#tb-project-rm-id)
-  - [tb messageme](#tb-messageme)
-  - [tb whoami](#tb-whoami)
-+ [Toolbeam Spec](#toolbeam-spec)
-  - [Project Options](#project-options)
-  - [Tool Options](#tool-options)
-  - [Field Options](#field-options)
-+ [Linking Tools](#linking-tools)
-+ [Toolbeam Notification API](#toolbeam-notification-api)
 
 ### Toolbeam CLI
 
@@ -423,6 +430,20 @@ Removes a project and all their tools. The tools in the project will also be rem
 ### tb messageme
 
 Sends a text message to the given number with the 3 most recently created tools. Uses [TextBelt](http://textbelt.com) to send the messages.
+
+**Example**
+
++ Sample text message
+
+  ```
+  Toolbeam:
+
+  Get Top Movies - https://toolbeam.com/t/tnqjurvz
+
+  Find a Classic Movie - https://toolbeam.com/t/dbgfrxpi
+
+  Subscribe to Movie - https://toolbeam.com/t/bcgrjtcu
+  ```
 
 ### tb whoami
 
@@ -656,16 +677,18 @@ Toolbeam auto converts `https://toolbeam.com/t/{toolId}` urls in an API response
 
 **Examples**
 
-Suppose your user info API responded with the following object. And you had a Edit User Info tool @ `https://toolbeam.com/t/whvhltqmi`.
+Suppose your API responded with a user object. And you had a Edit User Info tool @ `https://toolbeam.com/t/whvhltqmi`.
 
 ```javascript
 {
   "user_id": 512,
+  "username": "jdoe",
+  "email": "jdoe@example.com",
   "edit": <link>
 }
 ```
 
-Then you could return the following as a `<link>`:
+Then you could do the following by returning these links:
 
 + Link to the Edit User Info tool
 
@@ -755,4 +778,12 @@ Copyright (c) 2016 Anomaly Innovations
 Distributed under the MIT license. See [LICENSE](LICENSE) for more information.
 
 [npm-image]: https://img.shields.io/npm/v/toolbeam-cli.svg?style=flat-square
+[gitter-image]: https://img.shields.io/gitter/room/toolbeam-cli/lobby.svg?style=flat-square
+[license-image]: https://img.shields.io/badge/license-MIT-lightgrey.svg?style=flat-square
+[ios-image]: https://img.shields.io/badge/iOS-App%20Store-blue.svg?style=flat-square
+[android-image]: https://img.shields.io/badge/Android-Play%20Store-green.svg?style=flat-square
+
 [npm-url]: https://www.npmjs.com/package/toolbeam-cli
+[gitter-url]: https://gitter.im/toolbeam-cli/Lobby
+[ios-url]: https://itunes.apple.com/us/app/toolbeam/id1101941226?mt=8
+[android-url]: https://play.google.com/store/apps/details?id=com.anomalyinnovations.toolbeam
