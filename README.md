@@ -63,6 +63,7 @@ Toolbeam converts your API into a native cross-platform mobile tool. A quick exa
     * [Field Options](#field-options)
   - [Linking Tools](#linking-tools)
   - [Toolbeam Notification API](#toolbeam-notification-api)
++ [Pricing](#pricing)
 + [Support](#support)
 + [License](#license)
 
@@ -776,6 +777,12 @@ The notification API ensures that you own the tool you are sending notifications
            -d message=hello%20world&user_uuid=<Recipient User UUID>&tool_uuid=<Recipient Tool UUID> \
            https://api.toolbeam.com/v1/app/send_notifications
     ```
+
+## Pricing
+
+Toolbeam is free to use. Tools can be accessed by anybody via the share url.
+
+If you'd like to create private tools for your team, feel free to contact us via [email](mailto:contact@toolbeam.com).
 
 ## Support
 
