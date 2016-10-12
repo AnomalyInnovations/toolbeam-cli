@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://toolbeam.com/">
-    <img alt="Toolbeam" src="https://github.com/AnomalyInnovations/toolbeam-cli/raw/master/docs/images/logo.png" width="340">
+    <img alt="Toolbeam" src="https://github.com/AnomalyInnovations/toolbeam-cli/raw/master/docs/images/logo.png" width="340" />
   </a>
 </p>
 
@@ -9,9 +9,9 @@
 </p>
 
 <p align="center">
-  <a href="https://www.npmjs.com/package/toolbeam-cli"><img alt="NPM Version" src="https://img.shields.io/npm/v/toolbeam-cli.svg?style=flat-square"></a>
-  <a href="https://gitter.im/toolbeam-cli/Lobby"><img alt="Chat on Gitter" src="https://img.shields.io/gitter/room/toolbeam-cli/lobby.svg?style=flat-square"></a>
-  <a href="https://github.com/AnomalyInnovations/toolbeam-cli/blob/master/license"><img alt="License" src="https://img.shields.io/badge/license-MIT-lightgrey.svg?style=flat-square"></a>
+  <a href="https://www.npmjs.com/package/toolbeam-cli"><img alt="NPM Version" src="https://img.shields.io/npm/v/toolbeam-cli.svg?style=flat-square" /></a>
+  <a href="https://gitter.im/toolbeam-cli/Lobby"><img alt="Chat on Gitter" src="https://img.shields.io/gitter/room/toolbeam-cli/lobby.svg?style=flat-square" /></a>
+  <a href="https://github.com/AnomalyInnovations/toolbeam-cli/blob/master/license"><img alt="License" src="https://img.shields.io/badge/license-MIT-lightgrey.svg?style=flat-square" /></a>
 </p>
 
 ------------------------------------------------------------------------------------
@@ -131,7 +131,7 @@ Run 'tb messageme' to send the links to your phone
 
 Go ahead and navigate to **https://toolbeam.com/t/oevonxry** or run `tb messageme` to send the link to your phone and try it out.
 
-![Example Screenshot](https://github.com/AnomalyInnovations/toolbeam-cli/raw/master/docs/examples/1.png)
+<img alt="Example Screenshot" src="https://github.com/AnomalyInnovations/toolbeam-cli/raw/master/docs/examples/1.png" width="320" />
 
 ### Setting Field Types and Handling File Uploads
 
@@ -157,7 +157,7 @@ Let's create the tool:
 
 And now navigate to **https://toolbeam.com/t/kldgocfm** and try taking a photo from your camera or uploading an image from your camera roll.
 
-![Example Screenshot](https://github.com/AnomalyInnovations/toolbeam-cli/raw/master/docs/examples/2.png)
+<img alt="Example Screenshot" src="https://github.com/AnomalyInnovations/toolbeam-cli/raw/master/docs/examples/2.png" width="320" />
 
 ### Using Basic Auth
 
@@ -180,7 +180,7 @@ Create the tool:
 
 Navigate to **https://toolbeam.com/t/moqulqnk** and try it with the basic auth info `admin:password`.
 
-![Example Screenshot](https://github.com/AnomalyInnovations/toolbeam-cli/raw/master/docs/examples/3.png)
+<img alt="Example Screenshot" src="https://github.com/AnomalyInnovations/toolbeam-cli/raw/master/docs/examples/3.png" width="320" />
 
 ### Sending Notifications
 
@@ -208,7 +208,7 @@ And head over to **https://toolbeam.com/t/bcgrjtcu** to give it a try. Now after
 
 If you are connecting to the example API using your own tools, the notifications will not work since the API Key used belongs to a demo account. Just be sure to grab your own API Key (using `tb whoami`) when trying to send notifications using your own API.
 
-![Example Screenshot](https://github.com/AnomalyInnovations/toolbeam-cli/raw/master/docs/examples/4.png)
+<img alt="Example Screenshot" src="https://github.com/AnomalyInnovations/toolbeam-cli/raw/master/docs/examples/4.png" width="320" />
 
 ### Linking Tools Together
 
@@ -242,13 +242,13 @@ And create the tool:
 
 Head over to **https://toolbeam.com/t/dbgfrxpi** and search for a movie to give linking a try. If you are building your own tools by connecting to the example API, remember that the tools that are linked are the ones from a demo account.
 
-![Example Screenshot](https://github.com/AnomalyInnovations/toolbeam-cli/raw/master/docs/examples/5.png)
+<img alt="Example Screenshot" src="https://github.com/AnomalyInnovations/toolbeam-cli/raw/master/docs/examples/5.png" width="320" />
 
 ## How it Works
 
 Running `tb init` and `tb add` creates an [Open API Spec](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md) JSON file called `toolbeam.json` describing the API resource in the current directory. And `tb push` uploads this to Toolbeam.com and creates the tools. The tools talk directly to your API and the data transferred is not stored on the device or on our servers.
 
-![Flowchart](https://github.com/AnomalyInnovations/toolbeam-cli/raw/master/docs/images/flow.png)
+<img alt="Flowchart" src="https://github.com/AnomalyInnovations/toolbeam-cli/raw/master/docs/images/flow.png" width="710" />
 
 ## Documentation
 
