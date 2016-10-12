@@ -270,6 +270,10 @@ function parseAddParamOptions(options = []) {
 			else if (acc.current === null) {
 				throw `Set the parameter name before setting '${opt}'`;
 			}
+			// Setting the same option again
+			else if (acc.current.hasOwnProperty(key)) {
+				throw `Parameter option '${key}' is being set multiple times`;
+			}
 
 			acc.current[key] = value;
 
