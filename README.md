@@ -14,7 +14,7 @@
   <a href="https://github.com/AnomalyInnovations/toolbeam-cli/blob/master/license"><img alt="License" src="https://img.shields.io/badge/license-MIT-lightgrey.svg?style=flat-square"></a>
 </p>
 
---------------------------------------------------------
+------------------------------------------------------------------------------------
 
 Toolbeam converts your API into a native cross-platform mobile tool. A quick example:
 
