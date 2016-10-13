@@ -132,7 +132,7 @@ Run 'tb messageme' to send the links to your phone
 
 Go ahead and navigate to **https://toolbeam.com/t/oevonxry** or run `tb messageme` to send the link to your phone and try it out.
 
-<img alt="Example Screenshot" src="https://github.com/AnomalyInnovations/toolbeam-cli/raw/master/docs/examples/1.png" width="540" />
+<img alt="Example Screenshot" src="https://github.com/AnomalyInnovations/toolbeam-cli/raw/master/docs/examples/1.png" width="270" />
 
 ### Setting Field Types and Handling File Uploads
 
@@ -181,7 +181,7 @@ Create the tool:
 
 Navigate to **https://toolbeam.com/t/moqulqnk** and try it with the basic auth info `admin:password`.
 
-<img alt="Example Screenshot" src="https://github.com/AnomalyInnovations/toolbeam-cli/raw/master/docs/examples/3.png" width="540" />
+<img alt="Example Screenshot" src="https://github.com/AnomalyInnovations/toolbeam-cli/raw/master/docs/examples/3.png" width="270" />
 
 ### Sending Notifications
 
