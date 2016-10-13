@@ -132,7 +132,7 @@ Run 'tb messageme' to send the links to your phone
 
 Go ahead and navigate to **https://toolbeam.com/t/oevonxry** or run `tb messageme` to send the link to your phone and try it out.
 
-<img alt="Example Screenshot" src="https://github.com/AnomalyInnovations/toolbeam-cli/raw/master/docs/examples/1.png" width="320" />
+<img alt="Example Screenshot" src="https://github.com/AnomalyInnovations/toolbeam-cli/raw/master/docs/examples/1.png" width="540" />
 
 ### Setting Field Types and Handling File Uploads
 
@@ -181,7 +181,7 @@ Create the tool:
 
 Navigate to **https://toolbeam.com/t/moqulqnk** and try it with the basic auth info `admin:password`.
 
-<img alt="Example Screenshot" src="https://github.com/AnomalyInnovations/toolbeam-cli/raw/master/docs/examples/3.png" width="320" />
+<img alt="Example Screenshot" src="https://github.com/AnomalyInnovations/toolbeam-cli/raw/master/docs/examples/3.png" width="540" />
 
 ### Sending Notifications
 
@@ -784,7 +784,9 @@ If you'd like to create private tools for your team, feel free to contact us via
 
 ## Support
 
-Have a feature request or find a bug? Chat with us on [Gitter](https://gitter.im/toolbeam-cli/Lobby), open a [new issue](https://github.com/AnomalyInnovations/toolbeam-cli/issues/new), or send us an [email](mailto:contact@toolbeam.com).
+Need help figuring something out? Chat with us on [Gitter](https://gitter.im/toolbeam-cli/Lobby) or send us an [email](mailto:contact@toolbeam.com).
+
+Have a feature request or find a bug? Open a [new issue](https://github.com/AnomalyInnovations/toolbeam-cli/issues/new).
 
 ## License
 
