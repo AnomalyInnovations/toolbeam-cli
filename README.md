@@ -20,9 +20,7 @@ Toolbeam converts your API into a native cross-platform mobile tool. A quick exa
 
 1. Take a GET API resource that returns a list of movies
 
-   ```
    https://toolbeam-example-api-wgkghsyfrv.now.sh/top_movies
-   ```
 
 2. Add it to Toolbeam and create a tool
 
