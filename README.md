@@ -34,9 +34,7 @@ Toolbeam converts your API into a native cross-platform mobile tool. A quick exa
 
    :calling: &nbsp; **https://toolbeam.com/t/tnqjurvz**
 
-   <!---
-   ![Tool](http://i.imgur.com/TtNaEfP.gif)
-   -->
+   ![Example Gif](https://github.com/AnomalyInnovations/toolbeam-cli/raw/master/docs/examples/example.gif)
 
 ## Contents
 
