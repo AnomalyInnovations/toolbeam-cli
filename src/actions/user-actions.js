@@ -87,6 +87,10 @@ export function getUserApiKey(state) {
 	return state.user.user.api_key;
 }
 
+export function getUserUuid(state) {
+	return state.user.user.uuid;
+}
+
 export function getCachedPhoneNumber(state) {
 	return state.user.phone_number;
 }
