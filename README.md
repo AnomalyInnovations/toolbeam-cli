@@ -97,7 +97,7 @@ Continuing with the movie example, we are going to create a set of tools to expl
 
 ### Setting API Parameters
 
-To start off, let's create a tool to get a movie given it's id. We'll use the API `GET /movies/{id}`.
+To start off, let's create a tool to get a movie given its id. We'll use the API `GET /movies/{id}`.
 
 ```
 > tb init https://toolbeam-example-api-wgkghsyfrv.now.sh
@@ -167,7 +167,7 @@ Now let's look at deleting a movie and making it so that the user needs to authe
                              --set-param name:id in:path field:number
 ```
 
-Notice that we are setting the the tool option `security`. You can read further about the other tool options [below](#tb-add-oprn-path-options).
+Notice that we are setting the tool option `security`. You can read further about the other tool options [below](#tb-add-oprn-path-options).
 
 (Optionally, we'll edit the [spec](docs/examples/delete-movie.md) to tweak the appearance of the tool.)
 
@@ -193,7 +193,7 @@ To explore how to use notifications, let's create a tool that'll notify us when 
 
 Notice that we set the flag `needsNotificationPermission` to indicate that we'd like to send the user notifications. Toolbeam makes it easy to send notifications using the [Toolbeam Notification API](#toolbeam-notification-api). Simply, send us the uuid of the tool and user you'd like to send the notification to, along with your API Key. You can get user uuid and the tool uuid from the request headers and your API Key by running `tb whoami`. You can read more about the Notification API [here](#toolbeam-notification-api).
 
-Parameters sent using `formData` are passed in to the API using the `application/x-www-form-urlencoded` header. Also, the location of the user is passed in as a JSON object containing latitude and longitude. You can read more about the `geolocation` field type for the `tb add` command [here](#tb-add-oprn-path-options).
+Parameters sent using `formData` are passed into the API using the `application/x-www-form-urlencoded` header. Also, the location of the user is passed in as a JSON object containing latitude and longitude. You can read more about the `geolocation` field type for the `tb add` command [here](#tb-add-oprn-path-options).
 
 (Optionally, we'll edit the [spec](docs/examples/subscribe-movie.md) to change the appearance of the tool.)
 
@@ -205,7 +205,7 @@ Let's create the tool:
 
 And head over to **https://toolbeam.com/t/bcgrjtcu** to give it a try. Now after you subscribe to a movie, you should get a notification on your phone after about 5s!
 
-**Note:** If you are working through this example yourself and you are connecting to the example API; you will not receive a notifcation. This is because the API Key used in the sample API belongs to a demo account. To test out notifcations, you can run the [example API](https://github.com/AnomalyInnovations/toolbeam-example-api) yourself and use your own API Key.
+**Note:** If you are working through this example yourself and you are connecting to the example API; you will not receive a notification. This is because the API Key used in the sample API belongs to a demo account. To test out notifications, you can run the [example API](https://github.com/AnomalyInnovations/toolbeam-example-api) yourself and use your own API Key.
 
 <img alt="Example Screenshot" src="https://github.com/AnomalyInnovations/toolbeam-cli/raw/master/docs/examples/4.png" width="320" />
 
@@ -221,9 +221,9 @@ While, the tools on their own are useful; linking them together allows us to cre
 }
 ```
 
-We are linking to the Edit, Delete, and Subscribe tools from above and passing in the info for the movie that is returned. By doing so Toolbeam will convert these fields into buttons that'll link to the specified tools. And the query string parameters in these urls are used as the default values in the linked tools.
+We are linking to the Edit, Delete, and Subscribe tools from above and passing in the info for the movie that is returned. By doing so Toolbeam will convert these fields into buttons that'll link to the specified tools. And the query string parameters in these URLs are used as the default values in the linked tools.
 
-Notice that the unlike the others, the delete tool is linking to `/response`. By doing so, it links directly to the response screen of the Delete tool and skips the form screen. You can read further about linking tools [below](#linking-tools).
+Notice that unlike the others, the delete tool is linking to `/response`. By doing so, it links directly to the response screen of the Delete tool and skips the form screen. You can read further about linking tools [below](#linking-tools).
 
 Now let's add the API resource:
 
@@ -272,13 +272,13 @@ Commands:
 
 ### tb init \<url\>
 
-Initialize a new Toolbeam project with the given base url. Group all your API resources that are under the same base url into a single project. Conversely, create a new project for when adding an API resource that has a different base url.
+Initialize a new Toolbeam project with the given base URL. Group all your API resources that are under the same base URL into a single project. Conversely, create a new project for when adding an API resource that has a different base URL.
 
 **Arguments**
 
 + \<url\>
 
-  The base url of your API.
+  The base URL of your API.
 
 **Examples**
 
@@ -292,7 +292,7 @@ Initialize a new Toolbeam project with the given base url. Group all your API re
 
 ### tb add [oprn] \<path\> [options]
 
-Add an API resource with the given path as a tool. The path is relative to the base url of the current project.
+Add an API resource with the given path as a tool. The path is relative to the base URL of the current project.
 
 **Arguments**
 
@@ -322,9 +322,9 @@ Add an API resource with the given path as a tool. The path is relative to the b
   | Option | Description |
   | -----  | ----------- |
   | name   | **Required** The name of the parameter. This will be used in path templating and in the headers depending on where it is used. |
-  | in     | **Required** The type of the parameter and where it will be used. <ul><li>`path`: Used to replace the parameter in path templating. The parameter `foo` will be applied to the base API path `/movies/{foo}`.</li><li>`query`: Parameter will be added to the query string for the request.</li><li>`header`: Parameter will be added as a custom header for the request.</li><li>`formData`: The request will be made using `application/x-www-form-urlencoded` or `multipart/form-data`. If there are no parameters with field type `image` or `video`, then the parameters will be passed in the request body similar to the query string format of `foo=1&bar=value` using `application/x-www-form-urlencoded`. But in the presence of a paramter with field type `image` or `video`; the request will be encoded using `multipart/form-data`.</li></ul> |
-  | field  | The type of field used in the UI. Defaults to `text`.<ul><li>`text`: Displays the standard alphanumeric keypad on field focus.</li><li>`number`: Displays the number keypad on field focus.</li><li>`email`: Displays the email keypad on field focus.</li><li>`hidden`: The field is not displayed to the user.</li><li>`select`: The field is displayed as a picker. Use in conjuction with `enum` to display a list of options.</li><li>`image`: Let's the user upload an image from their camera roll or take a photo with their camera. The API request is made using `multipart/form-data`.</li><li>`video`: Similar to `image` but let's the user upload a video.</li><li>`geolocation`: Prompts the user for their current location and passes that to the API as a JSON object with `latitude` and `longitude` (ex:`{"latitude":43.64,"longitude":-79.37}`).</li></ul>|
-  | enum   | Comma separated list of option in a select picker. Used in conjuction with field type `select`. |
+  | in     | **Required** The type of the parameter and where it will be used. <ul><li>`path`: Used to replace the parameter in path templating. The parameter `foo` will be applied to the base API path `/movies/{foo}`.</li><li>`query`: Parameter will be added to the query string for the request.</li><li>`header`: Parameter will be added as a custom header for the request.</li><li>`formData`: The request will be made using `application/x-www-form-urlencoded` or `multipart/form-data`. If there are no parameters with field type `image` or `video`, then the parameters will be passed in the request body similar to the query string format of `foo=1&bar=value` using `application/x-www-form-urlencoded`. But in the presence of a parameter with field type `image` or `video`; the request will be encoded using `multipart/form-data`.</li></ul> |
+  | field  | The type of field used in the UI. Defaults to `text`.<ul><li>`text`: Displays the standard alphanumeric keypad on field focus.</li><li>`number`: Displays the number keypad on field focus.</li><li>`email`: Displays the email keypad on field focus.</li><li>`hidden`: The field is not displayed to the user.</li><li>`select`: The field is displayed as a picker. Use in conjunction with `enum` to display a list of options.</li><li>`image`: Lets the user upload an image from their camera roll or take a photo with their camera. The API request is made using `multipart/form-data`.</li><li>`video`: Similar to `image` but lets the user upload a video.</li><li>`geolocation`: Prompts the user for their current location and passes that to the API as a JSON object with `latitude` and `longitude` (ex:`{"latitude":43.64,"longitude":-79.37}`).</li></ul>|
+  | enum   | Comma separated list of option in a select picker. Used in conjunction with field type `select`. |
 
 **Examples**
 
@@ -344,7 +344,7 @@ Add an API resource with the given path as a tool. The path is relative to the b
 
   `tb add POST /movies/upload --set security:basic needsNotificationPermission:true`
 
-+  Add a GET resource with a paramter using path templating.
++  Add a GET resource with a parameter using path templating.
 
   `tb add /movies/{id} --set-param name:id in:path`
 
@@ -384,7 +384,7 @@ Remove an API resource with the given path from the spec. This does the opposite
 
 + \<path\>
 
-  The path of your API resource to remove.
+  The path of the API resource to remove.
 
 **Examples**
 
@@ -519,7 +519,7 @@ Below is a more detailed explanation of the fields that are used.
 
 + **info.x-tb-uuid**:[string]
 
-  The UUID for the project, generated after the first `tb push`. Do not change.
+  The UUID for the project generated after the first `tb push`. Do not change.
 
 + **host**:[string]
 
@@ -582,7 +582,7 @@ Below is a more detailed explanation of the fields that are used.
 
     - formData
     
-      The request will be made using `application/x-www-form-urlencoded` or `multipart/form-data`. If there are no parameters with field type `image` or `video`, then the parameters will be passed in the request body similar to the query string format of `foo=1&bar=value` using `application/x-www-form-urlencoded`. But in the presence of a paramter with field type `image` or `video`; the request will be encoded using `multipart/form-data`.
+      The request will be made using `application/x-www-form-urlencoded` or `multipart/form-data`. If there are no parameters with field type `image` or `video`, then the parameters will be passed in the request body similar to the query string format of `foo=1&bar=value` using `application/x-www-form-urlencoded`. But in the presence of a parameter with field type `image` or `video`; the request will be encoded using `multipart/form-data`.
 
 + **required**:[boolean]
 
@@ -618,11 +618,11 @@ Below is a more detailed explanation of the fields that are used.
 
   - hidden
     
-    The field is not displayed to the user. Can be used in conjuction with setting a  `default` to pass some data in the request that does not change.
+    The field is not displayed to the user. Can be used in conjunction with setting a  `default` to pass some data in the request that does not change.
 
   - select
     
-    The field is displayed as a picker. Use in conjuction with `enum` and `x-tb-fieldEnumLabel`. As an exmaple here is a param block for a select:
+    The field is displayed as a picker. Use in conjunction with `enum` and `x-tb-fieldEnumLabel`. As an example here is a param block for a select:
     ```javascript
     {
       "name": "type",
@@ -636,11 +636,11 @@ Below is a more detailed explanation of the fields that are used.
 
   - image
 
-    Let's the user upload an image from their camera roll or take a photo with their camera. The API request is made using `multipart/form-data`.
+    Lets the user upload an image from their camera roll or take a photo with their camera. The API request is made using `multipart/form-data`.
 
   - video
 
-    Similar to `image` but let's the user upload a video.
+    Similar to `image` but lets the user upload a video.
 
   - geolocation
     
@@ -656,21 +656,21 @@ Below is a more detailed explanation of the fields that are used.
 
 ### Linking Tools
 
-Toolbeam auto converts `https://toolbeam.com/t/{toolId}` urls in an API response into a button that directs users to the specified tool. By using these links we can chain tools together. This is useful for cases where you want a user to execute an action based on what is returned from a tool.
+Toolbeam auto converts `https://toolbeam.com/t/{toolId}` URLs in an API response into a button that directs users to the specified tool. By using these links we can chain tools together. This is useful for cases where you want a user to execute an action based on what is returned from a tool.
 
 **Types of Links**
 
 + Link to the tool
 
-  Link to a tool by returning `https://toolbeam.com/t/{toolId}?paramName={defaultValue}` in your API. In the query string of the url you can add the parameters of the tool that you would like to initialize with.
+  Link to a tool by returning `https://toolbeam.com/t/{toolId}?paramName={defaultValue}` in your API. In the query string of the URL you can add the parameters of the tool that you would like to initialize with.
 
 + Link directly to the tool response screen
 
-  You can also directly link to the response screen of a tool by returning the url `https://toolbeam.com/t/{toolId}/response?paramName={defaultValue}`. This is effectively making the API request of the tool with the passed in parameters.
+  You can also directly link to the response screen of a tool by returning the URL `https://toolbeam.com/t/{toolId}/response?paramName={defaultValue}`. This is effectively making the API request of the tool with the passed in parameters.
 
 **Examples**
 
-Suppose your API responded with a user object. And you had a Edit User Info tool @ `https://toolbeam.com/t/whvhltqmi`.
+Suppose your API responded with a user object. And you had an Edit User Info tool @ `https://toolbeam.com/t/whvhltqmi`.
 
 ```javascript
 {
@@ -794,13 +794,13 @@ Below are the Error codes returned:
 
 ## Pricing
 
-Toolbeam is free to use. Tools can be accessed by anybody via the share url.
+Toolbeam is free to use. Tools can be accessed by anybody via the share URL.
 
 If you'd like to create private tools, please get in touch with us [here](https://goo.gl/forms/esEgY8JTUILtLskk1).
 
 ## Support
 
-Need help figuring something out? Chat with us on [Gitter](https://gitter.im/toolbeam-cli/Lobby) or send us an [email](mailto:contact@toolbeam.com).
+Need help to figure something out? Chat with us on [Gitter](https://gitter.im/toolbeam-cli/Lobby) or send us an [email](mailto:contact@toolbeam.com).
 
 Have a feature request or find a bug? Open a [new issue](https://github.com/AnomalyInnovations/toolbeam-cli/issues/new).
 
