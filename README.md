@@ -93,7 +93,7 @@ Toolbeam converts your API into a native cross-platform mobile tool. A quick exa
 
 ## Examples
 
-Continuing with the movie example, we are going to create a set of tools to explore some of the features of Toolbeam. We are going to use a very simple JSON API that is publicly accessible and you can see the source for it [here](https://github.com/AnomalyInnovations/toolbeam-example-api/blob/master/index.js).
+Continuing with the movie example, we are going to create a set of tools to explore some of the features of Toolbeam. We are going to use a very simple JSON API that is publicly accessible and you can see the source for it [here](https://github.com/AnomalyInnovations/toolbeam-example-api/blob/master/index.js). The resources in the API are for demo purposes only and don't make any real changes to the underlying data.
 
 ### Setting API Parameters
 
@@ -110,7 +110,7 @@ We are also setting the field type for the `id` parameter to `number` to use the
 
 Running the two above commands create a [Open API Spec](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md) file called `toolbeam.json` in the current directory.
 
-(Optionally, we'll edit the [spec](docs/examples/get-movie.md) manually to make our tool a bit more user friendly)
+(Optionally, we'll edit the [spec](docs/examples/get-movie.md) manually to change our project name, tool name, field label, etc.)
 
 And now running `tb push` will push the spec to Toolbeam; creating the project and the tool.
 
@@ -128,7 +128,7 @@ Project created 'Classic Movies'
 Run 'tb messageme' to send the links to your phone
 ```
 
-Go ahead and navigate to **https://toolbeam.com/t/oevonxry** or run `tb messageme` to send the link to your phone and try it out.
+Go ahead and navigate to **https://toolbeam.com/t/oevonxry** or run `tb messageme` to send the link to your phone. Now if you enter an Id, it should return a movie object.
 
 <img alt="Example Screenshot" src="https://github.com/AnomalyInnovations/toolbeam-cli/raw/master/docs/examples/1.png" width="270" />
 
@@ -146,7 +146,7 @@ We're using the `select` field type for the `genre` parameter and passing in the
 
 To upload the `poster` we are using the `image` field type. When using a file field type (`image` or `video`) the API request uses the `multipart/form-data` encoding. Without a file field type, the API request is made using the `application/x-www-form-urlencoded` header for `formData` parameters. You can read more about the different field options [below](#tb-add-oprn-path-options).
 
-(Optionally, you can edit the [spec](docs/examples/update-movie.md) to change the appearance of the tool)
+(Optionally, we'll edit the [spec](docs/examples/update-movie.md) to change the appearance of the tool.)
 
 Let's create the tool:
 
@@ -169,7 +169,7 @@ Now let's look at deleting a movie and making it so that the user needs to authe
 
 Notice that we are setting the the tool option `security`. You can read further about the other tool options [below](#tb-add-oprn-path-options).
 
-(Optionally, we'll edit the [spec](docs/examples/delete-movie.md) to tweak the appearance of the tool)
+(Optionally, we'll edit the [spec](docs/examples/delete-movie.md) to tweak the appearance of the tool.)
 
 Create the tool:
 
@@ -195,7 +195,7 @@ Notice that we set the flag `needsNotificationPermission` to indicate that we'd 
 
 Parameters sent using `formData` are passed in to the API using the `application/x-www-form-urlencoded` header. Also, the location of the user is passed in as a JSON object containing latitude and longitude. You can read more about the `geolocation` field type for the `tb add` command [here](#tb-add-oprn-path-options).
 
-(Optionally, you can edit the [spec](docs/examples/subscribe-movie.md) to change the appearance of the tool)
+(Optionally, we'll edit the [spec](docs/examples/subscribe-movie.md) to change the appearance of the tool.)
 
 Let's create the tool:
 
@@ -203,9 +203,9 @@ Let's create the tool:
 > tb push
 ```
 
-And head over to **https://toolbeam.com/t/bcgrjtcu** to give it a try. Now after you subscribe to a movie, you should get a notification on your phone after about 10s!
+And head over to **https://toolbeam.com/t/bcgrjtcu** to give it a try. Now after you subscribe to a movie, you should get a notification on your phone after about 5s!
 
-If you are connecting to the example API using your own tools, the notifications will not work since the API Key used belongs to a demo account. Just be sure to grab your own API Key (using `tb whoami`) when trying to send notifications using your own API.
+**Note:** If you are working through this example yourself and you are connecting to the example API; you will not receive a notifcation. This is because the API Key used in the sample API belongs to a demo account. To test out notifcations, you can run the [example API](https://github.com/AnomalyInnovations/toolbeam-example-api) yourself and use your own API Key.
 
 <img alt="Example Screenshot" src="https://github.com/AnomalyInnovations/toolbeam-cli/raw/master/docs/examples/4.png" width="320" />
 
@@ -231,7 +231,7 @@ Now let's add the API resource:
 > tb add /movies --set-param name:keyword in:query
 ```
 
-(Optionally, edit the [spec](docs/examples/search-movie.md) to change the appearance of the tool)
+(Optionally, edit the [spec](docs/examples/search-movie.md) to change the appearance of the tool.)
 
 And create the tool:
 
