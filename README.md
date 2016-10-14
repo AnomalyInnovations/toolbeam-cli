@@ -438,20 +438,6 @@ Removes a project and all their tools. The tools in the project will also be rem
 
 Sends a text message to the given number with the 3 most recently created tools. Uses [TextBelt](http://textbelt.com) to send the messages.
 
-**Example**
-
-+ Sample text message
-
-  ```
-  Toolbeam:
-
-  Get Top Movies - https://toolbeam.com/t/tnqjurvz
-
-  Find a Classic Movie - https://toolbeam.com/t/dbgfrxpi
-
-  Subscribe to Movie - https://toolbeam.com/t/bcgrjtcu
-  ```
-
 ### tb whoami
 
 Shows information about the current logged in session. Also, shows the API key of the current user.
@@ -750,27 +736,59 @@ The notification API ensures that you own the tool you are sending notifications
 
     The uuid of the tool that we are sending notifications to. This is passed in through the header of every single request made to your API by Toolbeam. Passed in as `TB-Tool-UUID`.
 
-  + **API-KEY** in:header
+  + **TB-API-KEY** in:header
 
-    The API key of your account. You can find this by running `tb whoami`.
+    The API key of your account. You can find this by running `tb whoami`. This needs to be passed in through the header of your request, unlike the other parameters.
 
-**Response**
+**Error Response**
 
-  + 200
+In the case of an error, the API responds with a non 200 HTTP status code and a JSON response of the following format:
 
-    The notifications have been successfully sent.
+```javascript
+{
+  "error": <Error Status>,
+  "message": <Error Message>,
+  "code": <Error Code>
+}
+```
 
-  + 500
+Below are the Error codes returned:
 
-    There was a problem sending the notification.
+  + 1014
+
+    The notification message is invalid.
+
+  + 1016
+
+    The tool UUID is invalid.
+
+  + 1018
+
+    The API Key is invalid.
+
+  + 2009
+
+    The user uuid does not exist.
+
+  + 3001
+
+    The tool uuid does not exist.
+
+  + 4001
+
+    Your API Key is not authorized to send notifications to the given tool. Check if you own this tool.
+
+  + 4002
+
+    The given user is not subscribed to this tool.
 
 **Examples**
 
   + Send a simple "hello world" message using cURL
 
     ```
-    > curl -X POST -H "API-KEY: <Your API KEY>" \
-           -d message=hello%20world&user_uuid=<Recipient User UUID>&tool_uuid=<Recipient Tool UUID> \
+    > curl -X POST -H "TB-API-KEY: <Your API KEY>" \
+           -d "message=hello%20world&user_uuid=<Recipient User UUID>&tool_uuid=<Recipient Tool UUID>" \
            https://api.toolbeam.com/v1/app/send_notifications
     ```
 
