@@ -796,7 +796,7 @@ Below are the Error codes returned:
 
 Toolbeam is free to use. Tools can be accessed by anybody via the share url.
 
-If you'd like to create private tools for your team, feel free to contact us via [email](mailto:contact@toolbeam.com).
+If you'd like to create private tools, please get in touch with us [here](https://goo.gl/forms/esEgY8JTUILtLskk1).
 
 ## Support
 
