@@ -61,6 +61,7 @@ Toolbeam converts your API into a native cross-platform mobile tool. A quick exa
   - [Toolbeam Notification API](#toolbeam-notification-api)
 + [Pricing](#pricing)
 + [Support](#support)
++ [Thanks](#thanks)
 + [License](#license)
 
 ## Features
@@ -191,7 +192,7 @@ To explore how to use notifications, let's create a tool that'll notify us when 
                                      --set-param name:location in:formData field:geolocation
 ```
 
-Notice that we set the flag `needsNotificationPermission` to indicate that we'd like to send the user notifications. Toolbeam makes it easy to send notifications using the [Toolbeam Notification API](#toolbeam-notification-api). Simply, send us the uuid of the tool and user you'd like to send the notification to, along with your API Key. You can get user uuid and the tool uuid from the request headers and your API Key by running `tb whoami`. You can read more about the Notification API [here](#toolbeam-notification-api).
+Notice that we set the flag `needsNotificationPermission` to indicate that we'd like to send the user notifications. Toolbeam makes it easy to send notifications using the [Toolbeam Notification API](#toolbeam-notification-api). Simply, send us the uuid of the tool and user you'd like to send the notification to, along with your API Key. You can get the user uuid and the tool uuid from the request headers and your API Key by running `tb whoami`. You can read more about the Notification API [here](#toolbeam-notification-api).
 
 Parameters sent using `formData` are passed into the API using the `application/x-www-form-urlencoded` header. Also, the location of the user is passed in as a JSON object containing latitude and longitude. You can read more about the `geolocation` field type for the `tb add` command [here](#tb-add-oprn-path-options).
 
@@ -272,7 +273,7 @@ Commands:
 
 ### tb init \<url\>
 
-Initialize a new Toolbeam project with the given base URL. Group all your API resources that are under the same base URL into a single project. Conversely, create a new project for when adding an API resource that has a different base URL.
+Initialize a new Toolbeam project with the given base URL. Group all your API resources that are under the same base URL into a single project.
 
 **Arguments**
 
@@ -322,9 +323,9 @@ Add an API resource with the given path as a tool. The path is relative to the b
   | Option | Description |
   | -----  | ----------- |
   | name   | **Required** The name of the parameter. This will be used in path templating and in the headers depending on where it is used. |
-  | in     | **Required** The type of the parameter and where it will be used. <ul><li>`path`: Used to replace the parameter in path templating. The parameter `foo` will be applied to the base API path `/movies/{foo}`.</li><li>`query`: Parameter will be added to the query string for the request.</li><li>`header`: Parameter will be added as a custom header for the request.</li><li>`formData`: The request will be made using `application/x-www-form-urlencoded` or `multipart/form-data`. If there are no parameters with field type `image` or `video`, then the parameters will be passed in the request body similar to the query string format of `foo=1&bar=value` using `application/x-www-form-urlencoded`. But in the presence of a parameter with field type `image` or `video`; the request will be encoded using `multipart/form-data`.</li></ul> |
+  | in     | **Required** The type of the parameter and where it will be used. <ul><li>`path`: Used to replace the parameter in path templating. The parameter `foo` will be applied to the API path `/movies/{foo}`.</li><li>`query`: Parameter will be added to the query string for the request using the query string format `foo=1&bar=value`.</li><li>`header`: Parameter will be added as a custom header for the request.</li><li>`formData`: The request will be made using `application/x-www-form-urlencoded` or `multipart/form-data`. If there are no parameters with field type `image` or `video`, then the parameters will be passed in the request body similar to the query string format of `foo=1&bar=value` using `application/x-www-form-urlencoded`. But in the presence of a parameter with field type `image` or `video`; the request will be encoded using `multipart/form-data`.</li></ul> |
   | field  | The type of field used in the UI. Defaults to `text`.<ul><li>`text`: Displays the standard alphanumeric keypad on field focus.</li><li>`number`: Displays the number keypad on field focus.</li><li>`email`: Displays the email keypad on field focus.</li><li>`hidden`: The field is not displayed to the user.</li><li>`select`: The field is displayed as a picker. Use in conjunction with `enum` to display a list of options.</li><li>`image`: Lets the user upload an image from their camera roll or take a photo with their camera. The API request is made using `multipart/form-data`.</li><li>`video`: Similar to `image` but lets the user upload a video.</li><li>`geolocation`: Prompts the user for their current location and passes that to the API as a JSON object with `latitude` and `longitude` (ex:`{"latitude":43.64,"longitude":-79.37}`).</li></ul>|
-  | enum   | Comma separated list of option in a select picker. Used in conjunction with field type `select`. |
+  | enum   | Comma separated list of options in a select picker. Used in conjunction with field type `select`. |
 
 **Examples**
 
@@ -420,7 +421,7 @@ List all your projects along with their project ids. And all the tools with thei
 
 ### tb project rm \<id\>
 
-Removes a project and all their tools. The tools in the project will also be removed from any users that have them. This command cannot be undone, please use with caution.
+Removes a project and all their tools. The tools in the project will also be removed from any users that have them. This command cannot be undone; please use with caution.
 
 **Arguments**
 
@@ -440,7 +441,7 @@ Sends a text message to the given number with the 3 most recently created tools.
 
 ### tb whoami
 
-Shows information about the current logged in session. Also, shows the API key of the current user.
+Shows information about the user currently logged in. Also, shows the API key of the user.
 
 ### Toolbeam Spec
 
@@ -537,7 +538,7 @@ Below is a more detailed explanation of the fields that are used.
 
 + **x-tb-color:**red|blue|orange|green|purple
 
-  The color of the tool.
+  The color of the tool. If not provided, one is randomly picked.
 
 + **summary**:[string]
 
@@ -545,7 +546,7 @@ Below is a more detailed explanation of the fields that are used.
 
 + **operationId**:[string]
 
-  A unique id that is used to identify the tool. Please do not change.
+  A unique id that is generated to identify the tool. Please do not change.
 
 + **x-tb-actionLabel**:[string]
 
@@ -553,11 +554,11 @@ Below is a more detailed explanation of the fields that are used.
 
 + **x-tb-needsConfirm**:[boolean]
 
-  True if a confirm dialog should be presented on submit.
+  True if a confirm dialog should be presented on submit. Defaults to false.
 
 + **x-tb-needsNotificationPermission**:[boolean]
 
-    True if the tool needs to ask the user permission to send notifications.
+    True if the tool needs to ask the user permission to send notifications. Defaults to false.
 
 ### Field Options
 
@@ -575,7 +576,8 @@ Below is a more detailed explanation of the fields that are used.
 
     - query
 
-      Parameter will be added to the query string for the request.
+      Parameter will be added to the query string for the request using the query string format `foo=1&bar=value`.
+
     - header
     
       Parameter will be added as a custom header for the request.
@@ -596,13 +598,9 @@ Below is a more detailed explanation of the fields that are used.
 
   The label for the field. If not provided, the `name` is used as the label.
 
-+ **x-tb-fieldPlaceholder**:[string]
-
-  The placeholder text for the field. If not provided, the `type` is used as the placeholder.
-
 + **x-tb-fieldType**:text|number|email|select|hidden
 
-  The type of the field.
+  The type of field used in the UI. Defaults to `text`.
 
   - text
     
@@ -654,9 +652,13 @@ Below is a more detailed explanation of the fields that are used.
   
     An array of values displayed as the options in the picker. If not provided, `enum` is displayed as the options.
 
++ **x-tb-fieldPlaceholder**:[string]
+
+  The placeholder text for the field. If not provided, a placeholder based on the `x-tb-fieldType` is used as the placeholder.
+
 ### Linking Tools
 
-Toolbeam auto converts `https://toolbeam.com/t/{toolId}` URLs in an API response into a button that directs users to the specified tool. By using these links we can chain tools together. This is useful for cases where you want a user to execute an action based on what is returned from a tool.
+Toolbeam auto converts `https://toolbeam.com/t/{toolUuid}` URLs in an API response into a button that directs users to the specified tool. By using these links we can chain tools together. This is useful for cases where you want a user to execute an action based on what is returned from a tool.
 
 **Types of Links**
 
@@ -756,15 +758,15 @@ Below are the Error codes returned:
 
   + 1014
 
-    The notification message is invalid.
+    The notification message is empty.
 
   + 1016
 
-    The tool UUID is invalid.
+    The tool UUID is empty.
 
   + 1018
 
-    The API Key is invalid.
+    The API Key is empty.
 
   + 2009
 
@@ -803,6 +805,10 @@ If you'd like to create private tools, please get in touch with us [here](https:
 Need help to figure something out? Chat with us on [Gitter](https://gitter.im/toolbeam-cli/Lobby) or send us an [email](mailto:contact@toolbeam.com).
 
 Have a feature request or find a bug? Open a [new issue](https://github.com/AnomalyInnovations/toolbeam-cli/issues/new).
+
+## Thanks
+
+Thanks to [TextBelt](http://textbelt.com) for their text messaging service.
 
 ## License
 
