@@ -61,7 +61,7 @@ Toolbeam converts your API into a native cross-platform mobile tool. A quick exa
   - [Toolbeam Notification API](#toolbeam-notification-api)
 + [Pricing](#pricing)
 + [Support](#support)
-+ [Thanks](#thanks)
++ [Credits](#credits)
 + [License](#license)
 
 ## Features
@@ -806,7 +806,7 @@ Need help to figure something out? Chat with us on [Gitter](https://gitter.im/to
 
 Have a feature request or find a bug? Open a [new issue](https://github.com/AnomalyInnovations/toolbeam-cli/issues/new).
 
-## Thanks
+## Credits
 
 Thanks to [TextBelt](http://textbelt.com) for their text messaging service.
 
