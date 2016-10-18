@@ -17,6 +17,8 @@ import yargs from 'yargs';
 import updateNotifier from 'update-notifier';
 
 import store from './store';
+import * as userActions from './actions/user-actions';
+import * as trackerActions from './actions/tracker-actions';
 import errorHandler from './libs/error-handler';
 import { trimChar } from './libs/string';
 import { quietParse } from './libs/json';
@@ -166,6 +168,9 @@ catch(e) {
 ///////////////////////
 
 function runCommand(argv) {
+	store.dispatch(userActions.load());
+	store.dispatch(trackerActions.track(...getTrackerArgs(argv)));
+
 	switch (argv._[0]) {
 		case SIGNUP:
 			return requireAnonymous(() => signup(store));
@@ -339,6 +344,16 @@ function checkOperation(argv) {
 		return 'Error: Not a valid HTTP operation <oprn>';
 	}
 	return true;
+}
+
+function getTrackerArgs(argv) {
+	const event = `CLI ${argv._.join('.')}`;
+	const [ , , ...rawArgs ] = process.argv;
+
+	return [
+		event,
+		rawArgs,
+	];
 }
 
 function checkUpdates() {

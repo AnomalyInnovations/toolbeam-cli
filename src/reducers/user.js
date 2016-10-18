@@ -13,6 +13,7 @@ export default function user(state = initialState, action = {}) {
   switch (action.type) {
 
     case types.USER_LOAD:
+			// Handled in middleware
 			return state;
     case types.USER_LOAD_SUCCESS:
 			return { ...state,
