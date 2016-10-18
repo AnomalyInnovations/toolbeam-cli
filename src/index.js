@@ -11,7 +11,6 @@ process.on('unhandledRejection', e => {
 
 import packageJson from '../package.json';
 
-import 'babel-polyfill';
 import chalk from 'chalk';
 import yargs from 'yargs';
 import updateNotifier from 'update-notifier';
