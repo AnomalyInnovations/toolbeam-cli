@@ -7,7 +7,7 @@ Below is the annotated version of the spec with the changes made. View the [comp
     "title": "Classic Movies", // Give our project a name
     "version": "1.0.0"
   },
-  "host": "toolbeam-example-api-wgkghsyfrv.now.sh",
+  "host": "toolbeam-example-api-usbvhngxwi.now.sh",
   "schemes": [
     "https"
   ],
