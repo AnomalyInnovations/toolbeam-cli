@@ -23,6 +23,7 @@
   "author": "Jav V <air@live.ca>",
   "license": "MIT",
   "dependencies": {
+    "babel-polyfill": "^6.16.0",
     "babel-runtime": "^6.11.6",
     "chalk": "^1.1.3",
     "cli-table": "^0.3.1",
