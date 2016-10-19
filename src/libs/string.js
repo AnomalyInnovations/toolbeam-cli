@@ -6,7 +6,7 @@ export function trimChar(str, char) {
 
 export function truncate(string, length, ellipsis = '…') {
 	return (string.length > length)
-		? string.substr(0, length - 1) + ellipsis
+		? string.substr(0, length - ellipsis.length) + ellipsis
 		: string;
 }
 

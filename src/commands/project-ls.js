@@ -7,6 +7,8 @@ import config from '../config';
 import * as specsActions from '../actions/specs-actions';
 import * as toolsActions from '../actions/tools-actions';
 
+const colWidth = 35;
+
 export default async function({getState, dispatch}) {
 	console.log(chalk.gray('Fetching your projects'));
 
@@ -36,7 +38,7 @@ export default async function({getState, dispatch}) {
 		}
 
 		acc[projectId].push([
-			truncate(colorToChalk(tool.color)(tool.name), 35),
+			colorToChalk(tool.color)(truncate(tool.name, colWidth - 2)),
 			fullURL(tool.uri)
 		]);
 
@@ -58,7 +60,7 @@ export default async function({getState, dispatch}) {
 
 		if (toolsInProject) {
 			table = new Table({
-				colWidths: [35, 35]
+				colWidths: [colWidth, colWidth]
 			});
 			table.push(...toolsInProject);
 		}
