@@ -5,7 +5,7 @@
 </p>
 
 <p align="center">
-  <b>Convert your API to a native mobile tool</b>
+  <b>Micro tools powered by Microservices</b>
 </p>
 
 <p align="center">
@@ -16,9 +16,9 @@
 
 ------------------------------------------------------------------------------------
 
-Toolbeam converts your API into a native cross-platform mobile tool. A quick example:
+Toolbeam instantly converts a microservice to a native mobile tool. A quick example:
 
-1. Take a GET API resource that returns a list of movies
+1. Take a GET API endpoint that returns a list of movies
 
    https://toolbeam-example-api-gqzlijbklg.now.sh/top_movies
 
@@ -35,34 +35,6 @@ Toolbeam converts your API into a native cross-platform mobile tool. A quick exa
    :calling: &nbsp; **https://toolbeam.com/t/tnqjurvz**
 
    ![Example Gif](https://github.com/AnomalyInnovations/toolbeam-cli/raw/master/docs/examples/example.gif)
-
-## Contents
-
-+ [Features](#features)
-+ [Get Started](#get-started)
-+ [Examples](#examples)
-+ [How it Works](#how-it-works)
-+ [Documentation](#documentation)
-  - [Toolbeam CLI](#toolbeam-cli)
-    * [tb init](#tb-init-url)
-    * [tb add](#tb-add-oprn-path-options)
-    * [tb rm](#tb-rm-oprn-path)
-    * [tb push](#tb-push)
-    * [tb pull](#tb-pull-id)
-    * [tb project ls](#tb-project-ls)
-    * [tb project rm](#tb-project-rm-id)
-    * [tb messageme](#tb-messageme)
-    * [tb whoami](#tb-whoami)
-  - [Toolbeam Spec](#toolbeam-spec)
-    * [Project Options](#project-options)
-    * [Tool Options](#tool-options)
-    * [Field Options](#field-options)
-  - [Linking Tools](#linking-tools)
-  - [Toolbeam Notification API](#toolbeam-notification-api)
-+ [Pricing](#pricing)
-+ [Support](#support)
-+ [Credits](#credits)
-+ [License](#license)
 
 ## Features
 
@@ -91,6 +63,31 @@ Toolbeam converts your API into a native cross-platform mobile tool. A quick exa
 1. Install [Node.js](https://nodejs.org/)
 2. Install the Toolbeam CLI: `npm install -g toolbeam-cli`
 3. Sign up for a Toolbeam account: `tb signup`
+
+## Contents
+
++ [Examples](#examples)
++ [How it Works](#how-it-works)
++ [Documentation](#documentation)
+  - [Toolbeam CLI](#toolbeam-cli)
+    * [tb init](#tb-init-url)
+    * [tb add](#tb-add-oprn-path-options)
+    * [tb rm](#tb-rm-oprn-path)
+    * [tb push](#tb-push)
+    * [tb pull](#tb-pull-id)
+    * [tb project ls](#tb-project-ls)
+    * [tb project rm](#tb-project-rm-id)
+    * [tb messageme](#tb-messageme)
+    * [tb whoami](#tb-whoami)
+  - [Toolbeam Spec](#toolbeam-spec)
+    * [Project Options](#project-options)
+    * [Tool Options](#tool-options)
+    * [Field Options](#field-options)
+  - [Linking Tools](#linking-tools)
+  - [Toolbeam Notification API](#toolbeam-notification-api)
++ [Support](#support)
++ [Credits](#credits)
++ [License](#license)
 
 ## Examples
 
@@ -793,12 +790,6 @@ Below are the Error codes returned:
            -d "message=hello%20world&user_uuid=<Recipient User UUID>&tool_uuid=<Recipient Tool UUID>" \
            https://api.toolbeam.com/v1/app/send_notifications
     ```
-
-## Pricing
-
-Toolbeam is free to use. Tools can be accessed by anybody via the share URL.
-
-If you'd like to create private tools, please get in touch with us [here](https://goo.gl/forms/esEgY8JTUILtLskk1).
 
 ## Support
 
