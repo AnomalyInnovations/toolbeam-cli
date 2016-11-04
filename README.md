@@ -36,6 +36,33 @@ Toolbeam instantly converts a microservice to a native mobile tool. A quick exam
 
    ![Example Gif](https://github.com/AnomalyInnovations/toolbeam-cli/raw/master/docs/examples/example.gif)
 
+## Contents
+
++ [Features](#features)
++ [Get Started](#get-started)
++ [Examples](#examples)
++ [How it Works](#how-it-works)
++ [Documentation](#documentation)
+  - [Toolbeam CLI](#toolbeam-cli)
+    * [tb init](#tb-init-url)
+    * [tb add](#tb-add-oprn-path-options)
+    * [tb rm](#tb-rm-oprn-path)
+    * [tb push](#tb-push)
+    * [tb pull](#tb-pull-id)
+    * [tb project ls](#tb-project-ls)
+    * [tb project rm](#tb-project-rm-id)
+    * [tb messageme](#tb-messageme)
+    * [tb whoami](#tb-whoami)
+  - [Toolbeam Spec](#toolbeam-spec)
+    * [Project Options](#project-options)
+    * [Tool Options](#tool-options)
+    * [Field Options](#field-options)
+  - [Linking Tools](#linking-tools)
+  - [Toolbeam Notification API](#toolbeam-notification-api)
++ [Support](#support)
++ [Credits](#credits)
++ [License](#license)
+
 ## Features
 
 + **Native and Cross Platform**
@@ -63,31 +90,6 @@ Toolbeam instantly converts a microservice to a native mobile tool. A quick exam
 1. Install [Node.js](https://nodejs.org/)
 2. Install the Toolbeam CLI: `npm install -g toolbeam-cli`
 3. Sign up for a Toolbeam account: `tb signup`
-
-## Contents
-
-+ [Examples](#examples)
-+ [How it Works](#how-it-works)
-+ [Documentation](#documentation)
-  - [Toolbeam CLI](#toolbeam-cli)
-    * [tb init](#tb-init-url)
-    * [tb add](#tb-add-oprn-path-options)
-    * [tb rm](#tb-rm-oprn-path)
-    * [tb push](#tb-push)
-    * [tb pull](#tb-pull-id)
-    * [tb project ls](#tb-project-ls)
-    * [tb project rm](#tb-project-rm-id)
-    * [tb messageme](#tb-messageme)
-    * [tb whoami](#tb-whoami)
-  - [Toolbeam Spec](#toolbeam-spec)
-    * [Project Options](#project-options)
-    * [Tool Options](#tool-options)
-    * [Field Options](#field-options)
-  - [Linking Tools](#linking-tools)
-  - [Toolbeam Notification API](#toolbeam-notification-api)
-+ [Support](#support)
-+ [Credits](#credits)
-+ [License](#license)
 
 ## Examples
 
